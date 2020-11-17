@@ -16,14 +16,15 @@ For more information on how to integrate the BlinkID ImageCapture SDK into your 
 
 Check out the live examples to see the BlinkID ImageCapture SDK in action:
 
-1. [BlinkID ImageCapture SDK with built-in UI](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/demo.html)
+1. [BlinkID ImageCapture SDK with built-in UI](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/examples/javascript/index.html)
     * See minimal example for UI component at [Codepen](https://codepen.io/microblink/pen/ZEOVRVQ)
+2. [BlinkID ImageCapture SDK UI - scan both document sides](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/examples/javascript-combined/index.html)
     * See example for scanning of both document sides at [Codepen](https://codepen.io/microblink/pen/pobGzEY)
-2. [Scan front side of identity document from web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-camera/javascript/index.html)
+3. [Scan front side of identity document from web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-camera/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/XWKoYPK)
-3. [Scan front side of identity document from image file](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-file/javascript/index.html)
+4. [Scan front side of identity document from image file](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-file/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/bGeOKxZ)
-4. [Scan both sides of identity document from web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/combined/javascript/index.html)
+5. [Scan both sides of identity document from web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/combined/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/dyXwKgZ)
 
 Finally, check out the [examples directory](examples) to see the source code of the aforementioned examples. Keep in mind that examples for UI component are located in the [ui/examples](ui/examples) directory.

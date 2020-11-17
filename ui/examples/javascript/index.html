@@ -7,7 +7,6 @@
 
         <!-- Import UI component which includes WASM library -->
         <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-        <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
         <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/client-library/dist/client-library.js"></script>
@@ -44,13 +43,17 @@
     <body>
         <!-- It's possible to obtain a free trial license key on microblink.com -->
         <blinkid-imagecapture-in-browser
-            license-key="sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL"
             recognizers="BlinkIdImageCaptureRecognizer"
         ></blinkid-imagecapture-in-browser>
 
         <script type="text/javascript">
             // Important: if attributes or properties are changed, whole component is rerendered
             const el = document.querySelector( "blinkid-imagecapture-in-browser" );
+
+            if ( window.location.hostname === "localhost" )
+            {
+                el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL";
+            }
 
             if ( window.location.hostname === "blinkid.github.io" )
             {
