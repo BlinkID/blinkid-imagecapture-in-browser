@@ -1,0 +1,52 @@
+*
+{
+    box-sizing: border-box;
+}
+
+html,
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+html
+{
+    font-size: 16px;
+    font-family: "Avenir Next", sans-serif;
+    line-height: 1.5rem;
+}
+
+section
+{
+    width: 100%;
+    max-width: 640px;
+
+    margin: 1.5rem auto;
+}
+
+h2
+{
+    background-color: #000;
+    color: #fff;
+
+    font-size: 1.5rem;
+    line-height: 3rem;
+
+    text-align: center;
+}
+
+label,
+textarea
+{
+    display: block;
+}
+
+textarea
+{
+    width: 100%;
+    padding: 0.25rem 0.5rem;
+
+    font-size: 1rem;
+    line-height: 1.5rem;
+}

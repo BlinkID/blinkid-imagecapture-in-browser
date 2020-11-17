@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+        <title>Example: BlinkID ImageCapture UI: scan both document sides</title>
+
+        <!-- Import UI component which includes WASM library -->
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+
+        <!-- Include client library for straightforward communication with backend services -->
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/client-library/dist/client-library.js"></script>
+
+        <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/dist/blinkid-imagecapture-sdk.js"></script>-->
+
+        <style type="text/css">
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+
+                width: 100%;
+                height: 100%;
+            }
+
+            html {
+                font-family: "Avenir Next", sans-serif;
+            }
+
+            body {
+                background-color: #fff;
+                box-sizing: border-box;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- It's possible to obtain a free trial license key on microblink.com -->
+        <blinkid-imagecapture-in-browser
+            license-key="sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL"
+            recognizers="BlinkIdImageCaptureRecognizer"
+        ></blinkid-imagecapture-in-browser>
+
+        <script type="text/javascript">
+            // Important: if attributes or properties are changed, whole component is rerendered
+            const el = document.querySelector( "blinkid-imagecapture-in-browser" );
+
+            if ( window.location.hostname === "blinkid.github.io" )
+            {
+                el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9hH4YlTvZbvuaF7qdDCre49ZhxvqIm5WQOTknq+AvYg/CLhjuSlXXDfNJSxYZg9htm199F1Hn2FufzLP90mL5lI542YMUk4oAdcen0VMiZmRKc3+6aXms8uMU3JInKzJ/YFtKym0wSP1wGXtAM+aXTyk/lkjJy5gRd1gFInaGIgTCuUhE2lgle1DWZdSwtVrmpffWnct6aH02f9EYsEeJsYLNa85U+9bjC1fOwt/0f8L7M9uEeyYCMSVFpq1ZHsdzAd3CWHrdX3wl3OzG2x+ioA4SS6YWmTY89GSCaN/mm6qOSo28XOXOb+PQHx/to06ypnNsgos9tptBT3Lev+X4tqS6OrOmDyw80YNSaoHILv6o=";
+            }
+
+            el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/resources/";
+
+            // Enable option to scan both document sides
+            el.recognizerOptions = [ "captureBothDocumentSides" ];
+
+            // Create instance of client library - for more information see `client-library/README.md` file
+            const client = new Client.Client(
+                Client.ApiType.SelfHosted,
+                {
+                    apiLocation: "https://demoapi.microblink.com"
+                }
+            );
+
+            /**
+             * UI component will extract a document image, which can be recognized on the backend.
+             */
+            el.addEventListener
+            (
+                "scanSuccess",
+                ev =>
+                {
+                    console.log( "scanSuccess: extracted image from WASM library", ev.detail );
+
+                    /**
+                     * [OPTIONAL] Filter document based on provided class info.
+                     *
+                     * Keep in mind that enums with codes for country, region and document types are
+                     * included in the WASM library.
+                     */
+                    /*if ( ev.detail.recognizer.classInfo.country === BlinkIDImageCaptureSDK.Country.CROATIA )
+                    {
+                        console.log( "What should I do with Croatian document?" );
+                    }*/
+
+                    // Show error or loading screen in UI component based on extracted image
+                    if ( !ev.detail.recognizer.frontSideCameraFrame || !ev.detail.recognizer.backSideCameraFrame )
+                    {
+                        el.setUiState( "ERROR" );
+                        return;
+                    }
+                    else
+                    {
+                        el.setUiState( "LOADING" );
+                    }
+
+                    // Send image to web API for processing
+                    const payload =
+                    {
+                        // Images from WASM library should be converted to Base64 from ImageData format.
+                        "imageFrontSide": client.imageDataToBase64( ev.detail.recognizer.frontSideCameraFrame ),
+                        "imageBackSide": client.imageDataToBase64( ev.detail.recognizer.backSideCameraFrame )
+                    };
+
+                    client.recognize( "/v1/recognizers/blinkid-combined", payload )
+                        .then( ( results ) =>
+                        {
+                            const recognitionResults = results.response.data.result;
+                            console.log( "API recognition results", recognitionResults );
+
+                            if ( recognitionResults.recognitionStatus === "EMPTY" )
+                            {
+                                console.warn( "API processing returned empty results." );
+                                el.setUiState( "ERROR" );
+                                return;
+                            }
+
+                            // Do something with the results and notify the user
+                            el.setUiState( "SUCCESS" );
+                        } )
+                        .catch( ( error ) =>
+                        {
+                            console.error( "API recognition error", error );
+                            el.setUiState( "ERROR" );
+                        } );
+                }
+            );
+
+            /**
+             * Other events
+             */
+            el.addEventListener
+            (
+                "fatalError",
+                ev => console.log( "fatalError", ev.detail )
+            );
+
+            el.addEventListener
+            (
+                "ready",
+                ev => console.log( "ready", ev.detail )
+            );
+
+            el.addEventListener
+            (
+                "scanError",
+                ev => console.log( "scanError", ev.detail )
+            );
+
+            el.addEventListener
+            (
+                "feedback",
+                ev => console.log( "feedback", ev.detail )
+            );
+        </script>
+    </body>
+</html>

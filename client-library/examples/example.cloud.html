@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Example: Client library with Cloud API</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <section>
+            <h2>Upload image</h2>
+            <label for="image-file">Choose image file</label>
+            <input id="image-file" type="file" accept="image/*" />
+        </section>
+        <section>
+            <h2>Results</h2>
+            <p>Status: <strong id="scan-status">loading</strong></p>
+            <textarea id="scan-results" rows="10"></textarea>
+        </section>
+    </body>
+
+    <!-- STEP 1: load Client library -->
+    <script src="../dist/client-librart.js"></script>
+
+    <script>
+        /* Auxiliary code for showing status and results */
+        const scanStatus  = document.getElementById( "scan-status"  );
+        const scanResults = document.getElementById( "scan-results" );
+        const imageFile   = document.getElementById( "image-file"   );
+
+        /* STEP 2: create new instance of Client class */
+        const configuration =
+        {
+            /* Set location of proxy application or exact location of Cloud API (not recommended) */
+            apiLocation: "http://localhost",
+            headers:
+            {
+                /* For purposes of example - header should be added by proxy application */
+                "Authorization": "Bearer <PLACE-YOUR-TOKEN-HERE>"
+            }
+        };
+
+        const client = new Client.Client( Client.ApiType.Cloud, configuration );
+
+        /* [OPTIONAL] Check API availability */
+        client.getHealthcheck()
+            .then( () =>
+            {
+                scanStatus.innerText = "Waiting for image";
+            } )
+            .catch( ( response ) =>
+            {
+                scanStatus.innerText = "API not available";
+                imageFile.setAttribute( "disabled", "disabled" );
+
+                /* Error details */
+                console.error( "Cannot access API!", response.response );
+            } );
+
+        /* Retrieve image file in Base64 format from input element */
+        imageFile.addEventListener( "change", async ( ev ) =>
+        {
+            const image = await extractImageFile( ev );
+
+            if ( image === null )
+            {
+                scanStatus.innerText = "local error";
+                scanResults.value    = "Image file not provided!";
+                return;
+            }
+
+            /* STEP 3: execute recognition
+             *
+             * See official Cloud API documentation for information about
+             * available endpoints and request format.
+             */
+            const payload =
+            {
+                "imageSource": image
+            };
+
+            scanStatus.innerText = "waiting for API response";
+            scanResults.value = "-";
+
+            client.recognize( "/v1/recognizers/blinkid", payload )
+                .then( ( results ) =>
+                {
+                    const recognitionResults = results.response.data.result;
+                    console.log( "Recognition results", recognitionResults );
+
+                    /* Handle case when results are empty */
+                    if ( recognitionResults.recognitionStatus === "EMPTY" )
+                    {
+                        scanStatus.innerText = "empty";
+                        scanResults.value = "Cannot extract data from image.";
+                        return;
+                    }
+
+                    scanStatus.innerText = "success";
+                    scanResults.value = JSON.stringify( results, null, 2 );
+                } )
+                .catch( ( error ) =>
+                {
+                    console.error( "Recognition error", error );
+
+                    scanStatus.innerText = "error";
+
+                    /* User friendly message */
+                    scanResults.value = error.error.message;
+                } );
+        } );
+
+        /* Extract image file from DOM event and get image in Base64 format */
+        function extractImageFile( ev )
+        {
+            return new Promise( ( resolve, reject ) =>
+            {
+                /* Check if image file is present */
+                if ( !ev || !ev.target || !ev.target.files )
+                {
+                    resolve( null );
+                    return;
+                }
+
+                const fileList = ev.target.files;
+
+                let image = null;
+                const imageRegex = RegExp( /^image\// );
+                for ( let i = 0; i < fileList.length; ++i )
+                {
+                    if ( imageRegex.exec( fileList[ i ].type ) )
+                    {
+                        image = fileList[ i ];
+                    }
+                }
+
+                if ( !image )
+                {
+                    resolve( null );
+                    return;
+                }
+
+                /* Create Base64 representation of image */
+                const reader = new FileReader();
+                
+                reader.onload = () => resolve( reader.result );
+                reader.onerror = ( error ) =>
+                {
+                    reject( null );
+                    console.error( "Error while reading image file!", error );
+                };
+
+                reader.readAsDataURL( image );
+            } );
+        }
+    </script>
+</html>
