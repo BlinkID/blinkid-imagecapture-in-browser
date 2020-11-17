@@ -107,5 +107,7 @@ export interface BlinkIdImageCaptureRecognizer extends Recognizer
  */
 export async function createBlinkIdImageCaptureRecognizer( wasmSDK: WasmSDK ): Promise< BlinkIdImageCaptureRecognizer >
 {
-    return wasmSDK.mbWasmModule.newRecognizer( "BlinkIdImageCaptureRecognizer" ) as Promise< BlinkIdImageCaptureRecognizer >;
+    return wasmSDK.mbWasmModule.newRecognizer(
+        "BlinkIdImageCaptureRecognizer"
+    ) as Promise< BlinkIdImageCaptureRecognizer >;
 }
