@@ -464,7 +464,7 @@ To perform the recognition, you should simply write:
 const cameraFeed = <HTMLVideoElement> document.getElementById( "cameraFeed" );
 try
 {
-    const videoRecognizer = await MicroblinkSDK.VideoRecognizer.createVideoRecognizerFromCameraStream(
+    const videoRecognizer = await BlinkIDImageCaptureSDK.VideoRecognizer.createVideoRecognizerFromCameraStream(
         cameraFeed,
         recognizerRunner
     );
@@ -483,7 +483,7 @@ The `recognize` method of the `VideoRecognizer` will start the video capture and
 If, instead of performing recognition of live video stream, you want to perform recognition of pre-recorded video file, you should simply construct `VideoRecognizer` using a different function, as shown below:
 
 ```typescript
-const videoRecognizer = await MicroblinkSDK.createVideoRecognizerFromVideoPath(
+const videoRecognizer = await BlinkIDImageCaptureSDK.createVideoRecognizerFromVideoPath(
     videoPath,
     htmlVideoElement,
     recognizerRunner
@@ -498,7 +498,7 @@ The procedure for using `VideoRecognizer` described [above](#videoRecognizer) is
 ```typescript
 videoRecognizer.startRecognition
 (
-    ( recognitionState: MicroblinkSDK.RecognizerResultState ) =>
+    ( recognitionState: BlinkIDImageCaptureSDK.RecognizerResultState ) =>
     {
         // Pause recognition before performing any async operation - this will make sure that
         // recognition will not continue while returning the control flow back from this function.
@@ -545,7 +545,7 @@ Similarly, if you, for example, remove the `onQuadDetection` from `MetadataCallb
 This section will give a list of all `Recognizer` objects that are available within BlinkID ImageCapture SDK, their purpose and recommendations how they should be used to get best performance and user experience.
 ### <a name="blinkid-imagecapture-recognizer"></a> BlinkID ImageCapture recognizer
 
-The [`BlinkIdImageCaptureRecognizer`](src/Recognizers/BlinkID/ImageCapture/BlinkIdImageCaptureRecognizer.ts) is recognizer that recognizes a document a user is holding and extracts an image of the most suitable frame from the camera feed.
+The [`BlinkIdImageCaptureRecognizer`](src/Recognizers/BlinkID/ImageCapture/ImageCaptureRecognizer.ts) is recognizer that recognizes a document a user is holding and extracts an image of the most suitable frame from the camera feed.
 
 Also, this recognizer can process still image for which it will determine document class and if the image is good enough for processing on the backend service.
 
