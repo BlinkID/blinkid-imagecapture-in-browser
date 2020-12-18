@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import { ImageAnalysisResult } from "../Generic/ImageAnalysisResult";
 import { ProcessingStatus } from "../Generic/ProcessingStatus";
 import { ClassInfo } from "../Generic/ClassInfo";

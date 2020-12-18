@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
+/**
  * BlinkID ImageCapture In-browser SDK demo app which demonstrates how to:
  *
  * - Change default SDK settings
@@ -26,11 +30,11 @@ function main()
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL";
+    let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLIUTxcuCAoWyrw/hXqFhXCFPheJpGEl1rOJxd04GybaYWVZhEd2YAi2vy4j/nBPMUyIwH1f2tmwODVgEA42ErPfvMOzOm/appqwoQxciyCIkwVi55sT2hmu2v4qJlU/+NHhxDTGPaJiSIUP0X6HS+INl8Afl2h+Zl7s0wn4QHjJx8O7y1hs=";
 
     if ( window.location.hostname === "blinkid.github.io" )
     {
-        licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9hH4YlTvZbvuaF7qdDCre49ZhxvqIm5WQOTknq+AvYg/CLhjuSlXXDfNJSxYZg9htm199F1Hn2FufzLP90mL5lI542YMUk4oAdcen0VMiZmRKc3+6aXms8uMU3JInKzJ/YFtKym0wSP1wGXtAM+aXTyk/lkjJy5gRd1gFInaGIgTCuUhE2lgle1DWZdSwtVrmpffWnct6aH02f9EYsEeJsYLNa85U+9bjC1fOwt/0f8L7M9uEeyYCMSVFpq1ZHsdzAd3CWHrdX3wl3OzG2x+ioA4SS6YWmTY89GSCaN/mm6qOSo28XOXOb+PQHx/to06ypnNsgos9tptBT3Lev+X4tqS6OrOmDyw80YNSaoHILv6o=";
+        licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==";
     }
 
     // 2. Create instance of SDK load settings with your license key
@@ -45,7 +49,7 @@ function main()
     loadSettings.loadProgressCallback = ( progress ) => ( progressEl.value = progress );
 
     // Set absolute location of the engine, i.e. WASM and support JS files
-    loadSettings.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/resources/";
+    loadSettings.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources/";
 
     // 3. Load SDK
     BlinkIDImageCaptureSDK.loadWasmModule( loadSettings ).then

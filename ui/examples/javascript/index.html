@@ -6,13 +6,13 @@
         <title>Example: BlinkID ImageCapture UI</title>
 
         <!-- Import UI component which includes WASM library -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -43,6 +43,7 @@
     <body>
         <!-- It's possible to obtain a free trial license key on microblink.com -->
         <blinkid-imagecapture-in-browser
+            license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLIUTxcuCAoWyrw/hXqFhXCFPheJpGEl1rOJxd04GybaYWVZhEd2YAi2vy4j/nBPMUyIwH1f2tmwODVgEA42ErPfvMOzOm/appqwoQxciyCIkwVi55sT2hmu2v4qJlU/+NHhxDTGPaJiSIUP0X6HS+INl8Afl2h+Zl7s0wn4QHjJx8O7y1hs="
             recognizers="BlinkIdImageCaptureRecognizer"
         ></blinkid-imagecapture-in-browser>
 
@@ -50,17 +51,12 @@
             // Important: if attributes or properties are changed, whole component is rerendered
             const el = document.querySelector( "blinkid-imagecapture-in-browser" );
 
-            if ( window.location.hostname === "localhost" )
-            {
-                el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL";
-            }
-
             if ( window.location.hostname === "blinkid.github.io" )
             {
-                el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9hH4YlTvZbvuaF7qdDCre49ZhxvqIm5WQOTknq+AvYg/CLhjuSlXXDfNJSxYZg9htm199F1Hn2FufzLP90mL5lI542YMUk4oAdcen0VMiZmRKc3+6aXms8uMU3JInKzJ/YFtKym0wSP1wGXtAM+aXTyk/lkjJy5gRd1gFInaGIgTCuUhE2lgle1DWZdSwtVrmpffWnct6aH02f9EYsEeJsYLNa85U+9bjC1fOwt/0f8L7M9uEeyYCMSVFpq1ZHsdzAd3CWHrdX3wl3OzG2x+ioA4SS6YWmTY89GSCaN/mm6qOSo28XOXOb+PQHx/to06ypnNsgos9tptBT3Lev+X4tqS6OrOmDyw80YNSaoHILv6o=";
+                el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==";
             }
 
-            el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.8.0/resources/";
+            el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources/";
 
             // Create instance of client library - for more information see `client-library/README.md` file
             const client = new Client.Client(

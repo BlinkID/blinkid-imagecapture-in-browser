@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 :host {
     position: absolute;
     top: 0;
@@ -13,7 +17,7 @@
     align-items: flex-start;
     overflow: hidden;
     overflow-y: auto;
-    padding: 24px; 
+    padding: 24px;
 
     .mb-modal {
         width: 100%;
@@ -42,22 +46,22 @@
             font-size: 16px;
             line-height: 24px;
         }
-    
+
         .content {
             margin: 24px 0;
             font-weight: 400;
             font-size: 14px;
             line-height: 20px;
-    
+
             &.centered {
                 text-align: center;
             }
         }
-    
+
         .actions {
             display: flex;
             justify-content: center;
-    
+
             button {
               width: 126px;
               height: 32px;
@@ -75,4 +79,4 @@
     visibility: visible;
     opacity: 1;
 }
-    
+

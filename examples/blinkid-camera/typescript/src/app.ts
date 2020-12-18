@@ -1,4 +1,8 @@
 /**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
+/**
  * BlinkID ImageCapture In-browser SDK demo app which demonstrates how to:
  *
  * - Change default SDK settings
@@ -33,7 +37,7 @@ function main()
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPmw/w35CpGHWKuMfxTChdS5rKWl4F7HaDXx9aykxe8aPV88utx6Aa2HGMg8uubU53EdcRQJ6UHupNS3uHQFZm+vWMEnCNcCn3yJgkO/VbSliNJZvF7X89DL9WnD8ChNLWJfZBY0rJEHt5CBpkPaagp8UEWPvB+oC1WA4GXxv/w4ZBAptKC3jaJeivxVOp+/Cr2SBmSsFLwvYDH1gGhUI1fkDNQg/W2Mlobxif3rRUbJ9ZkdZyMztjii/nJ6+X9TyFxwcSD7pmhp7iVHwLW2fmelJDwcFpz75QAziI9se+9CZcCPF2wz/PNAytAaNlSHvwmoJLXDf5vBof5Z20Egdmi7L3olNUIemZPi8CJmK+TjL";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLIUTxcuCAoWyrw/hXqFhXCFPheJpGEl1rOJxd04GybaYWVZhEd2YAi2vy4j/nBPMUyIwH1f2tmwODVgEA42ErPfvMOzOm/appqwoQxciyCIkwVi55sT2hmu2v4qJlU/+NHhxDTGPaJiSIUP0X6HS+INl8Afl2h+Zl7s0wn4QHjJx8O7y1hs=";
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings( licenseKey );

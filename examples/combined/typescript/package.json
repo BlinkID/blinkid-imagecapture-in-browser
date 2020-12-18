@@ -19,6 +19,6 @@
     "typescript": "^3.9.5"
   },
   "dependencies": {
-    "@microblink/blinkid-imagecapture-in-browser-sdk": "~5.8.0"
+    "@microblink/blinkid-imagecapture-in-browser-sdk": "~5.9.0"
   }
 }

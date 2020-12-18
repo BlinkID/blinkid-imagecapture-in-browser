@@ -1,4 +1,8 @@
-import { 
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
+import {
   Component,
   Host,
   h,
@@ -67,11 +71,11 @@ export class MbModal {
           <div class="actions">
 
             <slot name="actionButtons"></slot>
-            
+
           </div>
 
         </div>
-        
+
       </Host>
     );
   }
