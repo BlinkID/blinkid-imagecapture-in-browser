@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import { newSpecPage } from '@stencil/core/testing';
 import { BlinkidImageCaptureInBrowser } from '../blinkid-imagecapture-in-browser';
 

@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import
 {
     RecognizerRunner,
@@ -281,7 +285,7 @@ export class VideoRecognizer
      * @param recognitionTimeoutMs Amount of time before returned promise will be resolved regardless of whether
      *.       recognition was successful or not.
      */
-    startRecognition( onScanningDone: OnScanningDone, recognitionTimeoutMs = 30000 ): void
+    startRecognition( onScanningDone: OnScanningDone, recognitionTimeoutMs = 15000 ): void
     {
         if ( this.videoFeed === null )
         {
@@ -334,7 +338,7 @@ export class VideoRecognizer
      * @param recognitionTimeoutMs Amount of time before returned promise will be resolved regardless of whether
      *        recognition was successful or not.
      */
-    async recognize( recognitionTimeoutMs = 30000 ): Promise< RecognizerResultState >
+    async recognize( recognitionTimeoutMs = 15000 ): Promise< RecognizerResultState >
     {
         return new Promise
         (
@@ -488,7 +492,7 @@ export class VideoRecognizer
 
     private recognitionPaused = false;
 
-    private recognitionTimeoutMs = 30000;
+    private recognitionTimeoutMs = 15000;
 
     private timeoutID = 0;
 
@@ -558,7 +562,7 @@ export class VideoRecognizer
                 this.clearTimeout();
             }
         }
-        else if ( processResult !== RecognizerResultState.Empty )
+        else if ( processResult === RecognizerResultState.Uncertain )
         {
             if ( this.timeoutID === 0 )
             {
@@ -568,6 +572,11 @@ export class VideoRecognizer
                     this.recognitionTimeoutMs
                 );
             }
+        }
+        else if ( processResult === RecognizerResultState.StageValid )
+        {
+            // stage recognition is finished, clear timeout and resume recognition
+            this.clearTimeout();
         }
         if ( !this.recognitionPaused )
         {

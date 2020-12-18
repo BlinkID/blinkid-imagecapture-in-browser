@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";
 
 export function hasVideoDevices(): Promise<boolean> {

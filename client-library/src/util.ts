@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import { HttpResponse } from "./data-structures";
 
 export function getSafeUrl( base: string, ...args: string[] ): string

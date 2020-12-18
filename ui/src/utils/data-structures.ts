@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) Microblink Ltd. All rights reserved.
+ */
+
 import { EventEmitter } from '@stencil/core';
 
 import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";

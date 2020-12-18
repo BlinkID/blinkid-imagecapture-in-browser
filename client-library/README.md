@@ -46,6 +46,8 @@ Since client library is published on NPM, it's possible to load the library via 
 <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/client-library/dist/client-library.min.js"></script>
 ```
 
+*Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
+
 ### <a name="installation-es-module"></a> ES module
 
 The library is also packaged as a classic ES module which can be loaded via CDN.
@@ -53,6 +55,8 @@ The library is also packaged as a classic ES module which can be loaded via CDN.
 ```js
 import { Client } from "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/client-library/es/client-library.mjs";
 ```
+
+*Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
 ## <a name="usage"></a> Usage
 
 ```typescript

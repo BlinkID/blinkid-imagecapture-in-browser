@@ -36,6 +36,8 @@ To use the UI component, JS file with custom element must be loaded and WASM eng
 <blinkid-imagecapture-in-browser license-key="..." engine-location="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/resources/"></blinkid-imagecapture-in-browser>
 ```
 
+*Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
+
 ### <a name="installation-npm"></a> Installation via NPM
 
 ```sh
