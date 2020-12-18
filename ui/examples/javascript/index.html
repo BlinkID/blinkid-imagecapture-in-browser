@@ -48,113 +48,118 @@
         ></blinkid-imagecapture-in-browser>
 
         <script type="text/javascript">
-            // Important: if attributes or properties are changed, whole component is rerendered
-            const el = document.querySelector( "blinkid-imagecapture-in-browser" );
-
-            if ( window.location.hostname === "blinkid.github.io" )
+            function run()
             {
-                el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==";
+                // Important: if attributes or properties are changed, whole component is rerendered
+                const el = document.querySelector( "blinkid-imagecapture-in-browser" );
+
+                if ( window.location.hostname === "blinkid.github.io" )
+                {
+                    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==";
+                }
+
+                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources/";
+
+                // Create instance of client library - for more information see `client-library/README.md` file
+                const client = new Client.Client(
+                    Client.ApiType.SelfHosted,
+                    {
+                        apiLocation: "https://demoapi.microblink.com"
+                    }
+                );
+
+                /**
+                 * UI component will extract a document image, which can be recognized on the backend.
+                 */
+                el.addEventListener
+                (
+                    "scanSuccess",
+                    ev =>
+                    {
+                        console.log( "scanSuccess: extracted image from WASM library", ev.detail );
+
+                        /**
+                         * [OPTIONAL] Filter document based on provided class info.
+                         *
+                         * Keep in mind that enums with codes for country, region and document types are
+                         * included in the WASM library.
+                         */
+                        /*if ( ev.detail.recognizer.classInfo.country === BlinkIDImageCaptureSDK.Country.CROATIA )
+                        {
+                            console.log( "What should I do with Croatian document?" );
+                        }*/
+
+                        // Show error or loading screen in UI component based on extracted image
+                        if ( !ev.detail.recognizer.frontSideCameraFrame )
+                        {
+                            el.setUiState( "ERROR" );
+                            return;
+                        }
+                        else
+                        {
+                            el.setUiState( "LOADING" );
+                        }
+
+                        // Send image to web API for processing
+                        const payload =
+                        {
+                            // Image from WASM library should be converted to Base64 from ImageData format.
+                            "imageSource": client.imageDataToBase64( ev.detail.recognizer.frontSideCameraFrame )
+                        };
+
+                        client.recognize( "/v1/recognizers/blinkid", payload )
+                            .then( ( results ) =>
+                            {
+                                const recognitionResults = results.response.data.result;
+                                console.log( "API recognition results", recognitionResults );
+
+                                if ( recognitionResults.recognitionStatus === "EMPTY" )
+                                {
+                                    console.warn( "API processing returned empty results." );
+                                    el.setUiState( "ERROR" );
+                                    return;
+                                }
+
+                                // Do something with the results and notify the user
+                                el.setUiState( "SUCCESS" );
+                            } )
+                            .catch( ( error ) =>
+                            {
+                                console.error( "API recognition error", error );
+                                el.setUiState( "ERROR" );
+                            } );
+                    }
+                );
+
+                /**
+                 * Other events
+                 */
+                el.addEventListener
+                (
+                    "fatalError",
+                    ev => console.log( "fatalError", ev.detail )
+                );
+
+                el.addEventListener
+                (
+                    "ready",
+                    ev => console.log( "ready", ev.detail )
+                );
+
+                el.addEventListener
+                (
+                    "scanError",
+                    ev => console.log( "scanError", ev.detail )
+                );
+
+                el.addEventListener
+                (
+                    "feedback",
+                    ev => console.log( "feedback", ev.detail )
+                );
             }
 
-            el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources/";
-
-            // Create instance of client library - for more information see `client-library/README.md` file
-            const client = new Client.Client(
-                Client.ApiType.SelfHosted,
-                {
-                    apiLocation: "https://demoapi.microblink.com"
-                }
-            );
-
-            /**
-             * UI component will extract a document image, which can be recognized on the backend.
-             */
-            el.addEventListener
-            (
-                "scanSuccess",
-                ev =>
-                {
-                    console.log( "scanSuccess: extracted image from WASM library", ev.detail );
-
-                    /**
-                     * [OPTIONAL] Filter document based on provided class info.
-                     *
-                     * Keep in mind that enums with codes for country, region and document types are
-                     * included in the WASM library.
-                     */
-                    /*if ( ev.detail.recognizer.classInfo.country === BlinkIDImageCaptureSDK.Country.CROATIA )
-                    {
-                        console.log( "What should I do with Croatian document?" );
-                    }*/
-
-                    // Show error or loading screen in UI component based on extracted image
-                    if ( !ev.detail.recognizer.frontSideCameraFrame )
-                    {
-                        el.setUiState( "ERROR" );
-                        return;
-                    }
-                    else
-                    {
-                        el.setUiState( "LOADING" );
-                    }
-
-                    // Send image to web API for processing
-                    const payload =
-                    {
-                        // Image from WASM library should be converted to Base64 from ImageData format.
-                        "imageSource": client.imageDataToBase64( ev.detail.recognizer.frontSideCameraFrame )
-                    };
-
-                    client.recognize( "/v1/recognizers/blinkid", payload )
-                        .then( ( results ) =>
-                        {
-                            const recognitionResults = results.response.data.result;
-                            console.log( "API recognition results", recognitionResults );
-
-                            if ( recognitionResults.recognitionStatus === "EMPTY" )
-                            {
-                                console.warn( "API processing returned empty results." );
-                                el.setUiState( "ERROR" );
-                                return;
-                            }
-
-                            // Do something with the results and notify the user
-                            el.setUiState( "SUCCESS" );
-                        } )
-                        .catch( ( error ) =>
-                        {
-                            console.error( "API recognition error", error );
-                            el.setUiState( "ERROR" );
-                        } );
-                }
-            );
-
-            /**
-             * Other events
-             */
-            el.addEventListener
-            (
-                "fatalError",
-                ev => console.log( "fatalError", ev.detail )
-            );
-
-            el.addEventListener
-            (
-                "ready",
-                ev => console.log( "ready", ev.detail )
-            );
-
-            el.addEventListener
-            (
-                "scanError",
-                ev => console.log( "scanError", ev.detail )
-            );
-
-            el.addEventListener
-            (
-                "feedback",
-                ev => console.log( "feedback", ev.detail )
-            );
+            window.addEventListener( "DOMContentLoaded", ev => run() );
         </script>
     </body>
 </html>

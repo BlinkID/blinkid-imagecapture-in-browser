@@ -137,10 +137,10 @@
     <script src="../client-dist/client-library.js"></script>
     <script type="text/javascript">
       window.getSafePathname = p => p[ p.length - 1 ] === '/' ? p : p.split( '/' ).slice( 0, -1 ).join( '/' ) + '/';
-       window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPoY+w35CpGHWqtw4YC5t1oX/aQgfnUxj4w7md5KK7PsAJWgDeN7gNR95AcmU6E6YdpE7+FuMlvpQj/GnCMTAdPfSEjvnyVVW8fkTrJgpvPCENAnQkAK/thdArxfi7i36pQChaBsWezwJ2yeNhUdIVDOc2qbak9LnV0BuO3+gK6xvjetxmEuXVxbgliwqUOiLPkxwufZMdR9dPjwywHBs8x2aknPm5Akrm0pz9D6r/ZRgg6A7AIYfXpKGELaxf7K4GSRK94UFp8G0XeVECuPoHvKpk08HJk+pYVj+MC6HuAAzNg6gRNvF7QZ2y+di6tTWgLt7kn4Xin0MAZBIFx6tLLZQALyempSE9ay+3ZmB0eWzeFDxCSXbfqHxq4T7PXYUcJRPrmF+d/RCYLbNzkO2f/Azzd+Lm0MJx3dru0ooLBlnc718jo9zFCCV+K0FhNUwA6uUe6dS3UbsO724R17UKQD1OMD8VG4ZAKaoNzCCT4bRkFV/YxkoyhoVaHE=';
+      window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLIUTxcuCAoWyrw/hXqFhXCFPheJpGEl1rOJxd04GybaYWVZhEd2YAi2vy4j/nBPMUyIwH1f2tmwODVgEA42ErPfvMOzOm/appqwoQxciyCIkwVi55sT2hmu2v4qJlU/+NHhxDTGPaJiSIUP0X6HS+INl8Afl2h+Zl7s0wn4QHjJx8O7y1hs=';
 
       if (window.location.hostname === 'blinkid.github.io') {
-        window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9hH4YlTvZbvuaF7qdDCre49ZhxvqIm5WQOTknq+AvYg/CLhjuSlXXDfNJSxYZg9htm199F1Hn2FufzLP90mL5lI542YMUk4oAdcen0VMiZmRKc3+6aXms8uMU3JInKzJ/YFtKym0wSP1wGXtAM+aXTyk/lkjJy5gRd1gFInaGIgTCuUhE2lgle1DWZdSwtVrmpffWnct6aH02f9EYsEeJsYLNa85U+9bjC1fOwt/0f8L7M9uEeyYCMSVFpq1ZHsdzAd3CWHrdX3wl3OzG2x+ioA4SS6YWmTY89GSCaN/mm6qOSo28XOXOb+PQHx/to06ypnNsgos9tptBT3Lev+X4tqS6OrOmDyw80YNSaoHILv6o=';
+        window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==';
       }
 
       window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources";
@@ -296,7 +296,7 @@
             el.setUiState('ERROR');
             return;
           }
-          
+
           if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
             // Show loading screen in UI component
             el.setUiState('LOADING');
@@ -364,7 +364,7 @@
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
         window.setTimeout(() => {
-          el.translations = { 
+          el.translations = {
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -455,7 +455,7 @@
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         window.setTimeout(() => {
-          el.translations = { 
+          el.translations = {
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -710,7 +710,7 @@
 
         customizatorForm.addEventListener('submit', ev => {
           ev.preventDefault();
-          
+
           document.querySelector(
             '#example-customization .box'
           ).style.background = document.getElementById('customization-background').value;
