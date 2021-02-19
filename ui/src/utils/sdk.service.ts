@@ -210,10 +210,16 @@ export class SdkService {
               if (!results || results.state === BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
                 eventCallback({
                   status: RecognitionStatus.EmptyResultState,
-                  data: { initiatedByUser: this.cancelInitiatedFromOutside }
+                  data: {
+                    initiatedByUser: this.cancelInitiatedFromOutside,
+                    recognizerName: this.recognizerName
+                  }
                 });
               } else {
-                const recognitionResults: RecognitionResults = { recognizer: results }
+                const recognitionResults: RecognitionResults = {
+                  recognizer: results,
+                  recognizerName: this.recognizerName
+                }
 
                 if (recognizer.successFrame) {
                   const successFrameResults = await recognizer.successFrame.getResult();
@@ -228,7 +234,7 @@ export class SdkService {
                   data: {
                     result: recognitionResults,
                     initiatedByUser: this.cancelInitiatedFromOutside,
-                    closeCamera: this.recognizerName !== 'BlinkIdImageCaptureRecognizer'
+                    imageCapture: this.recognizerName === 'BlinkIdImageCaptureRecognizer'
                   }
                 });
                 break;
@@ -237,7 +243,10 @@ export class SdkService {
           } else {
             eventCallback({
               status: RecognitionStatus.EmptyResultState,
-              data: { initiatedByUser: this.cancelInitiatedFromOutside }
+              data: {
+                initiatedByUser: this.cancelInitiatedFromOutside,
+                recognizerName: ''
+              }
             });
           }
 
@@ -282,8 +291,11 @@ export class SdkService {
     await this.videoRecognizer.flipCamera();
   }
 
-  public async isCameraFlipped(): Promise<boolean> {
-    return await this.videoRecognizer.cameraFlipped;
+  public isCameraFlipped(): boolean {
+    if (!this.videoRecognizer) {
+      return false;
+    }
+    return this.videoRecognizer.cameraFlipped;
   }
 
   public isScanFromImageAvailable(recognizers: Array<string>, _recognizerOptions: Array<string> = []): boolean {
@@ -326,9 +338,10 @@ export class SdkService {
       return;
     }
 
-    const imageElement = document.createElement('img');
+    const imageElement = new Image();
     imageElement.src = URL.createObjectURL(file);
     await imageElement.decode();
+
     const imageFrame = BlinkIDImageCaptureSDK.captureFrame(imageElement);
 
     this.eventEmitter$.addEventListener('terminate', async () => {
@@ -353,6 +366,8 @@ export class SdkService {
           await recognizer.recognizer.delete();
         }
       }
+
+      this.eventEmitter$.dispatchEvent(new Event('terminate:done'));
     });
 
     // Get results
@@ -367,10 +382,17 @@ export class SdkService {
         if (!results || results.state === BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
           eventCallback({
             status: RecognitionStatus.EmptyResultState,
-            data: { initiatedByUser: this.cancelInitiatedFromOutside }
+            data: {
+              initiatedByUser: this.cancelInitiatedFromOutside,
+              recognizerName: recognizer.name
+            }
           });
         } else {
-          const recognitionResults: RecognitionResults = { recognizer: results }
+          const recognitionResults: RecognitionResults = {
+            recognizer: results,
+            imageCapture: recognizer.name === 'BlinkIdImageCaptureRecognizer',
+            recognizerName: recognizer.name
+          };
           eventCallback({
             status: RecognitionStatus.ScanSuccessful,
             data: recognitionResults
@@ -379,9 +401,39 @@ export class SdkService {
         }
       }
     } else {
+      // If necessary, scan the image once again with different settings
+      if (configuration.thoroughScan) {
+        configuration.thoroughScan = false;
+
+        if (
+          !Array.isArray(configuration.recognizerOptions) ||
+          configuration.recognizerOptions.indexOf('scanCroppedDocumentImage') === -1
+        ) {
+          if (!Array.isArray(configuration.recognizerOptions)) {
+            configuration.recognizerOptions = [];
+          }
+          configuration.recognizerOptions.push('scanCroppedDocumentImage');
+        }
+        else {
+          const position = configuration.recognizerOptions.indexOf('scanCroppedDocumentImage');
+          configuration.recognizerOptions.splice(position, 1);
+        }
+
+        const eventHandler = (recognitionEvent: RecognitionEvent) => eventCallback(recognitionEvent);
+        const handleTerminateDone = () => {
+          this.eventEmitter$.removeEventListener('terminate:done', handleTerminateDone);
+          this.scanFromImage(configuration, eventHandler);
+        }
+        this.cancelRecognition();
+        this.eventEmitter$.addEventListener('terminate:done', handleTerminateDone);
+        return;
+      }
       eventCallback({
         status: RecognitionStatus.EmptyResultState,
-        data: { initiatedByUser: this.cancelInitiatedFromOutside }
+        data: {
+          initiatedByUser: this.cancelInitiatedFromOutside,
+          recognizerName: ''
+        }
       });
     }
 
@@ -436,8 +488,9 @@ export class SdkService {
 
     const recognizerInstances = [];
 
-    for (const recognizer of pureRecognizers) {
-      const instance: RecognizerInstance = { recognizer }
+    for (let i = 0; i < pureRecognizers.length; ++i) {
+      const recognizer = pureRecognizers[i];
+      const instance: RecognizerInstance = { name: recognizers[i], recognizer }
 
       if (successFrame) {
         const successFrameGrabber = await BlinkIDImageCaptureSDK.createSuccessFrameGrabberRecognizer(this.sdk, recognizer);
@@ -460,7 +513,6 @@ export class SdkService {
         eventCallback({ status: RecognitionStatus.DetectionStatusChange, data: quad });
 
         const detectionStatus = quad.detectionStatus;
-
         switch (detectionStatus) {
           case BlinkIDImageCaptureSDK.DetectionStatus.Fail:
             eventCallback({ status: RecognitionStatus.DetectionStatusSuccess });

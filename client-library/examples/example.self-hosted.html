@@ -33,10 +33,7 @@
             apiLocation: "http://localhost",
             healthcheckEndpoint: "/v1/hc",
             headers:
-            {
-                /* For purposes of example - header should be added by proxy application */
-                "Authorization": "Bearer <PLACE-YOUR-TOKEN-HERE>"
-            }
+            {}
         };
 
         const client = new Client.Client( Client.ApiType.SelfHosted, configuration );

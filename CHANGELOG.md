@@ -1,5 +1,35 @@
 # Release notes
 
+**Newly supported identity documents**
+
+* Saudi Arabia - DL (front)
+* Saudi Arabia - Resident ID (front)
+
+### Changes to the BlinkId(Combined)Recognizer:
+
+* We've improved data extraction through the MRZ:
+    * We now return the document type through `ClassInfo`.
+* We've extended the `ClassInfo` structure with helper methods so you can filter documents by country more easily:
+    * Use `countryName`, `isoNumericCountryCode`, `isoAlpha2CountryCode` and `isoAlpha3CountryCode` to get the full country names or their representative codes defined by [ISO](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes).
+* We've added another `ProcessingStatus` called `AwaitingOtherSide`
+    * This status is triggered once BlinkID has finished with the first side of a document and expects the other side, too.
+* We've added a new recognition mode for recognizing still images of documents that have already been cropped:
+    * Set the `scanCroppedDocumentImage` to true when you're feeding BlinkID images of documents that have already been cropped and don't require detection.
+    * Keep in mind that this setting won't work on document images that haven't been properly cropped.
+
+### Changes to the UI component:
+
+* We’ve added new ways you can configure the UI component to better fit the way your app looks and behaves.
+    * For a full list of attributes, properties and events you can modify, please see the [API documentation](ui/docs/components/blinkid-imagecapture-in-browser/readme.md).
+    * For a full list of CSS variables please see [\_globals.scss file](ui/src/components/shared/styles/_globals.scss).
+
+### Changes to RecognizerRunner class:
+
+* Invoking `RecognizerRunner.processImage` on  multiple still images will no longer implicitly reset the recognizer chain.
+    * This means you can now use BlinkIdImageCaptureRecognizer with the flag `captureBothDocumentSides` to scan both sides of a document by giving it two still images.
+    * If you still need to reset the recognizers, you can do that  manually by invoking the `RecognizerRunner.resetRecognizers` function.
+    * A complete example of how to use BlinkIdImageCaptureRecognizer with the flag `captureBothDocumentSides` with still images has been added [here](examples/combined-file).
+
 ## 5.9.0
 
 ### New additions to our supported documents list

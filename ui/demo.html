@@ -137,10 +137,10 @@
     <script src="../client-dist/client-library.js"></script>
     <script type="text/javascript">
       window.getSafePathname = p => p[ p.length - 1 ] === '/' ? p : p.split( '/' ).slice( 0, -1 ).join( '/' ) + '/';
-      window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLC04YNbW6mKi4G+0hY/TYPcxYsMtciH6IQJEVwB6I94r6RO0MkLQpRKpjcp6GFK8IfGpG+8dkyC4yaZwr7fpo45DcI31+Qrfv7UJAYaw7XSrOe3xRa1R7cUZ++uJAUgGCNvGbRJdpK/aoyDOSedumMwhP3aoShjz3NwVaBiJ212fw3hPEMM=';
+      window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLK04YMA5M4agSspIfB0b0vqHwhTKKYaP0WhavKtbe2ZICfGcm22v7qoVLgagC9RDKyDZBazkD2RXLK1zIejK86Fwc6EFxEdpvTbx3tQ+2K37DkKFioEBkY6reVf/C8vY6TqvCAjjZS+QU2j7zuzvRGTsPHb8YkyrDOcvp4Q/DU1tkr0avQ0=';
 
       if (window.location.hostname === 'blinkid.github.io') {
-        window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDiKtDv+XZv0f4pXoMJlSDkzDC87o8ov+Zn7XXpyM5A6Y7HyH2psXm4ew3rXY49SgFjxpvp/TX8+IgPPN+4PibhMhBpzZ1/K0cqUejQreB3harGuGjOf2kxzHgNC5M4Uv4kDJtTfBzgoaIQ1U6G98S5uu7PfrVJJ2IyMO4rm38CDPlRCGxbA==';
+        window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDoIDmaB8XoK5Dh0ilusTxAZ5LCn1qJWJCicwjvveQl+h0jalMwiQxe8qofTkXWSdiEnUA4U3tJZb/TLzAuJO888jeB/8V5zN5PyqArzl4YvXrbuuk/LcXhy/SlS6vJPYpOxBqUD0O8VfZVcoDbb1rcupZILjTlzsAzbUD6pv4amQRhEao8A==';
       }
 
       window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.9.0/resources";
@@ -185,7 +185,6 @@
           .catch((response) => {
             el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
           });
-
         el.addEventListener('scanError', ev => {
           console.log('scanError', ev.detail);
 
@@ -194,7 +193,6 @@
 
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
-
           if (!ev.detail.recognizer.frontSideCameraFrame) {
             console.log("Could not extract front image of a document.");
             el.setUiState('ERROR');
@@ -257,6 +255,7 @@
         el.recognizerOptions = [
           'captureBothDocumentSides'
         ];
+
         const configuration = {
           apiLocation: "https://demoapi.microblink.com",
           healthcheckEndpoint: "/v1/hc"
@@ -296,7 +295,7 @@
             el.setUiState('ERROR');
             return;
           }
-
+          
           if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
             // Show loading screen in UI component
             el.setUiState('LOADING');
@@ -333,8 +332,6 @@
         });
       })();
     </script>
-
-
     <section id="example-localization">
       <h2>Custom messages</h2>
       <p>It's possible to change default text messages which are displayed to the user.</p>
@@ -364,7 +361,7 @@
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
         window.setTimeout(() => {
-          el.translations = {
+          el.translations = { 
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -380,7 +377,6 @@
           .catch((response) => {
             el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
           });
-
         el.addEventListener('scanError', ev => {
           console.log('scanError', ev.detail);
 
@@ -390,7 +386,6 @@
 
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
-
           if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
             // Show loading screen in UI component
             el.setUiState('LOADING');
@@ -455,7 +450,7 @@
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         window.setTimeout(() => {
-          el.translations = {
+          el.translations = { 
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -471,17 +466,14 @@
           .catch((response) => {
             el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
           });
-
         el.addEventListener('scanError', ev => {
           console.log('scanError', ev.detail);
 
           el.setUiState('ERROR');
         });
 
-
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
-
           if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
             // Show loading screen in UI component
             el.setUiState('LOADING');
@@ -603,17 +595,14 @@
           .catch((response) => {
             el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
           });
-
         el.addEventListener('scanError', ev => {
           console.log('scanError', ev.detail);
 
           el.setUiState('ERROR');
         });
 
-
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
-
           if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
             // Show loading screen in UI component
             el.setUiState('LOADING');
@@ -710,7 +699,7 @@
 
         customizatorForm.addEventListener('submit', ev => {
           ev.preventDefault();
-
+          
           document.querySelector(
             '#example-customization .box'
           ).style.background = document.getElementById('customization-background').value;

@@ -3,11 +3,10 @@
  */
 
 /**
- * BlinkID ImageCapture In-browser SDK demo app which demonstrates how to:
+ * This example app demonstrates how to use BlinkID ImageCapture In-browser SDK to achieve the following:
  *
  * - Change default SDK settings
- * - Scan front side of the identity document from image
- * - Provide visual feedback to the end-user during the scan
+ * - Scan front and back side of the identity document with file upload (combined experience)
  * - Send an image to web API for processing
  */
 import * as BlinkIDImageCaptureSDK from "@microblink/blinkid-imagecapture-in-browser-sdk";
@@ -17,7 +16,8 @@ import { ApiType, Client } from "@microblink/blinkid-imagecapture-in-browser-sdk
 const initialMessageEl = document.getElementById( "msg" ) as HTMLHeadingElement;
 const progressEl = document.getElementById( "load-progress" ) as HTMLProgressElement;
 const scanImageElement = document.getElementById( "target-image") as HTMLImageElement;
-const inputImageFile = document.getElementById( "image-file" ) as HTMLInputElement;
+const inputImageFileFrontSide = document.getElementById( "image-file-front-side" ) as HTMLInputElement;
+const inputImageFileBackSide = document.getElementById( "image-file-back-side" ) as HTMLInputElement;
 let processingOnWebApi = false;
 
 /**
@@ -56,10 +56,10 @@ function main()
         {
             document.getElementById( "screen-initial" )?.classList.add( "hidden" );
             document.getElementById( "screen-start" )?.classList.remove( "hidden" );
-            document.getElementById( "image-file" )?.addEventListener( "change", ( ev: any ) =>
+            document.getElementById( "start-button" )?.addEventListener( "click", ( ev: any ) =>
             {
                 ev.preventDefault();
-                startScan( sdk, ev.target.files );
+                startScan( sdk );
             });
         },
         ( error: any ) =>
@@ -73,7 +73,7 @@ function main()
 /**
  * Scan single side of identity document with web camera.
  */
-async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileList )
+async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK )
 {
     processingOnWebApi = false;
 
@@ -84,6 +84,13 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
     //
     // BlinkID ImageCapture Recognizer - recognize a document and extract an image
     const blinkIdImageCaptureRecognizer = await BlinkIDImageCaptureSDK.createBlinkIdImageCaptureRecognizer( sdk );
+
+    // 1.1. Enable scan of both sides for BlinkID ImageCapture recognizer
+    const settings = await blinkIdImageCaptureRecognizer.currentSettings();
+
+    settings[ "captureBothDocumentSides" ] = true;
+
+    await blinkIdImageCaptureRecognizer.updateSettings( settings );
 
     // 2. Create a RecognizerRunner object which orchestrates the recognition with one or more
     //    recognizer objects.
@@ -97,20 +104,13 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
         false
     );
 
-    // 3. Prepare image for scan action - keep in mind that SDK can only process images represented in
+    // 3. Prepare front side image for scan action - keep in mind that SDK can only process images represented in
     //    internal CapturedFrame data structure. Therefore, auxiliary method "captureFrame" is provided.
 
     // Make sure that image file is provided
-    let file = null;
-    const imageRegex = RegExp( /^image\// );
-    for ( let i = 0; i < fileList.length; ++i )
-    {
-        if ( imageRegex.exec( fileList[ i ].type ) )
-        {
-            file = fileList[ i ];
-        }
-    }
-    if ( !file )
+    const fileFrontSide = getImageFromInput( inputImageFileFrontSide.files );
+
+    if ( !fileFrontSide )
     {
         alert( "No image files provided!" );
         // Release memory on WebAssembly heap used by the RecognizerRunner
@@ -118,43 +118,69 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
 
         // Release memory on WebAssembly heap used by the recognizer
         blinkIdImageCaptureRecognizer?.delete();
-        inputImageFile.value = "";
+        inputImageFileFrontSide.value = "";
         return;
     }
 
-    scanImageElement!.src = URL.createObjectURL( file );
-    await scanImageElement.decode();
-    const imageFrame = BlinkIDImageCaptureSDK.captureFrame( scanImageElement );
+    const imageFrame = await getImageFrame( fileFrontSide );
 
     // 4. Start the recognition and await for the results
-    const processResult = await recognizerRunner.processImage( imageFrame );
+    const processResultFrontSide = await recognizerRunner.processImage( imageFrame );
 
-    // 5. If recognition was successful, obtain the result and display it
-    if ( processResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
+    // 5. If recognition of the first side was successful, process the back side
+    if ( processResultFrontSide !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
     {
-        const blinkIdImageCaptureResults = await blinkIdImageCaptureRecognizer.getResult();
-        if ( blinkIdImageCaptureResults.state !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
-        {
-            console.log( "BlinkIDImageCapture results", blinkIdImageCaptureResults );
+        // 6. Prepare back side image for scan action
+        const fileBackSide = getImageFromInput( inputImageFileBackSide.files );
 
-            if ( !blinkIdImageCaptureResults.frontSideCameraFrame )
+        if ( !fileBackSide )
+        {
+            alert( "No image files provided!" );
+            // Release memory on WebAssembly heap used by the RecognizerRunner
+            recognizerRunner?.delete();
+
+            // Release memory on WebAssembly heap used by the recognizer
+            blinkIdImageCaptureRecognizer?.delete();
+            inputImageFileBackSide.value = "";
+            return;
+        }
+
+        const imageFrame = await getImageFrame( fileBackSide );
+
+        // 7. Start the recognition and await for the results
+        const processResultBackSide = await recognizerRunner.processImage( imageFrame );
+
+        if ( processResultBackSide !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
+        {
+            // 8. If recognition of the back side was successful, obtain the result and display it
+            const results = await blinkIdImageCaptureRecognizer.getResult();
+            if ( results.state !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
             {
-                alert( "Could not extract front image of a document. Please try again." );
+                console.log( "BlinkIDImageCapture results", results );
+
+                if ( !results.frontSideCameraFrame || !results.backSideCameraFrame )
+                {
+                    alert( "Could not extract images of a document. Please try again." );
+                }
+                else
+                {
+                    processingOnWebApi = true;
+                    console.log( "Sending request to web API..." );
+                    getWebApiResults( results.frontSideCameraFrame, results.backSideCameraFrame );
+                }
             }
-            else
-            {
-                processingOnWebApi = true;
-                console.log( "Sending request to web API..." );
-                getWebApiResults( blinkIdImageCaptureResults.frontSideCameraFrame );
-            }
+        }
+        else
+        {
+            alert( "Could not extract information from the back side of a document!" );
         }
     }
     else
     {
-        alert( "Could not extract information!" );
+        alert( "Could not extract information from the front side of a document!" );
     }
 
-    // 7. Release all resources allocated on the WebAssembly heap and associated with camera stream
+    // 9. Release all resources allocated on the WebAssembly heap and associated with camera stream
 
     // Release memory on WebAssembly heap used by the RecognizerRunner
     recognizerRunner?.delete();
@@ -163,7 +189,8 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
     blinkIdImageCaptureRecognizer?.delete();
 
     // Hide scanning screen and show scan button again
-    inputImageFile.value = "";
+    inputImageFileFrontSide.value = "";
+    inputImageFileBackSide.value = "";
 
     if ( !processingOnWebApi )
     {
@@ -172,12 +199,36 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
     }
 }
 
+function getImageFromInput( fileList: FileList | null ): File | null {
+    if ( fileList === null )
+    {
+        return null;
+    }
+
+    let image = null;
+    const imageRegex = RegExp( /^image\// );
+    for ( let i = 0; i < fileList.length; ++i )
+    {
+        if ( imageRegex.exec( fileList[ i ].type ) )
+        {
+            image = fileList[ i ];
+        }
+    }
+    return image;
+}
+
+async function getImageFrame( file: File ): Promise< BlinkIDImageCaptureSDK.CapturedFrame > {
+    scanImageElement.src = URL.createObjectURL( file );
+    await scanImageElement.decode();
+    return BlinkIDImageCaptureSDK.captureFrame( scanImageElement );
+}
+
 /**
  * Prepare and send image frames to web API for recognition processing.
  *
  * This function is using client library which is provided with the SDK.
  */
-function getWebApiResults( frontSide: ImageData )
+function getWebApiResults( frontSide: ImageData, backSide: ImageData )
 {
     // Create instance of client library - for more information see `client-library/README.md` file
     const client = new Client( ApiType.SelfHosted, { apiLocation: "https://demoapi.microblink.com" } );
@@ -185,11 +236,12 @@ function getWebApiResults( frontSide: ImageData )
     // Send image to web API for processing
     const payload =
     {
-        // Image from WASM library should be converted to Base64 from ImageData format.
-        "imageSource": client.imageDataToBase64( frontSide )
+        // Images from WASM library should be converted to Base64 from ImageData format.
+        "imageFrontSide": client.imageDataToBase64( frontSide ),
+        "imageBackSide": client.imageDataToBase64( backSide )
     };
 
-    client.recognize( "/v1/recognizers/blinkid", payload )
+    client.recognize( "/v1/recognizers/blinkid-combined", payload )
         .then( ( results ) =>
         {
             const recognitionResults = results.response.data.result;
