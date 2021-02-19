@@ -1,5 +1,7 @@
 # Release notes
 
+## 5.10.0
+
 **Newly supported identity documents**
 
 * Saudi Arabia - DL (front)
