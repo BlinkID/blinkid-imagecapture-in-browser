@@ -39,6 +39,12 @@ export class BlinkIdImageCaptureRecognizerSettings implements RecognizerSettings
      * Called when barcode frame capture step starts.
      */
     barcodeCaptureStartedCallback: BarcodeCaptureStartedCallback | null = null;
+
+    /**
+     * Configure the recognizer to only work on already cropped and dewarped images.
+     * This only works for still images - video feeds will ignore this setting.
+     */
+    scanCroppedDocumentImage = false;
 }
 
 /**

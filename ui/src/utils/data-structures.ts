@@ -27,18 +27,23 @@ export interface MicroblinkUI {
   // UI customization
   translations:         { [key: string]: string };
   rawTranslations:      string;
+  showActionLabels:     boolean;
+  showModalWindows:     boolean;
   iconCameraDefault:    string;
   iconCameraActive:     string;
   iconGalleryDefault:   string;
   iconGalleryActive:    string;
   iconInvalidFormat:    string;
-  iconSpinner:          string;
+  iconSpinnerScreenLoading: string;
+  iconSpinnerFromGalleryExperience: string;
 
   // Events
   fatalError:         EventEmitter<EventFatalError>;
   ready:              EventEmitter<EventReady>;
   scanError:          EventEmitter<EventScanError>;
   scanSuccess:        EventEmitter<EventScanSuccess>;
+  cameraScanStarted:  EventEmitter<null>;
+  imageScanStarted:   EventEmitter<null>;
 
   // Methods
   setUiState:         (state: 'ERROR' | 'LOADING' | 'NONE' | 'SUCCESS') => Promise<any>;
@@ -77,26 +82,31 @@ export class EventReady {
 }
 
 export class EventScanError {
-  code:     Code;
-  fatal:    boolean;
-  message:  string;
+  code:           Code;
+  fatal:          boolean;
+  message:        string;
+  recognizerName: string;
 
-  constructor(code: Code, fatal: boolean, message: string) {
+  constructor(code: Code, fatal: boolean, message: string, recognizerName: string) {
     this.code = code;
     this.fatal = fatal;
     this.message = message;
+    this.recognizerName = recognizerName;
   }
 }
 
 export class EventScanSuccess {
   recognizer:     BlinkIDImageCaptureSDK.RecognizerResult;
+  recognizerName: string;
   successFrame?:  BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult;
 
   constructor(
     recognizer: BlinkIDImageCaptureSDK.RecognizerResult,
+    recognizerName: string,
     successFrame?: BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult
   ) {
     this.recognizer = recognizer;
+    this.recognizerName = recognizerName;
 
     if (successFrame) {
       this.successFrame = successFrame;
@@ -132,12 +142,13 @@ export enum Code {
  * Scan structures
  */
 export const AvailableRecognizers: { [key: string]: string } = {
-  BlinkIdImageCaptureRecognizer:               'createBlinkIdImageCaptureRecognizer',
+  BlinkIdImageCaptureRecognizer:        'createBlinkIdImageCaptureRecognizer',
 }
 
 export const AvailableRecognizerOptions: { [key: string]: Array<string> } = {
   BlinkIdImageCaptureRecognizer: [
-    'captureBothDocumentSides'
+    'captureBothDocumentSides',
+    'scanCroppedDocumentImage'
   ],
 }
 
@@ -152,10 +163,12 @@ export interface VideoRecognitionConfiguration {
 export interface ImageRecognitionConfiguration {
   recognizers: Array<string>,
   recognizerOptions?: Array<string>,
+  thoroughScan?: boolean,
   fileList: FileList
 }
 
 export interface RecognizerInstance {
+  name: string,
   recognizer: BlinkIDImageCaptureSDK.Recognizer & { objectHandle: number },
   successFrame?: BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizer<BlinkIDImageCaptureSDK.Recognizer> & { objectHandle?: number }
 }
@@ -199,14 +212,17 @@ export interface RecognitionEvent {
 }
 
 export interface RecognitionResults {
-  recognizer: BlinkIDImageCaptureSDK.RecognizerResult,
-  successFrame?: BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult
+  recognizer:     BlinkIDImageCaptureSDK.RecognizerResult,
+  recognizerName: string,
+  successFrame?:  BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult,
+  imageCapture?:  boolean
 }
 
 export enum CameraExperience {
   Barcode         = 'BARCODE',
   CardCombined    = 'CARD_COMBINED',
-  CardSingleSide  = 'CARD_SINGLE_SIDE'
+  CardSingleSide  = 'CARD_SINGLE_SIDE',
+  BlinkCard       = 'BLINKCARD'
 }
 
 export enum CameraExperienceState {
@@ -227,8 +243,8 @@ export const CameraExperienceStateDuration = new Map([
   [ CameraExperienceState.Done, 300 ],
   [ CameraExperienceState.DoneAll, 400 ],
   [ CameraExperienceState.Flip, 3500 ],
-  [ CameraExperienceState.MoveCloser, 2000 ],
-  [ CameraExperienceState.MoveFarther, 2000 ]
+  [ CameraExperienceState.MoveCloser, 2500 ],
+  [ CameraExperienceState.MoveFarther, 2500 ]
 ]);
 
 export enum CameraExperienceReticleAnimation {
