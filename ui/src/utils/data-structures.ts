@@ -4,17 +4,17 @@
 
 import { EventEmitter } from '@stencil/core';
 
-import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";
+import * as BlinkIDImageCaptureSDK from '../../../es/blinkid-imagecapture-sdk';
 
 export interface MicroblinkUI {
   // SDK settings
   allowHelloMessage:    boolean;
   engineLocation:       string;
   licenseKey:           string;
+  wasmType:             string;
   rawRecognizers:       string;
   recognizers:          Array<string>;
-  rawRecognizerOptions: string;
-  recognizerOptions:    Array<string>;
+  recognizerOptions:    { [key: string]: any };
   includeSuccessFrame?: boolean;
 
   // Functional properties
@@ -53,6 +53,7 @@ export interface MicroblinkUI {
 export interface SdkSettings {
   allowHelloMessage:  boolean;
   engineLocation:     string;
+  wasmType?:          BlinkIDImageCaptureSDK.WasmType;
 }
 
 /**
@@ -145,16 +146,9 @@ export const AvailableRecognizers: { [key: string]: string } = {
   BlinkIdImageCaptureRecognizer:        'createBlinkIdImageCaptureRecognizer',
 }
 
-export const AvailableRecognizerOptions: { [key: string]: Array<string> } = {
-  BlinkIdImageCaptureRecognizer: [
-    'captureBothDocumentSides',
-    'scanCroppedDocumentImage'
-  ],
-}
-
 export interface VideoRecognitionConfiguration {
   recognizers: Array<string>,
-  recognizerOptions?: Array<string>,
+  recognizerOptions?: any,
   successFrame: boolean,
   cameraFeed: HTMLVideoElement,
   cameraId: string | null;
@@ -162,7 +156,7 @@ export interface VideoRecognitionConfiguration {
 
 export interface ImageRecognitionConfiguration {
   recognizers: Array<string>,
-  recognizerOptions?: Array<string>,
+  recognizerOptions?: any,
   thoroughScan?: boolean,
   fileList: FileList
 }

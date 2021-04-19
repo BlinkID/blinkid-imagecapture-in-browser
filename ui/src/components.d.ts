@@ -67,10 +67,6 @@ export namespace Components {
          */
         "licenseKey": string;
         /**
-          * Specify additional recognizer options.  Available options:  - 'captureBothDocumentSides', enable scanning of both document sides - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection  Example:  `<blinkid-imagecapture-in-browser recognizer-options="captureBothDocumentSides"></blinkid-imagecapture-in-browser>`
-         */
-        "rawRecognizerOptions": string;
-        /**
           * List of recognizers which should be used.  Available recognizers for BlinkID ImageCapture:  - BlinkIdImageCaptureRecognizer  Recognizers can be defined by setting HTML attribute "recognizers", for example:  `<blinkid-imagecapture-in-browser recognizers="BlinkIdImageCaptureRecognizer"></blinkid-imagecapture-in-browser>`
          */
         "rawRecognizers": string;
@@ -79,9 +75,9 @@ export namespace Components {
          */
         "rawTranslations": string;
         /**
-          * Specify additional recognizer options.  Available options:  - 'captureBothDocumentSides', enable scanning of both document sides - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection  Example:  ``` const blinkId = document.querySelector('blinkid-imagecapture-in-browser'); blinkid.recognizerOptions = ['captureBothDocumentSides']; ```
+          * Specify recognizer options. This option can only bet set as a JavaScript property.  Pass an object to `recognizerOptions` property where each key represents a recognizer, while the value represents desired recognizer options.  ``` blinkId.recognizerOptions = {    'BlinkIdImageCaptureRecognizer': {      // Enable scanning of both document sides      'captureBothDocumentSides': true,       // Scan images of documents that have already been cropped and don't require detection      'scanCroppedDocumentImage': true    } } ```  For a full list of available recognizer options see source code of a recognizer. For example, list of available recognizer options for BlinkIdImageCaptureRecognizer can be seen in the `src/Recognizers/BlinkID/ImageCapture/ImageCaptureRecognizer.ts` file.
          */
-        "recognizerOptions": Array<string>;
+        "recognizerOptions": { [key: string]: any };
         /**
           * List of recognizers which should be used.  Available recognizers for BlinkID ImageCapture:  - BlinkIdImageCaptureRecognizer  Recognizers can be defined by setting JS property "recognizers", for example:  ``` const blinkId = document.querySelector('blinkid-imagecapture-in-browser'); blinkId.recognizers = ['BlinkIdImageCaptureRecognizer']; ```
          */
@@ -118,6 +114,10 @@ export namespace Components {
           * Set custom translations for UI component. List of available translation keys can be found in `src/utils/translation.service.ts` file.
          */
         "translations": { [key: string]: string };
+        /**
+          * Defines the type of the WebAssembly build that will be loaded. If omitted, SDK will determine the best possible WebAssembly build which should be loaded based on the browser support.  Available WebAssembly builds:  - 'BASIC' - 'ADVANCED' - 'ADVANCED_WITH_THREADS'  For more information about different WebAssembly builds, check out the `src/MicroblinkSDK/WasmType.ts` file.
+         */
+        "wasmType": string;
     }
     interface MbApiProcessStatus {
         /**
@@ -188,6 +188,10 @@ export namespace Components {
           * Set camera scanning state.
          */
         "setState": (state: CameraExperienceState, isBackSide?: boolean, force?: boolean) => Promise<void>;
+        /**
+          * Show camera feedback message on camera for Barcode scanning
+         */
+        "showCameraFeedbackBarcodeMessage": boolean;
         /**
           * Unless specifically granted by your license key, you are not allowed to modify or remove the Microblink logo displayed on the bottom of the camera overlay.
          */
@@ -265,7 +269,7 @@ export namespace Components {
         /**
           * See description in public component.
          */
-        "recognizerOptions": Array<string>;
+        "recognizerOptions": { [key: string]: any };
         /**
           * See description in public component.
          */
@@ -297,6 +301,10 @@ export namespace Components {
         /**
           * See description in public component.
          */
+        "showCameraFeedbackBarcodeMessage": boolean;
+        /**
+          * See description in public component.
+         */
         "showModalWindows": boolean;
         /**
           * See description in public component.
@@ -310,6 +318,10 @@ export namespace Components {
           * Instance of TranslationService passed from root component.
          */
         "translationService": TranslationService;
+        /**
+          * See description in public component.
+         */
+        "wasmType": string | null;
     }
     interface MbContainer {
     }
@@ -536,10 +548,6 @@ declare namespace LocalJSX {
          */
         "onScanSuccess"?: (event: CustomEvent<EventScanSuccess>) => void;
         /**
-          * Specify additional recognizer options.  Available options:  - 'captureBothDocumentSides', enable scanning of both document sides - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection  Example:  `<blinkid-imagecapture-in-browser recognizer-options="captureBothDocumentSides"></blinkid-imagecapture-in-browser>`
-         */
-        "rawRecognizerOptions"?: string;
-        /**
           * List of recognizers which should be used.  Available recognizers for BlinkID ImageCapture:  - BlinkIdImageCaptureRecognizer  Recognizers can be defined by setting HTML attribute "recognizers", for example:  `<blinkid-imagecapture-in-browser recognizers="BlinkIdImageCaptureRecognizer"></blinkid-imagecapture-in-browser>`
          */
         "rawRecognizers"?: string;
@@ -548,9 +556,9 @@ declare namespace LocalJSX {
          */
         "rawTranslations"?: string;
         /**
-          * Specify additional recognizer options.  Available options:  - 'captureBothDocumentSides', enable scanning of both document sides - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection  Example:  ``` const blinkId = document.querySelector('blinkid-imagecapture-in-browser'); blinkid.recognizerOptions = ['captureBothDocumentSides']; ```
+          * Specify recognizer options. This option can only bet set as a JavaScript property.  Pass an object to `recognizerOptions` property where each key represents a recognizer, while the value represents desired recognizer options.  ``` blinkId.recognizerOptions = {    'BlinkIdImageCaptureRecognizer': {      // Enable scanning of both document sides      'captureBothDocumentSides': true,       // Scan images of documents that have already been cropped and don't require detection      'scanCroppedDocumentImage': true    } } ```  For a full list of available recognizer options see source code of a recognizer. For example, list of available recognizer options for BlinkIdImageCaptureRecognizer can be seen in the `src/Recognizers/BlinkID/ImageCapture/ImageCaptureRecognizer.ts` file.
          */
-        "recognizerOptions"?: Array<string>;
+        "recognizerOptions"?: { [key: string]: any };
         /**
           * List of recognizers which should be used.  Available recognizers for BlinkID ImageCapture:  - BlinkIdImageCaptureRecognizer  Recognizers can be defined by setting JS property "recognizers", for example:  ``` const blinkId = document.querySelector('blinkid-imagecapture-in-browser'); blinkId.recognizers = ['BlinkIdImageCaptureRecognizer']; ```
          */
@@ -579,6 +587,10 @@ declare namespace LocalJSX {
           * Set custom translations for UI component. List of available translation keys can be found in `src/utils/translation.service.ts` file.
          */
         "translations"?: { [key: string]: string };
+        /**
+          * Defines the type of the WebAssembly build that will be loaded. If omitted, SDK will determine the best possible WebAssembly build which should be loaded based on the browser support.  Available WebAssembly builds:  - 'BASIC' - 'ADVANCED' - 'ADVANCED_WITH_THREADS'  For more information about different WebAssembly builds, check out the `src/MicroblinkSDK/WasmType.ts` file.
+         */
+        "wasmType"?: string;
     }
     interface MbApiProcessStatus {
         /**
@@ -661,6 +673,10 @@ declare namespace LocalJSX {
           * Emitted when user clicks on Flip button.
          */
         "onFlipCameraAction"?: (event: CustomEvent<void>) => void;
+        /**
+          * Show camera feedback message on camera for Barcode scanning
+         */
+        "showCameraFeedbackBarcodeMessage"?: boolean;
         /**
           * Unless specifically granted by your license key, you are not allowed to modify or remove the Microblink logo displayed on the bottom of the camera overlay.
          */
@@ -766,7 +782,7 @@ declare namespace LocalJSX {
         /**
           * See description in public component.
          */
-        "recognizerOptions"?: Array<string>;
+        "recognizerOptions"?: { [key: string]: any };
         /**
           * See description in public component.
          */
@@ -794,6 +810,10 @@ declare namespace LocalJSX {
         /**
           * See description in public component.
          */
+        "showCameraFeedbackBarcodeMessage"?: boolean;
+        /**
+          * See description in public component.
+         */
         "showModalWindows"?: boolean;
         /**
           * See description in public component.
@@ -807,6 +827,10 @@ declare namespace LocalJSX {
           * Instance of TranslationService passed from root component.
          */
         "translationService"?: TranslationService;
+        /**
+          * See description in public component.
+         */
+        "wasmType"?: string | null;
     }
     interface MbContainer {
     }

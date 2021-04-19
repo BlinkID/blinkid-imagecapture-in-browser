@@ -6,7 +6,6 @@ import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";
 
 import {
   AvailableRecognizers,
-  AvailableRecognizerOptions,
   CameraExperience,
   Code,
   EventFatalError,
@@ -48,6 +47,10 @@ export class SdkService {
     loadSettings.allowHelloMessage = sdkSettings.allowHelloMessage;
     loadSettings.engineLocation = sdkSettings.engineLocation;
 
+    if (sdkSettings.wasmType) {
+      loadSettings.wasmType = sdkSettings.wasmType;
+    }
+
     return new Promise((resolve) => {
       BlinkIDImageCaptureSDK.loadWasmModule(loadSettings)
         .then((sdk: BlinkIDImageCaptureSDK.WasmSDK) => {
@@ -84,41 +87,9 @@ export class SdkService {
     }
   }
 
-  public checkRecognizerOptions(recognizers: Array<string>, recognizerOptions: Array<string>): CheckConclusion {
-    if (!recognizerOptions || !recognizerOptions.length) {
-      return {
-        status: true
-      }
-    }
-
-    for (const recognizerOption of recognizerOptions) {
-      let optionExistInProvidedRecognizers = false;
-
-      for (const recognizer of recognizers) {
-        const availableOptions = AvailableRecognizerOptions[recognizer];
-
-        if (availableOptions.indexOf(recognizerOption) > -1) {
-          optionExistInProvidedRecognizers = true;
-          break;
-        }
-      }
-
-      if (!optionExistInProvidedRecognizers) {
-        return {
-          status: false,
-          message: `Recognizer option "${ recognizerOption }" is not supported by available recognizers!`
-        }
-      }
-    }
-
-    return {
-      status: true
-    }
-  }
-
-  public getDesiredCameraExperience(recognizers: Array<string>, _recognizerOptions: Array<string> = []): CameraExperience {
-    if (recognizers.indexOf('BlinkIdImageCaptureRecognizer') > -1) {
-      if (_recognizerOptions && _recognizerOptions.includes('captureBothDocumentSides')) {
+  public getDesiredCameraExperience(_recognizers: Array<string> = [], _recognizerOptions: any = {}): CameraExperience {
+    if (_recognizers.indexOf('BlinkIdImageCaptureRecognizer') > -1) {
+      if (_recognizerOptions && Object.keys(_recognizerOptions).length > 0 && _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides) {
         return CameraExperience.CardCombined;
       }
 
@@ -298,9 +269,10 @@ export class SdkService {
     return this.videoRecognizer.cameraFlipped;
   }
 
-  public isScanFromImageAvailable(recognizers: Array<string>, _recognizerOptions: Array<string> = []): boolean {
-    if (recognizers.indexOf('BlinkIdImageCaptureRecognizer') !== -1) {
-      return _recognizerOptions && !_recognizerOptions.includes('captureBothDocumentSides');
+  public isScanFromImageAvailable(_recognizers: Array<string> = [], _recognizerOptions: any = {}): boolean {
+    if (_recognizers.indexOf('BlinkIdImageCaptureRecognizer') !== -1) {
+      if (_recognizerOptions && Object.keys(_recognizerOptions).length > 0 && _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides) return false;
+      else return true;
     }
     return true;
   }
@@ -428,6 +400,7 @@ export class SdkService {
         this.eventEmitter$.addEventListener('terminate:done', handleTerminateDone);
         return;
       }
+
       eventCallback({
         status: RecognitionStatus.EmptyResultState,
         data: {
@@ -458,7 +431,7 @@ export class SdkService {
 
   private async createRecognizers(
     recognizers: Array<string>,
-    recognizerOptions?: Array<string>,
+    recognizerOptions?: any,
     successFrame: boolean = false
   ): Promise<Array<RecognizerInstance>> {
     const pureRecognizers = [];
@@ -468,14 +441,14 @@ export class SdkService {
       pureRecognizers.push(instance);
     }
 
-    if (recognizerOptions && recognizerOptions.length) {
+    if (recognizerOptions && Object.keys(recognizerOptions).length > 0) {
       for (const recognizer of pureRecognizers) {
         let settingsUpdated = false;
         const settings = await recognizer.currentSettings();
 
-        for (const setting of recognizerOptions) {
-          if (setting in settings) {
-            settings[setting] = true;
+        for (const [key, value] of Object.entries(recognizerOptions[recognizer.recognizerName])) {
+          if (key in settings) {
+            settings[key] = value;
             settingsUpdated = true;
           }
         }
@@ -551,6 +524,7 @@ export class SdkService {
         }
       }
     }
+
     for (const el of recognizers) {
       if ( el.recognizer.recognizerName === 'BlinkIdImageCaptureRecognizer' ) {
         const settings = await el.recognizer.currentSettings() as BlinkIDImageCaptureSDK.BlinkIdImageCaptureRecognizerSettings;
@@ -560,6 +534,7 @@ export class SdkService {
         }
       }
     }
+
     const recognizerRunner = await BlinkIDImageCaptureSDK.createRecognizerRunner(
       this.sdk,
       recognizers.map((el: RecognizerInstance) => el.successFrame || el.recognizer),

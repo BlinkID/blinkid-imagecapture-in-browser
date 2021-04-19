@@ -6,13 +6,13 @@
         <title>Example: BlinkID ImageCapture UI: scan both document sides</title>
 
         <!-- Import UI component which includes WASM library -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.10.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.10.0/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.10.0/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -43,7 +43,7 @@
     <body>
         <!-- It's possible to obtain a free trial license key on microblink.com -->
         <blinkid-imagecapture-in-browser
-            license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLK04YMA5M4agSspIfB0b0vqHwhTKKYaP0WhavKtbe2ZICfGcm22v7qoVLgagC9RDKyDZBazkD2RXLK1zIejK86Fwc6EFxEdpvTbx3tQ+2K37DkKFioEBkY6reVf/C8vY6TqvCAjjZS+QU2j7zuzvRGTsPHb8YkyrDOcvp4Q/DU1tkr0avQ0="
+            license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo"
             recognizers="BlinkIdImageCaptureRecognizer"
         ></blinkid-imagecapture-in-browser>
 
@@ -55,10 +55,10 @@
 
                 if ( window.location.hostname === "blinkid.github.io" )
                 {
-                    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaDoIDmaB8XoK5Dh0ilusTxAZ5LCn1qJWJCicwjvveQl+h0jalMwiQxe8qofTkXWSdiEnUA4U3tJZb/TLzAuJO888jeB/8V5zN5PyqArzl4YvXrbuuk/LcXhy/SlS6vJPYpOxBqUD0O8VfZVcoDbb1rcupZILjTlzsAzbUD6pv4amQRhEao8A==";
+                    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=";
                 }
 
-                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.10.0/resources/";
+                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/resources/";
 
                 // Enable option to scan both document sides
                 el.recognizerOptions = [ "captureBothDocumentSides" ];

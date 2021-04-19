@@ -71,7 +71,7 @@ export interface BlinkIdImageCaptureRecognizerResult extends RecognizerResult
      * Result of analysis of the image of the back side of the document.
      * Available only if both sides of document capturing is enabled.
      */
-    readonly backImageAnalysisResult: ImageAnalysisResult | null;
+    readonly backImageAnalysisResult: ImageAnalysisResult;
 
     /**
      * Captured camera frame containing the front side of the document.
@@ -93,7 +93,7 @@ export interface BlinkIdImageCaptureRecognizerResult extends RecognizerResult
      * Orientation of the camera frame containing the front side of the document.
      * Available only if both sides of document capturing is enabled.
      */
-    readonly backSideCameraFrameOrientation: ImageOrientation | null;
+    readonly backSideCameraFrameOrientation: ImageOrientation;
 }
 
 /**
