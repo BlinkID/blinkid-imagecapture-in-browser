@@ -65,6 +65,20 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
   @Prop() licenseKey: string;
 
   /**
+   * Defines the type of the WebAssembly build that will be loaded. If omitted, SDK will determine
+   * the best possible WebAssembly build which should be loaded based on the browser support.
+   *
+   * Available WebAssembly builds:
+   *
+   * - 'BASIC'
+   * - 'ADVANCED'
+   * - 'ADVANCED_WITH_THREADS'
+   *
+   * For more information about different WebAssembly builds, check out the `src/MicroblinkSDK/WasmType.ts` file.
+   */
+   @Prop() wasmType: string = '';
+
+  /**
    * List of recognizers which should be used.
    *
    * Available recognizers for BlinkID ImageCapture:
@@ -94,35 +108,28 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
   @Prop() recognizers: Array<string>;
 
   /**
-   * Specify additional recognizer options.
+   * Specify recognizer options. This option can only bet set as a JavaScript property.
    *
-   * Available options:
-   *
-   * - 'captureBothDocumentSides', enable scanning of both document sides
-   * - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection
-   *
-   * Example:
-   *
-   * `<blinkid-imagecapture-in-browser recognizer-options="captureBothDocumentSides"></blinkid-imagecapture-in-browser>`
-   */
-  @Prop({ attribute: 'recognizer-options' }) rawRecognizerOptions: string;
-
-  /**
-   * Specify additional recognizer options.
-   *
-   * Available options:
-   *
-   * - 'captureBothDocumentSides', enable scanning of both document sides
-   * - 'scanCroppedDocumentImage', scan images of documents that have already been cropped and don't require detection
-   *
-   * Example:
+   * Pass an object to `recognizerOptions` property where each key represents a recognizer, while
+   * the value represents desired recognizer options.
    *
    * ```
-   * const blinkId = document.querySelector('blinkid-imagecapture-in-browser');
-   * blinkid.recognizerOptions = ['captureBothDocumentSides'];
+   * blinkId.recognizerOptions = {
+   *   'BlinkIdImageCaptureRecognizer': {
+   *     // Enable scanning of both document sides
+   *     'captureBothDocumentSides': true,
+   *
+   *     // Scan images of documents that have already been cropped and don't require detection
+   *     'scanCroppedDocumentImage': true
+   *   }
+   * }
    * ```
+   *
+   * For a full list of available recognizer options see source code of a recognizer. For example,
+   * list of available recognizer options for BlinkIdImageCaptureRecognizer can be seen in the
+   * `src/Recognizers/BlinkID/ImageCapture/ImageCaptureRecognizer.ts` file.
    */
-  @Prop() recognizerOptions: Array<string>;
+  @Prop() recognizerOptions: { [key: string]: any };
 
   /**
    * Set to 'false' if component should not enable drag and drop functionality.
@@ -337,9 +344,6 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
     const rawRecognizers = GenericHelpers.stringToArray(this.rawRecognizers);
     this.finalRecognizers = this.recognizers ? this.recognizers : rawRecognizers;
 
-    const rawRecognizerOptions = GenericHelpers.stringToArray(this.rawRecognizerOptions);
-    this.finalRecognizerOptions = this.recognizerOptions ? this.recognizerOptions : rawRecognizerOptions;
-
     const rawTranslations = GenericHelpers.stringToObject(this.rawTranslations);
     this.finalTranslations = this.translations ? this.translations : rawTranslations;
     this.translationService = new TranslationService(this.finalTranslations || {});
@@ -356,8 +360,9 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
                         allowHelloMessage={ this.allowHelloMessage }
                         engineLocation={ this.engineLocation }
                         licenseKey={ this.licenseKey }
+                        wasmType={ this.wasmType }
                         recognizers={ this.finalRecognizers }
-                        recognizerOptions={ this.finalRecognizerOptions }
+                        recognizerOptions={ this.recognizerOptions }
                         enableDrag={ this.enableDrag }
                         hideLoadingAndErrorUi={ this.hideLoadingAndErrorUi }
                         scanFromCamera={ this.scanFromCamera }
@@ -388,7 +393,6 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
   private translationService: TranslationService;
 
   private finalRecognizers: Array<string>;
-  private finalRecognizerOptions: Array<string>;
   private finalTranslations: { [key: string]: string };
 
   private feedbackEl!: HTMLMbFeedbackElement;

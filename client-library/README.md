@@ -57,6 +57,7 @@ import { Client } from "https://unpkg.com/@microblink/blinkid-imagecapture-in-br
 ```
 
 *Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
+
 ## <a name="usage"></a> Usage
 
 ```typescript
@@ -114,6 +115,7 @@ client.recognize( "/v1/recognizers/blinkid", { "imageSource": image } )
 ```
 
 For complete JavaScript examples for both Cloud API and Self-hosted API see HTML files in the [examples](examples) directory.
+
 ## <a name="customization"></a> Customization
 
 All configuration options can be seen in [data-structures.ts](src/data-structures.ts) file.
