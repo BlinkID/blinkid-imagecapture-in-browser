@@ -135,7 +135,7 @@
     </style>
     <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
     <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/ui/dist/blinkid-imagecapture-in-browser.js"></script>
-    <script src="../client-dist/client-library.js"></script>
+    <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/client-library/dist/client-library.js"></script>
     <script type="text/javascript">
       window.getSafePathname = p => p[ p.length - 1 ] === '/' ? p : p.split( '/' ).slice( 0, -1 ).join( '/' ) + '/';
       window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo';
@@ -171,22 +171,30 @@
       (function (){
         const el = document.querySelector('#example-minimal blinkid-imagecapture-in-browser');
 
+        /* [TEMPORARY FIX]
+         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+         * for examples, doesn't support COOP and COEP headers.
+         *
+         * For more information see "Integration" section in the official documentation.
+         */
+        el.wasmType = "BASIC";
+
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         const configuration = {
-    apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
-  };
+          apiLocation: "https://demoapi.microblink.com",
+          healthcheckEndpoint: "/v1/hc"
+        };
 
-const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+        const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-client.getHealthcheck()
-.then(() => { /* Do nothing */ })
-.catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-});
+        client.getHealthcheck()
+          .then(() => { /* Do nothing */ })
+          .catch((response) => {
+              el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+          });
 
 
         el.addEventListener('scanError', ev => {
@@ -197,40 +205,41 @@ client.getHealthcheck()
 
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
+
           if (!ev.detail.recognizer.frontSideCameraFrame) {
-    console.log("Could not extract front image of a document.");
-    el.setUiState('ERROR');
-    return;
-}
-
-// Show loading screen in UI component
-el.setUiState('LOADING');
-
-const imageData = ev.detail.recognizer.frontSideCameraFrame;
-const image64 = client.imageDataToBase64(imageData);
-
-const payload = {
-    'imageSource': image64
-};
-
-client.recognize('/v1/recognizers/blinkid', payload)
-    .then((results) => {
-        const recognitionResults = results.response.data.result;
-        console.log('API recognition results', recognitionResults);
-
-        /* Handle case when results are empty */
-        if (recognitionResults.recognitionStatus === 'EMPTY') {
-            console.warn('API processing returned empty results!');
+            console.log("Could not extract front image of a document.");
             el.setUiState('ERROR');
             return;
-        }
+          }
 
-        el.setUiState('SUCCESS');
-    })
-    .catch((error) => {
-        console.error('API recognition error', error);
-        el.setUiState('ERROR', error.error.message);
-    });
+          // Show loading screen in UI component
+          el.setUiState('LOADING');
+
+          const imageData = ev.detail.recognizer.frontSideCameraFrame;
+          const image64 = client.imageDataToBase64(imageData);
+
+          const payload = {
+            'imageSource': image64
+          };
+
+          client.recognize('/v1/recognizers/blinkid', payload)
+            .then((results) => {
+              const recognitionResults = results.response.data.result;
+              console.log('API recognition results', recognitionResults);
+
+              /* Handle case when results are empty */
+              if (recognitionResults.recognitionStatus === 'EMPTY') {
+                console.warn('API processing returned empty results!');
+                el.setUiState('ERROR');
+                return;
+              }
+
+              el.setUiState('SUCCESS');
+            })
+            .catch((error) => {
+              console.error('API recognition error', error);
+              el.setUiState('ERROR', error.error.message);
+            });
         });
       })();
     </script>
@@ -254,6 +263,14 @@ recognizer-options="captureBothDocumentSides"
   (function (){
     const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
 
+    /* [TEMPORARY FIX]
+     * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+     * for examples, doesn't support COOP and COEP headers.
+     *
+     * For more information see "Integration" section in the official documentation.
+     */
+    el.wasmType = "BASIC";
+
     el.engineLocation = window.engineLocation;
     el.licenseKey = window.licenseKey;
 
@@ -275,7 +292,7 @@ client.getHealthcheck()
 .catch((response) => {
     el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
 });
-    
+
     el.addEventListener('scanError', ev => {
       console.log('scanError', ev.detail);
 
@@ -302,7 +319,7 @@ if (!ev.detail.recognizer.backSideCameraFrame) {
   el.setUiState('ERROR');
   return;
 }
-  
+
 if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
   // Show loading screen in UI component
   el.setUiState('LOADING');
@@ -369,11 +386,19 @@ if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state ==
       (function (){
         const el = document.querySelector('#example-localization blinkid-imagecapture-in-browser');
 
+        /* [TEMPORARY FIX]
+         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+         * for examples, doesn't support COOP and COEP headers.
+         *
+         * For more information see "Integration" section in the official documentation.
+         */
+        el.wasmType = "BASIC";
+
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
         window.setTimeout(() => {
-          el.translations = { 
+          el.translations = {
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -464,12 +489,20 @@ client.recognize('/v1/recognizers/blinkid', payload)
       (function (){
         const el = document.querySelector('#example-localization-rtl blinkid-imagecapture-in-browser');
 
+        /* [TEMPORARY FIX]
+         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+         * for examples, doesn't support COOP and COEP headers.
+         *
+         * For more information see "Integration" section in the official documentation.
+         */
+        el.wasmType = "BASIC";
+
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         window.setTimeout(() => {
-          el.translations = { 
+          el.translations = {
             'action-message': 'Alternative CTA'
           };
         }, 3000);
@@ -606,6 +639,14 @@ client.recognize('/v1/recognizers/blinkid', payload)
       (function (){
         const el = document.querySelector('#example-customization blinkid-imagecapture-in-browser');
 
+        /* [TEMPORARY FIX]
+         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+         * for examples, doesn't support COOP and COEP headers.
+         *
+         * For more information see "Integration" section in the official documentation.
+         */
+        el.wasmType = "BASIC";
+
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
@@ -732,7 +773,7 @@ client.recognize('/v1/recognizers/blinkid', payload)
 
         customizatorForm.addEventListener('submit', ev => {
           ev.preventDefault();
-          
+
           document.querySelector(
             '#example-customization .box'
           ).style.background = document.getElementById('customization-background').value;
