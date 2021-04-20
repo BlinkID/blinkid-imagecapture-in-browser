@@ -44,7 +44,7 @@ const config = {
     worker: {
         input: 'src/worker.ts',
         output: {
-            file: 'resources/BlinkID ImageCaptureWasmSDK.worker.min.js',
+            file: 'resources/BlinkIDImageCaptureSDK.worker.min.js',
             format: 'iife'
         },
         plugins: [
@@ -66,7 +66,7 @@ const config = {
             nodeResolve(),
             typescript({ useTsconfigDeclarationDir: true }),
             babel({ babelHelpers: 'bundled' }),
-            replaceWorker('resources/BlinkID ImageCaptureWasmSDK.worker.min.js')
+            replaceWorker('resources/BlinkIDImageCaptureSDK.worker.min.js')
         ]
     },
     es: {
@@ -82,7 +82,7 @@ const config = {
             nodeResolve(),
             typescript({ tsconfigOverride: { compilerOptions: { declaration: false, sourceMap: true } } }),
             babel({ babelHelpers: 'bundled' }),
-            replaceWorker('resources/BlinkID ImageCaptureWasmSDK.worker.min.js')
+            replaceWorker('resources/BlinkIDImageCaptureSDK.worker.min.js')
         ]
     },
     esModule: {
@@ -98,7 +98,7 @@ const config = {
             typescript({ tsconfigOverride: { compilerOptions: { declaration: false } } }),
             babel({ babelHelpers: 'bundled' }),
             terser(terserConfig),
-            replaceWorker('resources/BlinkID ImageCaptureWasmSDK.worker.min.js')
+            replaceWorker('resources/BlinkIDImageCaptureSDK.worker.min.js')
         ]
     },
     umdDev: {
@@ -106,7 +106,7 @@ const config = {
         output: {
             file: 'dist/blinkid-imagecapture-sdk.js',
             format: 'umd',
-            name: '${libName}SDK',
+            name: 'BlinkIDImageCaptureSDK',
             indent: false,
             sourcemap: true,
             banner: bannerMsg
@@ -115,7 +115,7 @@ const config = {
             nodeResolve(),
             typescript({ tsconfigOverride: { compilerOptions: { declaration: false, sourceMap: true } } }),
             babel({ babelHelpers: 'bundled' }),
-            replaceWorker('resources/BlinkID ImageCaptureWasmSDK.worker.min.js')
+            replaceWorker('resources/BlinkIDImageCaptureSDK.worker.min.js')
         ]
     },
     umdProd: {
@@ -123,7 +123,7 @@ const config = {
         output: {
             file: 'dist/blinkid-imagecapture-sdk.min.js',
             format: 'umd',
-            name: 'BlinkID ImageCaptureSDK',
+            name: 'BlinkIDImageCaptureSDK',
             indent: false,
             banner: bannerMsg
         },
@@ -132,7 +132,7 @@ const config = {
             typescript({ tsconfigOverride: { compilerOptions: { declaration: false } } }),
             babel({ babelHelpers: 'bundled' }),
             terser(terserConfig),
-            replaceWorker('resources/BlinkID ImageCaptureWasmSDK.worker.min.js')
+            replaceWorker('resources/BlinkIDImageCaptureSDK.worker.min.js')
         ]
     }
 }
