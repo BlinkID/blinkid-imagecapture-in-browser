@@ -28,6 +28,14 @@ function initializeUiComponent()
         throw "Could not find UI component!";
     }
 
+    /* [TEMPORARY FIX]
+     * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+     * for examples, doesn't support COOP and COEP headers.
+     *
+     * For more information see "Integration" section in the official documentation.
+     */
+    el.wasmType = "BASIC";
+
     el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo";
     el.engineLocation = window.location.origin;
     el.recognizers = [ "BlinkIdImageCaptureRecognizer" ];

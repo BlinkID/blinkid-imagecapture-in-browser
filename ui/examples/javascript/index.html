@@ -6,13 +6,13 @@
         <title>Example: BlinkID ImageCapture UI</title>
 
         <!-- Import UI component which includes WASM library -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -58,7 +58,15 @@
                     el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=";
                 }
 
-                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.0/resources/";
+                /* [TEMPORARY FIX]
+                 * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+                 * for examples, doesn't support COOP and COEP headers.
+                 *
+                 * For more information see "Integration" section in the official documentation.
+                 */
+                el.wasmType = "BASIC";
+
+                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/resources/";
 
                 // Create instance of client library - for more information see `client-library/README.md` file
                 const client = new Client.Client(
