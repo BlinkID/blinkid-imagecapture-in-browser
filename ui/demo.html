@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
     <title>BlinkID ImageCapture UI: examples</title>
-    <!-- Copyright (c) Microblink Ltd. All rights reserved. -->
-<style>
+        <!-- Copyright (c) Microblink Ltd. All rights reserved. -->
+    <style>
       * {
         box-sizing: border-box;
       }
@@ -133,18 +133,19 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/ui/dist/blinkid-imagecapture-in-browser.js"></script>
-    <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/client-library/dist/client-library.js"></script>
-    <script type="text/javascript">
+    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script src="../client-library/dist/client-library.js"></script>
+        <script type="text/javascript">
       window.getSafePathname = p => p[ p.length - 1 ] === '/' ? p : p.split( '/' ).slice( 0, -1 ).join( '/' ) + '/';
+
       window.licenseKey = 'sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo';
 
       if (window.location.hostname === 'blinkid.github.io') {
         window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=';
       }
 
-      window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.1/resources";
+      window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/resources";
     </script>
   </head>
   <body>
@@ -171,30 +172,22 @@
       (function (){
         const el = document.querySelector('#example-minimal blinkid-imagecapture-in-browser');
 
-        /* [TEMPORARY FIX]
-         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-         * for examples, doesn't support COOP and COEP headers.
-         *
-         * For more information see "Integration" section in the official documentation.
-         */
-        el.wasmType = "BASIC";
-
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         const configuration = {
-          apiLocation: "https://demoapi.microblink.com",
-          healthcheckEndpoint: "/v1/hc"
-        };
+        apiLocation: "https://demoapi.microblink.com",
+        healthcheckEndpoint: "/v1/hc"
+      };
 
-        const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+      const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-        client.getHealthcheck()
-          .then(() => { /* Do nothing */ })
-          .catch((response) => {
-              el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-          });
+      client.getHealthcheck()
+        .then(() => { /* Do nothing */ })
+        .catch((response) => {
+          el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+        });
 
 
         el.addEventListener('scanError', ev => {
@@ -205,47 +198,46 @@
 
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
-
           if (!ev.detail.recognizer.frontSideCameraFrame) {
-            console.log("Could not extract front image of a document.");
+        console.log("Could not extract front image of a document.");
+        el.setUiState('ERROR');
+        return;
+      }
+      
+      // Show loading screen in UI component
+      el.setUiState('LOADING');
+      
+      const imageData = ev.detail.recognizer.frontSideCameraFrame;
+      const image64 = client.imageDataToBase64(imageData);
+      
+      const payload = {
+        'imageSource': image64
+      };
+      
+      client.recognize('/v1/recognizers/blinkid', payload)
+        .then((results) => {
+          const recognitionResults = results.response.data.result;
+          console.log('API recognition results', recognitionResults);
+      
+          /* Handle case when results are empty */
+          if (recognitionResults.recognitionStatus === 'EMPTY') {
+            console.warn('API processing returned empty results!');
             el.setUiState('ERROR');
             return;
           }
-
-          // Show loading screen in UI component
-          el.setUiState('LOADING');
-
-          const imageData = ev.detail.recognizer.frontSideCameraFrame;
-          const image64 = client.imageDataToBase64(imageData);
-
-          const payload = {
-            'imageSource': image64
-          };
-
-          client.recognize('/v1/recognizers/blinkid', payload)
-            .then((results) => {
-              const recognitionResults = results.response.data.result;
-              console.log('API recognition results', recognitionResults);
-
-              /* Handle case when results are empty */
-              if (recognitionResults.recognitionStatus === 'EMPTY') {
-                console.warn('API processing returned empty results!');
-                el.setUiState('ERROR');
-                return;
-              }
-
-              el.setUiState('SUCCESS');
-            })
-            .catch((error) => {
-              console.error('API recognition error', error);
-              el.setUiState('ERROR', error.error.message);
-            });
+      
+          el.setUiState('SUCCESS');
+        })
+        .catch((error) => {
+          console.error('API recognition error', error);
+          el.setUiState('ERROR', error.error.message);
+        });
         });
       })();
     </script>
 
 
-    <section id="example-combined">
+      <section id="example-combined">
     <h2>Scan both sides</h2>
     <p>UI component with default behaviour where it's required to set valid license key and recognizer.</p>
     <p>Keep in mind that this example uses additional code which sends an image to web API for processing. Complete code can be seen in <em>examples/ui</em> directory of this repository.</p>
@@ -257,105 +249,103 @@ license-key="LICENSE-KEY-GOES-HERE"
 recognizers="BlinkIdImageCaptureRecognizer"
 recognizer-options="captureBothDocumentSides"
 &gt;&lt;/blinkid-imagecapture-in-browser&gt;</pre>
-</section>
+  </section>
+  <script type="text/javascript">
+    (function (){
+      const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
 
-<script type="text/javascript">
-  (function (){
-    const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
+      /* [TEMPORARY FIX]
+       * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+       * for examples, doesn't support COOP and COEP headers.
+       *
+       * For more information see "Integration" section in the official documentation.
+       */
+      el.wasmType = 'BASIC';
 
-    /* [TEMPORARY FIX]
-     * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-     * for examples, doesn't support COOP and COEP headers.
-     *
-     * For more information see "Integration" section in the official documentation.
-     */
-    el.wasmType = "BASIC";
+      el.engineLocation = window.engineLocation;
+      el.licenseKey = window.licenseKey;
 
-    el.engineLocation = window.engineLocation;
-    el.licenseKey = window.licenseKey;
+      el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
-    el.recognizers = ['BlinkIdImageCaptureRecognizer'];
+      el.recognizerOptions = [
+        'captureBothDocumentSides'
+      ];
 
-    el.recognizerOptions = [
-      'captureBothDocumentSides'
-    ];
+      const configuration = {
+        apiLocation: "https://demoapi.microblink.com",
+        healthcheckEndpoint: "/v1/hc"
+      };
 
-    const configuration = {
-    apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
-  };
+      const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+      client.getHealthcheck()
+        .then(() => { /* Do nothing */ })
+        .catch((response) => {
+          el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+        });
 
-client.getHealthcheck()
-.then(() => { /* Do nothing */ })
-.catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-});
+      el.addEventListener('scanError', ev => {
+        console.log('scanError', ev.detail);
 
-    el.addEventListener('scanError', ev => {
-      console.log('scanError', ev.detail);
+        el.setUiState('ERROR');
+      });
 
-      el.setUiState('ERROR');
-    });
+      el.addEventListener('scanSuccess', ev => {
+        console.log('scanSuccess', ev.detail);
 
-
-    el.addEventListener('scanSuccess', ev => {
-      console.log('scanSuccess', ev.detail);
-
+        if (!ev.detail.recognizer.frontSideCameraFrame) {
+        console.log("Could not extract front image of a document.");
+        el.setUiState('ERROR');
+      }
+      
       if (!ev.detail.recognizer.frontSideCameraFrame) {
-  console.log("Could not extract front image of a document.");
-  el.setUiState('ERROR');
-}
-
-if (!ev.detail.recognizer.frontSideCameraFrame) {
-  console.log("Could not extract front image of a document.");
-  el.setUiState('ERROR');
-  return;
-}
-
-if (!ev.detail.recognizer.backSideCameraFrame) {
-  console.log("Could not extract back image of a document.");
-  el.setUiState('ERROR');
-  return;
-}
-
-if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
-  // Show loading screen in UI component
-  el.setUiState('LOADING');
-
-  const imageFrontData = ev.detail.recognizer.frontSideCameraFrame;
-  const imageFront64 = client.imageDataToBase64(imageFrontData);
-  const imageBackData = ev.detail.recognizer.backSideCameraFrame;
-  const imageBack64 = client.imageDataToBase64(imageBackData);
-
-  const payload = {
-    'imageFrontSide': imageFront64,
-    'imageBackSide': imageBack64
-  };
-
-  client.recognize('/v1/recognizers/blinkid-combined', payload)
-    .then((results) => {
-      const recognitionResults = results.response.data.result;
-      console.log('API recognition results', recognitionResults);
-
-      /* Handle case when results are empty */
-      if (recognitionResults.recognitionStatus === 'EMPTY') {
-        console.warn('API processing returned empty results!');
+        console.log("Could not extract front image of a document.");
         el.setUiState('ERROR');
         return;
       }
-
-      el.setUiState('SUCCESS');
-    })
-    .catch((error) => {
-      console.error('API recognition error', error);
-      el.setUiState('ERROR', error.error.message);
-    });
-}
-    });
-  })();
-</script>
+      
+      if (!ev.detail.recognizer.backSideCameraFrame) {
+        console.log("Could not extract back image of a document.");
+        el.setUiState('ERROR');
+        return;
+      }
+        
+      if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state === 2) {
+        // Show loading screen in UI component
+        el.setUiState('LOADING');
+      
+        const imageFrontData = ev.detail.recognizer.frontSideCameraFrame;
+        const imageFront64 = client.imageDataToBase64(imageFrontData);
+        const imageBackData = ev.detail.recognizer.backSideCameraFrame;
+        const imageBack64 = client.imageDataToBase64(imageBackData);
+      
+        const payload = {
+          'imageFrontSide': imageFront64,
+          'imageBackSide': imageBack64
+        };
+      
+        client.recognize('/v1/recognizers/blinkid-combined', payload)
+          .then((results) => {
+            const recognitionResults = results.response.data.result;
+            console.log('API recognition results', recognitionResults);
+      
+            /* Handle case when results are empty */
+            if (recognitionResults.recognitionStatus === 'EMPTY') {
+              console.warn('API processing returned empty results!');
+              el.setUiState('ERROR');
+              return;
+            }
+      
+            el.setUiState('SUCCESS');
+          })
+          .catch((error) => {
+            console.error('API recognition error', error);
+            el.setUiState('ERROR', error.error.message);
+          });
+      }
+      });
+    })();
+  </script>
 
 
 
@@ -386,35 +376,27 @@ if (ev.detail.recognizer.processingStatus === 0 && ev.detail.recognizer.state ==
       (function (){
         const el = document.querySelector('#example-localization blinkid-imagecapture-in-browser');
 
-        /* [TEMPORARY FIX]
-         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-         * for examples, doesn't support COOP and COEP headers.
-         *
-         * For more information see "Integration" section in the official documentation.
-         */
-        el.wasmType = "BASIC";
-
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
         window.setTimeout(() => {
-          el.translations = {
+          el.translations = { 
             'action-message': 'Alternative CTA'
           };
         }, 3000);
 
         const configuration = {
-    apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
-  };
+        apiLocation: "https://demoapi.microblink.com",
+        healthcheckEndpoint: "/v1/hc"
+      };
 
-const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+      const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-client.getHealthcheck()
-.then(() => { /* Do nothing */ })
-.catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-});
+      client.getHealthcheck()
+        .then(() => { /* Do nothing */ })
+        .catch((response) => {
+          el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+        });
 
 
         el.addEventListener('scanError', ev => {
@@ -427,39 +409,39 @@ client.getHealthcheck()
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
           if (!ev.detail.recognizer.frontSideCameraFrame) {
-    console.log("Could not extract front image of a document.");
-    el.setUiState('ERROR');
-    return;
-}
-
-// Show loading screen in UI component
-el.setUiState('LOADING');
-
-const imageData = ev.detail.recognizer.frontSideCameraFrame;
-const image64 = client.imageDataToBase64(imageData);
-
-const payload = {
-    'imageSource': image64
-};
-
-client.recognize('/v1/recognizers/blinkid', payload)
-    .then((results) => {
-        const recognitionResults = results.response.data.result;
-        console.log('API recognition results', recognitionResults);
-
-        /* Handle case when results are empty */
-        if (recognitionResults.recognitionStatus === 'EMPTY') {
+        console.log("Could not extract front image of a document.");
+        el.setUiState('ERROR');
+        return;
+      }
+      
+      // Show loading screen in UI component
+      el.setUiState('LOADING');
+      
+      const imageData = ev.detail.recognizer.frontSideCameraFrame;
+      const image64 = client.imageDataToBase64(imageData);
+      
+      const payload = {
+        'imageSource': image64
+      };
+      
+      client.recognize('/v1/recognizers/blinkid', payload)
+        .then((results) => {
+          const recognitionResults = results.response.data.result;
+          console.log('API recognition results', recognitionResults);
+      
+          /* Handle case when results are empty */
+          if (recognitionResults.recognitionStatus === 'EMPTY') {
             console.warn('API processing returned empty results!');
             el.setUiState('ERROR');
             return;
-        }
-
-        el.setUiState('SUCCESS');
-    })
-    .catch((error) => {
-        console.error('API recognition error', error);
-        el.setUiState('ERROR', error.error.message);
-    });
+          }
+      
+          el.setUiState('SUCCESS');
+        })
+        .catch((error) => {
+          console.error('API recognition error', error);
+          el.setUiState('ERROR', error.error.message);
+        });
         });
       })();
     </script>
@@ -489,36 +471,28 @@ client.recognize('/v1/recognizers/blinkid', payload)
       (function (){
         const el = document.querySelector('#example-localization-rtl blinkid-imagecapture-in-browser');
 
-        /* [TEMPORARY FIX]
-         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-         * for examples, doesn't support COOP and COEP headers.
-         *
-         * For more information see "Integration" section in the official documentation.
-         */
-        el.wasmType = "BASIC";
-
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         window.setTimeout(() => {
-          el.translations = {
+          el.translations = { 
             'action-message': 'Alternative CTA'
           };
         }, 3000);
 
         const configuration = {
-    apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
-  };
+        apiLocation: "https://demoapi.microblink.com",
+        healthcheckEndpoint: "/v1/hc"
+      };
 
-const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+      const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-client.getHealthcheck()
-.then(() => { /* Do nothing */ })
-.catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-});
+      client.getHealthcheck()
+        .then(() => { /* Do nothing */ })
+        .catch((response) => {
+          el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+        });
 
 
         el.addEventListener('scanError', ev => {
@@ -530,39 +504,39 @@ client.getHealthcheck()
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
           if (!ev.detail.recognizer.frontSideCameraFrame) {
-    console.log("Could not extract front image of a document.");
-    el.setUiState('ERROR');
-    return;
-}
-
-// Show loading screen in UI component
-el.setUiState('LOADING');
-
-const imageData = ev.detail.recognizer.frontSideCameraFrame;
-const image64 = client.imageDataToBase64(imageData);
-
-const payload = {
-    'imageSource': image64
-};
-
-client.recognize('/v1/recognizers/blinkid', payload)
-    .then((results) => {
-        const recognitionResults = results.response.data.result;
-        console.log('API recognition results', recognitionResults);
-
-        /* Handle case when results are empty */
-        if (recognitionResults.recognitionStatus === 'EMPTY') {
+        console.log("Could not extract front image of a document.");
+        el.setUiState('ERROR');
+        return;
+      }
+      
+      // Show loading screen in UI component
+      el.setUiState('LOADING');
+      
+      const imageData = ev.detail.recognizer.frontSideCameraFrame;
+      const image64 = client.imageDataToBase64(imageData);
+      
+      const payload = {
+        'imageSource': image64
+      };
+      
+      client.recognize('/v1/recognizers/blinkid', payload)
+        .then((results) => {
+          const recognitionResults = results.response.data.result;
+          console.log('API recognition results', recognitionResults);
+      
+          /* Handle case when results are empty */
+          if (recognitionResults.recognitionStatus === 'EMPTY') {
             console.warn('API processing returned empty results!');
             el.setUiState('ERROR');
             return;
-        }
-
-        el.setUiState('SUCCESS');
-    })
-    .catch((error) => {
-        console.error('API recognition error', error);
-        el.setUiState('ERROR', error.error.message);
-    });
+          }
+      
+          el.setUiState('SUCCESS');
+        })
+        .catch((error) => {
+          console.error('API recognition error', error);
+          el.setUiState('ERROR', error.error.message);
+        });
         });
       })();
     </script>
@@ -639,30 +613,22 @@ client.recognize('/v1/recognizers/blinkid', payload)
       (function (){
         const el = document.querySelector('#example-customization blinkid-imagecapture-in-browser');
 
-        /* [TEMPORARY FIX]
-         * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-         * for examples, doesn't support COOP and COEP headers.
-         *
-         * For more information see "Integration" section in the official documentation.
-         */
-        el.wasmType = "BASIC";
-
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
         const configuration = {
-    apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
-  };
+        apiLocation: "https://demoapi.microblink.com",
+        healthcheckEndpoint: "/v1/hc"
+      };
 
-const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
+      const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
-client.getHealthcheck()
-.then(() => { /* Do nothing */ })
-.catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
-});
+      client.getHealthcheck()
+        .then(() => { /* Do nothing */ })
+        .catch((response) => {
+          el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+        });
 
 
         el.addEventListener('scanError', ev => {
@@ -674,39 +640,39 @@ client.getHealthcheck()
         el.addEventListener('scanSuccess', ev => {
           console.log('scanSuccess', ev.detail);
           if (!ev.detail.recognizer.frontSideCameraFrame) {
-    console.log("Could not extract front image of a document.");
-    el.setUiState('ERROR');
-    return;
-}
-
-// Show loading screen in UI component
-el.setUiState('LOADING');
-
-const imageData = ev.detail.recognizer.frontSideCameraFrame;
-const image64 = client.imageDataToBase64(imageData);
-
-const payload = {
-    'imageSource': image64
-};
-
-client.recognize('/v1/recognizers/blinkid', payload)
-    .then((results) => {
-        const recognitionResults = results.response.data.result;
-        console.log('API recognition results', recognitionResults);
-
-        /* Handle case when results are empty */
-        if (recognitionResults.recognitionStatus === 'EMPTY') {
+        console.log("Could not extract front image of a document.");
+        el.setUiState('ERROR');
+        return;
+      }
+      
+      // Show loading screen in UI component
+      el.setUiState('LOADING');
+      
+      const imageData = ev.detail.recognizer.frontSideCameraFrame;
+      const image64 = client.imageDataToBase64(imageData);
+      
+      const payload = {
+        'imageSource': image64
+      };
+      
+      client.recognize('/v1/recognizers/blinkid', payload)
+        .then((results) => {
+          const recognitionResults = results.response.data.result;
+          console.log('API recognition results', recognitionResults);
+      
+          /* Handle case when results are empty */
+          if (recognitionResults.recognitionStatus === 'EMPTY') {
             console.warn('API processing returned empty results!');
             el.setUiState('ERROR');
             return;
-        }
-
-        el.setUiState('SUCCESS');
-    })
-    .catch((error) => {
-        console.error('API recognition error', error);
-        el.setUiState('ERROR', error.error.message);
-    });
+          }
+      
+          el.setUiState('SUCCESS');
+        })
+        .catch((error) => {
+          console.error('API recognition error', error);
+          el.setUiState('ERROR', error.error.message);
+        });
         });
       })();
     </script>
@@ -773,7 +739,7 @@ client.recognize('/v1/recognizers/blinkid', payload)
 
         customizatorForm.addEventListener('submit', ev => {
           ev.preventDefault();
-
+          
           document.querySelector(
             '#example-customization .box'
           ).style.background = document.getElementById('customization-background').value;
