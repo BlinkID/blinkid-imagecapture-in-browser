@@ -1,7 +1,10 @@
 # Release notes
 
-## 5.11.2
+## 5.11.3
 
+* We've fixed a broken `client-library` which resulted as empty folder and unusable development bundle
+
+## 5.11.2
 ### SDK changes
 
 * We've exposed a couple of functions that are used by the SDK to determine which WebAssembly bundle to load and from which location

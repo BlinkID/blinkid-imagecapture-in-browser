@@ -133,8 +133,8 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/ui/dist/blinkid-imagecapture-in-browser.js"></script>
     <script src="../client-library/dist/client-library.js"></script>
         <script type="text/javascript">
       window.getSafePathname = p => p[ p.length - 1 ] === '/' ? p : p.split( '/' ).slice( 0, -1 ).join( '/' ) + '/';
@@ -145,7 +145,7 @@
         window.licenseKey = 'sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=';
       }
 
-      window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/resources";
+      window.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/resources";
     </script>
   </head>
   <body>
@@ -171,6 +171,14 @@
     <script type="text/javascript">
       (function (){
         const el = document.querySelector('#example-minimal blinkid-imagecapture-in-browser');
+
+        /* [TEMPORARY FIX]
+        * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+        * for examples, doesn't support COOP and COEP headers.
+        *
+        * For more information see "Integration" section in the official documentation.
+        */
+        el.wasmType = 'BASIC';
 
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
@@ -376,6 +384,14 @@ recognizer-options="captureBothDocumentSides"
       (function (){
         const el = document.querySelector('#example-localization blinkid-imagecapture-in-browser');
 
+        /* [TEMPORARY FIX]
+        * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+        * for examples, doesn't support COOP and COEP headers.
+        *
+        * For more information see "Integration" section in the official documentation.
+        */
+        el.wasmType = 'BASIC';
+
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
         el.recognizers = ['BlinkIdImageCaptureRecognizer'];
@@ -470,6 +486,14 @@ recognizer-options="captureBothDocumentSides"
     <script type="text/javascript">
       (function (){
         const el = document.querySelector('#example-localization-rtl blinkid-imagecapture-in-browser');
+
+        /* [TEMPORARY FIX]
+        * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+        * for examples, doesn't support COOP and COEP headers.
+        *
+        * For more information see "Integration" section in the official documentation.
+        */
+        el.wasmType = 'BASIC';
 
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
@@ -612,6 +636,14 @@ recognizer-options="captureBothDocumentSides"
     <script type="text/javascript">
       (function (){
         const el = document.querySelector('#example-customization blinkid-imagecapture-in-browser');
+
+        /* [TEMPORARY FIX]
+        * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
+        * for examples, doesn't support COOP and COEP headers.
+        *
+        * For more information see "Integration" section in the official documentation.
+        */
+        el.wasmType = 'BASIC';
 
         el.engineLocation = window.engineLocation;
         el.licenseKey = window.licenseKey;
