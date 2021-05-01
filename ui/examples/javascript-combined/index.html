@@ -69,7 +69,11 @@
                 el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/resources/";
 
                 // Enable option to scan both document sides
-                el.recognizerOptions = [ "captureBothDocumentSides" ];
+                el.recognizerOptions = {
+                    'BlinkIdImageCaptureRecognizer': {
+                        captureBothDocumentSides: true
+                    }
+                }
 
                 // Create instance of client library - for more information see `client-library/README.md` file
                 const client = new Client.Client(
