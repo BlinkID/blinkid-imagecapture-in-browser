@@ -6,13 +6,13 @@
         <title>Example: BlinkID ImageCapture UI: scan both document sides</title>
 
         <!-- Import UI component which includes WASM library -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -66,7 +66,7 @@
                  */
                 el.wasmType = "BASIC";
 
-                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.2/resources/";
+                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/resources/";
 
                 // Enable option to scan both document sides
                 el.recognizerOptions = [ "captureBothDocumentSides" ];
