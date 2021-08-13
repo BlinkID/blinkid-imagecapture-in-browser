@@ -49,7 +49,7 @@ function main()
     loadSettings.loadProgressCallback = ( progress ) => ( progressEl.value = progress );
 
     // Set absolute location of the engine, i.e. WASM and support JS files
-    loadSettings.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecapture-in-browser/resources";
+    loadSettings.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
 
     // 3. Load SDK
     BlinkIDImageCaptureSDK.loadWasmModule( loadSettings ).then
