@@ -2,9 +2,10 @@
  * Copyright (c) Microblink Ltd. All rights reserved.
  */
 
+import { ClassInfo } from "../Generic/ClassInfo";
 import { ImageAnalysisResult } from "../Generic/ImageAnalysisResult";
 import { ProcessingStatus } from "../Generic/ProcessingStatus";
-import { ClassInfo } from "../Generic/ClassInfo";
+import { RecognitionModeFilter } from "../Generic/RecognitionModeFilter";
 
 import
 {
@@ -19,6 +20,7 @@ import
 export * from "../Generic/ClassInfo";
 export * from "../Generic/ImageAnalysisResult";
 export * from "../Generic/ProcessingStatus";
+export * from "../Generic/RecognitionModeFilter";
 
 /**
  * A barcode capture started callback function.
@@ -45,6 +47,12 @@ export class BlinkIdImageCaptureRecognizerSettings implements RecognizerSettings
      * This only works for still images - video feeds will ignore this setting.
      */
     scanCroppedDocumentImage = false;
+
+    /**
+     * Enable or disable recognition of specific document groups supported by the current license.
+     * By default all modes are enabled.
+     */
+    captureModeFilter = new RecognitionModeFilter();
 }
 
 /**

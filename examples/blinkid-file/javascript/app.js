@@ -30,23 +30,15 @@ function main()
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo";
+    let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLwUXza1htObpRih8QOvGrTQkcxdS4jAQV5d17d4zNLUVZRwTIjjr0gaYz+v4H++9CE49zVdEv18K9TNNU8BEnCYW6bthX1CABGUpVVJLoR8PlRPBNDhFI2KlQj/zPXu955Wc+b+Cvm8IPJOLO0FuMmtn4RL7bSPDeJs62WRv6G00bgY0Ha8jKkoWOki/5+4KKP1g0Vp4YMOG7tc=";
 
     if ( window.location.hostname === "blinkid.github.io" )
     {
-        licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=";
+        licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaACK9LsOPr2Dus6G8yiiYYl5VQwUApVeP999MMDDDO5rn2MaO8V+8T49z3hjPjRAjrZoTNaT0aQxP+eiYnG4hKWeWdhAO6eciw8G3RPZLibIy9qXZpSpmh7IkJaKtMeUkuWYTRIMc6c6LIdjFd/rfMeTrvF2WEIksMW1v5eD0XphdjoYGM8RLV/fGtftidb2+7RfIdhLEjOZfM9w==";
     }
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings( licenseKey );
-
-    /* [TEMPORARY FIX]
-     * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-     * for examples, doesn't support COOP and COEP headers.
-     *
-     * For more information see "Integration" section in the official documentation.
-     */
-    loadSettings.wasmType = "BASIC";
 
     // [OPTIONAL] Change default settings
 
@@ -57,7 +49,7 @@ function main()
     loadSettings.loadProgressCallback = ( progress ) => ( progressEl.value = progress );
 
     // Set absolute location of the engine, i.e. WASM and support JS files
-    loadSettings.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/resources/";
+    loadSettings.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecapture-in-browser/resources";
 
     // 3. Load SDK
     BlinkIDImageCaptureSDK.loadWasmModule( loadSettings ).then

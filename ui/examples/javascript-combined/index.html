@@ -6,13 +6,14 @@
         <title>Example: BlinkID ImageCapture UI: scan both document sides</title>
 
         <!-- Import UI component which includes WASM library -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <!-- Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production! -->
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.13.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.13.0/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.13.0/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -43,7 +44,7 @@
     <body>
         <!-- It's possible to obtain a free trial license key on microblink.com -->
         <blinkid-imagecapture-in-browser
-            license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo"
+            license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLwUXza1htObpRih8QOvGrTQkcxdS4jAQV5d17d4zNLUVZRwTIjjr0gaYz+v4H++9CE49zVdEv18K9TNNU8BEnCYW6bthX1CABGUpVVJLoR8PlRPBNDhFI2KlQj/zPXu955Wc+b+Cvm8IPJOLO0FuMmtn4RL7bSPDeJs62WRv6G00bgY0Ha8jKkoWOki/5+4KKP1g0Vp4YMOG7tc="
             recognizers="BlinkIdImageCaptureRecognizer"
         ></blinkid-imagecapture-in-browser>
 
@@ -55,18 +56,10 @@
 
                 if ( window.location.hostname === "blinkid.github.io" )
                 {
-                    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaEOIXmr4oS1aUAbMPUohDAa8GLyaU+DaNffm2vA2MytNo+fTEUOhvWu2dQD7Arrn+ASpDU0vByHSkgPenaVjy1GJ3M4wxBr273hW93Y5JiT7I8F/vhlh9q8H2qdOqvJBptMc2t9RrpsTp3urKrnCjo2TfmTkR2x7d5+3j3CmA+LfmJK6niIzZyDoGw3scLBCsioZEMBUBT58g=";
+                    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaACK9LsOPr2Dus6G8yiiYYl5VQwUApVeP999MMDDDO5rn2MaO8V+8T49z3hjPjRAjrZoTNaT0aQxP+eiYnG4hKWeWdhAO6eciw8G3RPZLibIy9qXZpSpmh7IkJaKtMeUkuWYTRIMc6c6LIdjFd/rfMeTrvF2WEIksMW1v5eD0XphdjoYGM8RLV/fGtftidb2+7RfIdhLEjOZfM9w==";
                 }
 
-                /* [TEMPORARY FIX]
-                 * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-                 * for examples, doesn't support COOP and COEP headers.
-                 *
-                 * For more information see "Integration" section in the official documentation.
-                 */
-                el.wasmType = "BASIC";
-
-                el.engineLocation = "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.11.3/resources/";
+                el.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecapture-in-browser/resources";
 
                 // Enable option to scan both document sides
                 el.recognizerOptions = {

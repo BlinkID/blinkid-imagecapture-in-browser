@@ -1,11 +1,134 @@
 # Release notes
 
+## 5.13.0
+
+### New additions to our supported document list
+
+We’ve added 61 new documents:
+
+#### Europe
+
+* Austria - Paper Passport 
+* Belarus - Paper Passport
+* Belgium - Paper Passport (beta)
+* Bulgaria - Paper Passport
+* Estonia - Paper Passport
+* France - Paper Passport (beta)
+* Georgia - Paper Passport (beta)
+* Germany - Paper Passport 
+* Greece - Paper Passport
+* Hungary- Paper Passport
+* Italy - Paper Passport (beta)
+* Kosovo - Paper Passport
+* Moldova - Paper Passport (beta)
+* Poland - Paper Passport
+* Portugal - Paper Passport
+* Spain - Paper Passport
+* Switzerland - Paper Passport
+* UK - Paper Passport
+
+#### Middle East and Africa
+
+* Algeria - Paper Passport (beta)
+* Egypt - Paper Passport (beta)
+* Eswatini - Paper Passport 
+* Ghana - Paper Passport
+* Iran - Paper Passport (beta)
+* Iraq - Paper Passport (beta)
+* Israel - Paper Passport (beta)
+* Jordan - Paper Passport (beta)
+* Kenya - Polycarbonate Passport
+* Libya - Polycarbonate Passport (beta)
+* Morocco - Paper Passport (beta)
+* Nigeria - Paper Passport
+* Nigeria - Polycarbonate Passport (beta)
+* Qatar - ID Card (front only, beta)
+* Saudi Arabia - Paper Passport
+* Syria - Paper Passport
+* Tanzania - ID Card (beta)
+* Tanzania - Voter ID (front only, beta)
+* Tunisia - Paper Passport
+* Turkey - Paper Passport
+* Zimbabwe - Paper Passport
+
+#### Latin America and the Caribbean
+
+* Argentina - Paper Passport
+* Brazil - Paper Passport (beta)
+* Guatemala - Paper Passport
+* Haiti - Paper Passport
+* Honduras - Paper Passport (beta)
+* Mexico - Paper Passport (beta)
+* Mexico - Nayarit - Driving Licence (beta)
+
+#### Asia
+
+* Bangladesh - Paper Passport
+* China - Paper Passport (beta)
+* India - Paper Passport
+* Indonesia - Paper Passport
+* Japan - Paper Passport
+* Nepal - Paper Passport
+* Pakistan - Paper Passport
+* Philippines - Paper Passport
+* South Korea - Paper Passport (beta)
+* Sri Lanka - Paper Passport
+* Uzbekistan - Paper Passport
+
+#### Oceania
+
+* Australia - Paper Passport
+
+#### Northern America
+
+* Canada - Paper Passport
+* Canada - Weapon Permit (front only, beta)
+* USA - Paper Passport (beta)
+
+#### Back side support added:
+
+* Greece - ID Card
+* Burkina Faso - ID Card
+* Democratic Republic of the Congo - Driving Licence
+* Mexico - Veracruz - Driving Licence
+* Canada - Citizenship Certificate
+
+#### No longer BETA:
+
+* Belarus - Driving Licence
+* UK - Polycarbonate Passport
+* Argentina - Alien ID
+* Bahamas - Driving Licence
+* Mexico - Durango - Driving Licence
+* Venezuela - ID Card
+* USA - Kansas - ID Card
+
+### Changes to the BlinkId(Combined)Recognizer:
+
+* We’ve renamed the Swaziland country to Eswatini in results and `ClassInfo` structure
+* We are filling out COUNTRY and REGION fields in ClassInfo, without the field TYPE of document, when using BarcodeID mode for scanning documents where the Front side is not supported, and back side results are extracted from AAMVA compliant barcodes
+    * This applies only if `ClassInfo` isn’t already prepopulated in some other way and when you’re not in `FullRecognition` mode
+* We've added support for including or excluding groups of documents supported by the current license with the `captureModeFilter` setting
+    * Scanning of documents with AAMVA compliant barcodes with BarcodeID mode
+    * Scanning of all licensed documents in BlinkID FullRecognition mode
+
+### Platform-related SDK changes
+
+* We've fixed a bug where some users were not able to scan passports, even though all document types were allowed by the license key.
+* We've improved the performance of the SDK by adding support for WebAssembly SIMD.
+    * This increases the scanning performance on compatible browsers up to 77% and up to 94% in cases when WebAssembly threads are also supported.
+    * Keep in mind that this feature requires a compatible browser (Chrome 91 and Firefox 90 or newer versions). Only `advanced` and `advanced-threads` binaries are using SIMD. In case that the browser doesn't support this feature, `basic` binary will be used.
+* We've reduced the memory fragmentation during video processing, resulting in a smaller memory footprint.
+* We've added a mechanism to automatically delete an instance of worker script in case of unsuccessful SDK initialization.
+    * New method `WasmSDK.delete()` was added for this purpose and is available on every instance of the SDK.
+* We've changed improper error handling in the `VideoRecognizer` class.
+    * From now on, it's possible to catch all errors that happen during the video recognition.
+
 ## 5.11.3
 
 * We've fixed a broken `client-library` which resulted as empty folder and unusable development bundle
 
 ## 5.11.2
-### SDK changes
 
 * We've exposed a couple of functions that are used by the SDK to determine which WebAssembly bundle to load and from which location
     * Function `detectWasmType()` returns the best possible WebAssembly bundle based on the features a browser supports.
