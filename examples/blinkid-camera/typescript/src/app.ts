@@ -37,18 +37,10 @@ function main()
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKzU9YA52R5wKkqk3QzgC8sVNFr63JqfW1zbtcPPm5UFyHdr1PJpDffHWEhFwg30vKEfjDh6hbIfYtS7XmF1KQOvJhHktAkFqst98Xza16f6WzKUIsx8kqaha3ahB8dtmJV8vLRyLkXFleLaYMOrsOhgF2YHyXlWc5Y8PpADxuwuzy6HJexW3ydqlf9EljYlnJymLIncUiRyo";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLwUXza1htObpRih8QOvGrTQkcxdS4jAQV5d17d4zNLUVZRwTIjjr0gaYz+v4H++9CE49zVdEv18K9TNNU8BEnCYW6bthX1CABGUpVVJLoR8PlRPBNDhFI2KlQj/zPXu955Wc+b+Cvm8IPJOLO0FuMmtn4RL7bSPDeJs62WRv6G00bgY0Ha8jKkoWOki/5+4KKP1g0Vp4YMOG7tc=";
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings( licenseKey );
-
-    /* [TEMPORARY FIX]
-     * Use basic WebAssembly builds since most performant option requires server setup and unpkg.com, which is used
-     * for examples, doesn't support COOP and COEP headers.
-     *
-     * For more information see "Integration" section in the official documentation.
-     */
-    loadSettings.wasmType = BlinkIDImageCaptureSDK.WasmType.Basic;
 
     // [OPTIONAL] Change default settings
 

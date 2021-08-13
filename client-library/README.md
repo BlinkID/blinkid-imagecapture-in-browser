@@ -39,21 +39,27 @@ import { Client } from "@microblink/blinkid-imagecapture-in-browser-sdk";
 
 ### <a name="installation-standalone-bundle"></a> Standalone (UMD) bundle
 
-Since client library is published on NPM, it's possible to load the library via CDN.
+Since the client library is published on NPM, it's possible to download the library via public CDN services.
+
+However, **we strongly advise** that you host the JavaScript bundle on your infrastructure since there is no guarantee that the public CDN service has satisfactory uptime and availability throughout the world.
 
 ```html
 <!-- After successful load, global variable `Client` is available. -->
-<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/client-library/dist/client-library.min.js"></script>
+<!-- IMPORTANT: change "X.Y.Z" to the version number you wish to use! -->
+<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/dist/client-library.min.js"></script>
 ```
 
 *Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
 
 ### <a name="installation-es-module"></a> ES module
 
-The library is also packaged as a classic ES module which can be loaded via CDN.
+The library is also packaged as a classic ES module which can be downloaded via public CDN services.
+
+However, **we strongly advise** that you host the JavaScript bundle on your infrastructure since there is no guarantee that the public CDN service has satisfactory uptime and availability throughout the world.
 
 ```js
-import { Client } from "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/client-library/es/client-library.mjs";
+/* IMPORTANT: change "X.Y.Z" to the version number you wish to use! */
+import { Client } from "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/es/client-library.mjs";
 ```
 
 *Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
