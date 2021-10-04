@@ -6,12 +6,15 @@ import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";
 
 import {
   AvailableRecognizers,
+  CameraEntry,
   CameraExperience,
   Code,
   EventFatalError,
   EventReady,
   VideoRecognitionConfiguration,
   ImageRecognitionConfiguration,
+  CombinedImageRecognitionConfiguration,
+  ImageRecognitionType,
   RecognizerInstance,
   RecognitionEvent,
   RecognitionStatus,
@@ -24,6 +27,19 @@ export interface CheckConclusion {
   message?: string;
 }
 
+export async function getCameraDevices(): Promise<Array<CameraEntry>> {
+  const devices = await BlinkIDImageCaptureSDK.getCameraDevices();
+  const allDevices = devices.frontCameras.concat(devices.backCameras);
+  const finalEntries = allDevices.map((el: BlinkIDImageCaptureSDK.SelectedCamera) => {
+    return {
+      prettyName: el.label,
+      details: el
+    }
+  });
+
+  return finalEntries;
+}
+
 export class SdkService {
   private sdk: BlinkIDImageCaptureSDK.WasmSDK;
 
@@ -33,12 +49,16 @@ export class SdkService {
 
   private recognizerName: string;
 
-  private videoRecognizer: BlinkIDImageCaptureSDK.VideoRecognizer;
+  public videoRecognizer: BlinkIDImageCaptureSDK.VideoRecognizer;
 
   public showOverlay: boolean = false;
 
   constructor() {
     this.eventEmitter$ = document.createElement('a');
+  }
+
+  public delete() {
+    this.sdk?.delete();
   }
 
   public initialize(licenseKey: string, sdkSettings: SdkSettings): Promise<EventReady|EventFatalError> {
@@ -123,6 +143,8 @@ export class SdkService {
         configuration.cameraId
       );
 
+      eventCallback({ status: RecognitionStatus.Ready });
+
       await this.videoRecognizer.setVideoRecognitionMode(BlinkIDImageCaptureSDK.VideoRecognitionMode.Recognition);
 
       this.eventEmitter$.addEventListener('terminate', async () => {
@@ -131,11 +153,11 @@ export class SdkService {
         }
 
         if (recognizerRunner) {
-            try {
-              await recognizerRunner.delete();
-            } catch (error) {
-              // Psst, this error should not happen.
-            }
+          try {
+            await recognizerRunner.delete();
+          } catch (error) {
+            // Psst, this error should not happen.
+          }
         }
 
         for (const recognizer of recognizers) {
@@ -224,7 +246,7 @@ export class SdkService {
           if (this.recognizerName !== 'BlinkIdImageCaptureRecognizer') {
             window.setTimeout(() => void this.cancelRecognition(), 400);
           }
-        });
+        }, configuration.recognitionTimeout);
     } catch (error) {
       if (error && error.name === 'VideoRecognizerError') {
         const reason = (error as BlinkIDImageCaptureSDK.VideoRecognizerError).reason;
@@ -270,11 +292,19 @@ export class SdkService {
   }
 
   public isScanFromImageAvailable(_recognizers: Array<string> = [], _recognizerOptions: any = {}): boolean {
-    if (_recognizers.indexOf('BlinkIdImageCaptureRecognizer') !== -1) {
-      if (_recognizerOptions && Object.keys(_recognizerOptions).length > 0 && _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides) return false;
-      else return true;
-    }
     return true;
+  }
+
+  public getScanFromImageType(_recognizers: Array<string> = [], _recognizerOptions: any = {}): ImageRecognitionType {
+    if (
+      _recognizerOptions &&
+      Object.keys(_recognizerOptions).length > 0 &&
+      _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides
+    ) {
+      return ImageRecognitionType.Combined;
+    }
+
+    return ImageRecognitionType.Single;
   }
 
   public async scanFromImage(
@@ -293,36 +323,15 @@ export class SdkService {
       eventCallback
     );
 
-    // Get image file
-    const imageRegex = RegExp(/^image\//);
-    const file: File|null = (() => {
-      for (let i = 0; i < configuration.fileList.length; ++i) {
-        if (imageRegex.exec(configuration.fileList[i].type)) {
-          return configuration.fileList[i];
-        }
-      }
+    const handleTerminate = async () => {
+      this.eventEmitter$.removeEventListener('terminate', handleTerminate);
 
-      return null;
-    })();
-
-    if (!file) {
-      eventCallback({ status: RecognitionStatus.NoImageFileFound });
-      return;
-    }
-
-    const imageElement = new Image();
-    imageElement.src = URL.createObjectURL(file);
-    await imageElement.decode();
-
-    const imageFrame = BlinkIDImageCaptureSDK.captureFrame(imageElement);
-
-    this.eventEmitter$.addEventListener('terminate', async () => {
       if (recognizerRunner) {
-          try {
-            await recognizerRunner.delete();
-          } catch (error) {
-            // Psst, this error should not happen.
-          }
+        try {
+          await recognizerRunner.delete();
+        } catch (error) {
+          // Psst, this error should not happen.
+        }
       }
 
       for (const recognizer of recognizers) {
@@ -340,7 +349,23 @@ export class SdkService {
       }
 
       this.eventEmitter$.dispatchEvent(new Event('terminate:done'));
-    });
+    };
+
+    this.eventEmitter$.addEventListener('terminate', handleTerminate);
+
+    // Get image file
+    if (!configuration.file || !RegExp(/^image\//).exec(configuration.file.type)) {
+      eventCallback({ status: RecognitionStatus.NoImageFileFound });
+      window.setTimeout(() => void this.cancelRecognition(), 500);
+      return;
+    }
+
+    const file = configuration.file;
+    const imageElement = new Image();
+    imageElement.src = URL.createObjectURL(file);
+    await imageElement.decode();
+
+    const imageFrame = BlinkIDImageCaptureSDK.captureFrame(imageElement);
 
     // Get results
     eventCallback({ status: RecognitionStatus.Processing });
@@ -359,7 +384,8 @@ export class SdkService {
               recognizerName: recognizer.name
             }
           });
-        } else {
+        }
+        else {
           const recognitionResults: RecognitionResults = {
             recognizer: results,
             imageCapture: recognizer.name === 'BlinkIdImageCaptureRecognizer',
@@ -372,23 +398,19 @@ export class SdkService {
           break;
         }
       }
-    } else {
+    }
+    else {
       // If necessary, scan the image once again with different settings
       if (configuration.thoroughScan) {
-        configuration.thoroughScan = false;
+        const c = configuration;
 
-        if (
-          !Array.isArray(configuration.recognizerOptions) ||
-          configuration.recognizerOptions.indexOf('scanCroppedDocumentImage') === -1
-        ) {
-          if (!Array.isArray(configuration.recognizerOptions)) {
-            configuration.recognizerOptions = [];
-          }
-          configuration.recognizerOptions.push('scanCroppedDocumentImage');
-        }
-        else {
-          const position = configuration.recognizerOptions.indexOf('scanCroppedDocumentImage');
-          configuration.recognizerOptions.splice(position, 1);
+        c.thoroughScan = false;
+        c.recognizerOptions = c.recognizerOptions || {};
+
+        for (const r of c.recognizers) {
+          c.recognizerOptions[r] = c.recognizerOptions[r] || {};
+          c.recognizerOptions[r].scanCroppedDocumentImage = !!c.recognizerOptions[r].scanCroppedDocumentImage;
+          c.recognizerOptions[r].scanCroppedDocumentImage = !c.recognizerOptions[r].scanCroppedDocumentImage;
         }
 
         const eventHandler = (recognitionEvent: RecognitionEvent) => eventCallback(recognitionEvent);
@@ -396,8 +418,157 @@ export class SdkService {
           this.eventEmitter$.removeEventListener('terminate:done', handleTerminateDone);
           this.scanFromImage(configuration, eventHandler);
         }
-        this.cancelRecognition();
         this.eventEmitter$.addEventListener('terminate:done', handleTerminateDone);
+        window.setTimeout(() => void this.cancelRecognition(), 500);
+        return;
+      }
+
+      eventCallback({
+        status: RecognitionStatus.EmptyResultState,
+        data: {
+          initiatedByUser: this.cancelInitiatedFromOutside,
+          recognizerName: ''
+        }
+      });
+    }
+
+    window.setTimeout(() => void this.cancelRecognition(), 500);
+  }
+
+  public async scanFromImageCombined(
+    configuration: CombinedImageRecognitionConfiguration,
+    eventCallback: (ev: RecognitionEvent) => void
+  ): Promise<void> {
+    eventCallback({ status: RecognitionStatus.Preparing });
+
+    const recognizers = await this.createRecognizers(
+      configuration.recognizers,
+      configuration.recognizerOptions
+    );
+
+    const recognizerRunner = await this.createRecognizerRunner(
+      recognizers,
+      eventCallback
+    );
+
+    const handleTerminate = async () => {
+      this.eventEmitter$.removeEventListener('terminate', handleTerminate);
+
+      if (recognizerRunner) {
+        try {
+          await recognizerRunner.delete();
+        } catch (error) {
+          // Psst, this error should not happen.
+        }
+      }
+
+      for (const recognizer of recognizers) {
+        if (!recognizer) {
+          continue;
+        }
+
+        if (
+          recognizer.recognizer &&
+          recognizer.recognizer.objectHandle > -1 &&
+          typeof recognizer.recognizer.delete === 'function'
+        ) {
+          await recognizer.recognizer.delete();
+        }
+      }
+
+      this.eventEmitter$.dispatchEvent(new Event('terminate:done'));
+    };
+
+    this.eventEmitter$.addEventListener('terminate', handleTerminate);
+
+    if (!configuration.firstFile) {
+      eventCallback({ status: RecognitionStatus.NoFirstImageFileFound });
+      window.setTimeout(() => void this.cancelRecognition(), 500);
+      return;
+    }
+
+    if (!configuration.secondFile) {
+      eventCallback({ status: RecognitionStatus.NoSecondImageFileFound });
+      window.setTimeout(() => void this.cancelRecognition(), 500);
+      return;
+    }
+
+    // Get results
+    eventCallback({ status: RecognitionStatus.Processing });
+
+    const imageElement = new Image();
+    imageElement.src = URL.createObjectURL(configuration.firstFile);
+    await imageElement.decode();
+
+    const firstFrame = BlinkIDImageCaptureSDK.captureFrame(imageElement);
+    const firstProcessResult = await recognizerRunner.processImage(firstFrame);
+
+    if (firstProcessResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
+      const imageElement = new Image();
+      imageElement.src = URL.createObjectURL(configuration.secondFile);
+      await imageElement.decode();
+
+      const secondFrame = BlinkIDImageCaptureSDK.captureFrame(imageElement);
+      const secondProcessResult = await recognizerRunner.processImage(secondFrame);
+
+      if (secondProcessResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
+        for (const recognizer of recognizers) {
+          const results = await recognizer.recognizer.getResult();
+
+          if (!results || results.state === BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
+            eventCallback({
+              status: RecognitionStatus.EmptyResultState,
+              data: {
+                initiatedByUser: this.cancelInitiatedFromOutside,
+                recognizerName: recognizer.name
+              }
+            });
+          }
+          else {
+            const recognitionResults: RecognitionResults = {
+              recognizer: results,
+              imageCapture: recognizer.name === 'BlinkIdImageCaptureRecognizer',
+              recognizerName: recognizer.name
+            };
+            eventCallback({
+              status: RecognitionStatus.ScanSuccessful,
+              data: recognitionResults
+            });
+            break;
+          }
+        }
+      }
+      else {
+        eventCallback({
+          status: RecognitionStatus.EmptyResultState,
+          data: {
+            initiatedByUser: this.cancelInitiatedFromOutside,
+            recognizerName: ''
+          }
+        });
+      }
+    }
+    else {
+      // If necessary, scan the image once again with different settings
+      if (configuration.thoroughScan) {
+        const c = configuration;
+
+        c.thoroughScan = false;
+        c.recognizerOptions = c.recognizerOptions || {};
+
+        for (const r of c.recognizers) {
+          c.recognizerOptions[r] = c.recognizerOptions[r] || {};
+          c.recognizerOptions[r].scanCroppedDocumentImage = !!c.recognizerOptions[r].scanCroppedDocumentImage;
+          c.recognizerOptions[r].scanCroppedDocumentImage = !c.recognizerOptions[r].scanCroppedDocumentImage;
+        }
+
+        const eventHandler = (recognitionEvent: RecognitionEvent) => eventCallback(recognitionEvent);
+        const handleTerminateDone = () => {
+          this.eventEmitter$.removeEventListener('terminate:done', handleTerminateDone);
+          this.scanFromImageCombined(configuration, eventHandler);
+        }
+        this.eventEmitter$.addEventListener('terminate:done', handleTerminateDone);
+        window.setTimeout(() => void this.cancelRecognition(), 500);
         return;
       }
 
@@ -419,6 +590,14 @@ export class SdkService {
 
   public async resumeRecognition(): Promise<void> {
     this.videoRecognizer.resumeRecognition(true);
+  }
+
+  public changeCameraDevice(camera: BlinkIDImageCaptureSDK.SelectedCamera): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.videoRecognizer.changeCameraDevice(camera)
+        .then(() => resolve(true))
+        .catch(() => resolve(false));
+    });
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -443,17 +622,24 @@ export class SdkService {
 
     if (recognizerOptions && Object.keys(recognizerOptions).length > 0) {
       for (const recognizer of pureRecognizers) {
-        let settingsUpdated = false;
         const settings = await recognizer.currentSettings();
+        let updated = false;
+
+        if (
+          !recognizerOptions[recognizer.recognizerName] ||
+          Object.keys(recognizerOptions[recognizer.recognizerName]).length < 1
+        ) {
+          continue;
+        }
 
         for (const [key, value] of Object.entries(recognizerOptions[recognizer.recognizerName])) {
           if (key in settings) {
             settings[key] = value;
-            settingsUpdated = true;
+            updated = true;
           }
         }
 
-        if (settingsUpdated) {
+        if (updated) {
           await recognizer.updateSettings(settings);
         }
       }
@@ -550,4 +736,3 @@ export class SdkService {
     this.eventEmitter$.dispatchEvent(new Event('terminate'));
   }
 }
-

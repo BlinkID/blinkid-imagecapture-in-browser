@@ -28,7 +28,7 @@ function initializeUiComponent()
         throw "Could not find UI component!";
     }
 
-    el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLwUXza1htObpRih8QOvGrTQkcxdS4jAQV5d17d4zNLUVZRwTIjjr0gaYz+v4H++9CE49zVdEv18K9TNNU8BEnCYW6bthX1CABGUpVVJLoR8PlRPBNDhFI2KlQj/zPXu955Wc+b+Cvm8IPJOLO0FuMmtn4RL7bSPDeJs62WRv6G00bgY0Ha8jKkoWOki/5+4KKP1g0Vp4YMOG7tc=";
+    el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKcUTzWfFms+1HtOJBLOa0Z9jQdHUQo1EWP1afmump3DAd/zRkoNODh6Y9FtA1eYVaya36wQmmWpLEliFyV9va44nCIrCRqyoUzeQolAjPINbKGqHklMsfYekNYLDA2i+7zfxUF8Ac3eQ3FiDhrN3d1l+36UjfUfU9e6omHNFxdqysdOxvgVw9bNH8fjbKRmI1CJHbJmb1AWmi2YGwk0=";
     el.engineLocation = window.location.origin;
     el.recognizers = [ "BlinkIdImageCaptureRecognizer" ];
 

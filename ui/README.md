@@ -57,9 +57,8 @@ cp -r node_modules/@microblink/blinkid-imagecapture-in-browser-sdk/resources/* s
 ```
 
 ```html
-<!-- Load custom element via `<script>` tag with fallback for older browsers -->
+<!-- Load custom element via `<script>` tag -->
 <script type="module" src="public/js/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-<script nomodule src="public/js/blinkid-imagecapture-in-browser.js"></script>
 
 <!-- Custom element is now available and location of WASM engine must be provided -->
 <!-- IMPORTANT: location of WASM engine must be an absolute path
