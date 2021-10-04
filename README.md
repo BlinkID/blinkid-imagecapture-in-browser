@@ -237,7 +237,23 @@ For example, in `package.json` you should have something like `"@microblink/blin
             cameraFeed,
             recognizerRunner
         );
+
+        // There is more than one way to handle recognition
+
+        // Using the recognize() method will provide you with the default behavior,
+        // such as built-in error handling, timeout and video feed pausing.
         const processResult = await videoRecognizer.recognize();
+
+        // Using the startRecognition() method allows you to pass your own onScanningDone callback, 
+        // giving you the option to create custom behavior.
+        const processResult = await videoRecognizer.startRecognition(
+            async ( recognitionState ) => 
+            {
+                videoRecognizer.pauseRecognition();
+                return recognitionState;
+            }
+        );
+
         // To obtain recognition results see next step
     }
     catch ( error )
@@ -252,7 +268,7 @@ For example, in `package.json` you should have something like `"@microblink/blin
     }
     ```
 
-6. If `processResult` returned from `VideoRecognizer's` method `recognize` is not `BlinkIDImageCaptureSDK.RecognizerResultState.Empty`, then at least one recognizer given to the `RecognizerRunner` above contains a recognition result. You can extract the result from each recognizer using its `getResult` method:
+6. If `processResult` returned from `VideoRecognizer's` method `recognize` or `startRecognition` is not `BlinkIDImageCaptureSDK.RecognizerResultState.Empty`, then at least one recognizer given to the `RecognizerRunner` above contains a recognition result. You can extract the result from each recognizer using its `getResult` method:
 
     ```typescript
     if ( processResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
