@@ -14,29 +14,28 @@ import * as BlinkIDImageCaptureSDK from "@microblink/blinkid-imagecapture-in-bro
 import { ApiType, Client } from "@microblink/blinkid-imagecapture-in-browser-sdk/client-library";
 
 // General UI helpers
-const initialMessageEl = document.getElementById( "msg" ) as HTMLHeadingElement;
-const progressEl = document.getElementById( "load-progress" ) as HTMLProgressElement;
-const scanImageElement = document.getElementById( "target-image") as HTMLImageElement;
-const inputImageFile = document.getElementById( "image-file" ) as HTMLInputElement;
+const initialMessageEl = document.getElementById("msg") as HTMLHeadingElement;
+const progressEl = document.getElementById("load-progress") as HTMLProgressElement;
+const scanImageElement = document.getElementById("target-image") as HTMLImageElement;
+const inputImageFile = document.getElementById("image-file") as HTMLInputElement;
 let processingOnWebApi = false;
 
 /**
  * Check browser support, customize settings and load WASM SDK.
  */
-function main()
-{
+function main() {
+
     // Check if browser has proper support for WebAssembly
-    if ( !BlinkIDImageCaptureSDK.isBrowserSupported() )
-    {
+    if (!BlinkIDImageCaptureSDK.isBrowserSupported()) {
         initialMessageEl.innerText = "This browser is not supported!";
         return;
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKcUTzWfFms+1HtOJBLOa0Z9jQdHUQo1EWP1afmump3DAd/zRkoNODh6Y9FtA1eYVaya36wQmmWpLEliFyV9va44nCIrCRqyoUzeQolAjPINbKGqHklMsfYekNYLDA2i+7zfxUF8Ac3eQ3FiDhrN3d1l+36UjfUfU9e6omHNFxdqysdOxvgVw9bNH8fjbKRmI1CJHbJmb1AWmi2YGwk0=";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKa04ZlIbreAlfvnlVctfE+J9SonygXAbRF54D1L1sgq2wp0QjtN1hgNiu0WtuheNGbAxAwaoci62MXfrEFpjSXMOVkzsrNbvBQGjuBqAq1k5jm5ThcLL/4F6AjdvtdjwvP+8dRx9kUqOKxc3DXTtR+Wtdur/D+VtDtcP8vvboGakck7xeG18rxOYpTv3XQEmn8U6E6LnuRXmLQ==";
 
     // 2. Create instance of SDK load settings with your license key
-    const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings( licenseKey );
+    const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings(licenseKey);
 
     // [OPTIONAL] Change default settings
 
@@ -44,75 +43,68 @@ function main()
     loadSettings.allowHelloMessage = true;
 
     // In order to provide better UX, display progress bar while loading the SDK
-    loadSettings.loadProgressCallback = ( progress: number ) => progressEl!.value = progress;
+    loadSettings.loadProgressCallback = (progress: number) => progressEl!.value = progress;
 
     // Set absolute location of the engine, i.e. WASM and support JS files
     loadSettings.engineLocation = window.location.origin;
 
     // 3. Load SDK
-    BlinkIDImageCaptureSDK.loadWasmModule( loadSettings ).then
-    (
-        ( sdk: BlinkIDImageCaptureSDK.WasmSDK ) =>
-        {
-            document.getElementById( "screen-initial" )?.classList.add( "hidden" );
-            document.getElementById( "screen-start" )?.classList.remove( "hidden" );
-            document.getElementById( "image-file" )?.addEventListener( "change", ( ev: any ) =>
-            {
-                ev.preventDefault();
-                startScan( sdk, ev.target.files );
-            });
-        },
-        ( error: any ) =>
-        {
-            initialMessageEl.innerText = "Failed to load SDK!";
-            console.error( "Failed to load SDK!", error );
-        }
-    );
+    BlinkIDImageCaptureSDK.loadWasmModule(loadSettings).then((sdk: BlinkIDImageCaptureSDK.WasmSDK) => {
+        document.getElementById("screen-initial")?.classList.add("hidden");
+        document.getElementById("screen-start")?.classList.remove("hidden");
+        document.getElementById("image-file")?.addEventListener("change", (ev: any) => {
+            ev.preventDefault();
+            startScan(sdk, ev.target.files);
+        });
+    }, (error: any) => {
+        initialMessageEl.innerText = "Failed to load SDK!";
+        console.error("Failed to load SDK!", error);
+    });
 }
 
 /**
  * Scan single side of identity document with web camera.
  */
-async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileList )
-{
+async function startScan(sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileList) {
     processingOnWebApi = false;
-
-    document.getElementById( "screen-start" )?.classList.add( "hidden" );
-    document.getElementById( "screen-scanning" )?.classList.remove( "hidden" );
+    document.getElementById("screen-start")?.classList.add("hidden");
+    document.getElementById("screen-scanning")?.classList.remove("hidden");
 
     // 1. Create a recognizer objects which will be used to recognize single image or stream of images.
     //
+
     // BlinkID ImageCapture Recognizer - recognize a document and extract an image
-    const blinkIdImageCaptureRecognizer = await BlinkIDImageCaptureSDK.createBlinkIdImageCaptureRecognizer( sdk );
+    const blinkIdImageCaptureRecognizer = await BlinkIDImageCaptureSDK.createBlinkIdImageCaptureRecognizer(sdk);
 
     // 2. Create a RecognizerRunner object which orchestrates the recognition with one or more
+
     //    recognizer objects.
-    const recognizerRunner = await BlinkIDImageCaptureSDK.createRecognizerRunner
-    (
-        // SDK instance to use
-        sdk,
-        // List of recognizer objects that will be associated with created RecognizerRunner object
-        [ blinkIdImageCaptureRecognizer ],
-        // [OPTIONAL] Should recognition pipeline stop as soon as first recognizer in chain finished recognition
-        false
-    );
+    const recognizerRunner = await BlinkIDImageCaptureSDK.createRecognizerRunner(
+
+    // SDK instance to use
+    sdk, 
+
+    // List of recognizer objects that will be associated with created RecognizerRunner object
+    [blinkIdImageCaptureRecognizer], 
+
+    // [OPTIONAL] Should recognition pipeline stop as soon as first recognizer in chain finished recognition
+    false);
 
     // 3. Prepare image for scan action - keep in mind that SDK can only process images represented in
+
     //    internal CapturedFrame data structure. Therefore, auxiliary method "captureFrame" is provided.
 
     // Make sure that image file is provided
     let file = null;
-    const imageRegex = RegExp( /^image\// );
-    for ( let i = 0; i < fileList.length; ++i )
-    {
-        if ( imageRegex.exec( fileList[ i ].type ) )
-        {
-            file = fileList[ i ];
+    const imageRegex = RegExp(/^image\//);
+    for (let i = 0; i < fileList.length; ++i) {
+        if (imageRegex.exec(fileList[i].type)) {
+            file = fileList[i];
         }
     }
-    if ( !file )
-    {
-        alert( "No image files provided!" );
+    if (!file) {
+        alert("No image files provided!");
+
         // Release memory on WebAssembly heap used by the RecognizerRunner
         recognizerRunner?.delete();
 
@@ -121,37 +113,30 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
         inputImageFile.value = "";
         return;
     }
-
-    scanImageElement!.src = URL.createObjectURL( file );
+    scanImageElement!.src = URL.createObjectURL(file);
     await scanImageElement.decode();
-    const imageFrame = BlinkIDImageCaptureSDK.captureFrame( scanImageElement );
+    const imageFrame = BlinkIDImageCaptureSDK.captureFrame(scanImageElement);
 
     // 4. Start the recognition and await for the results
-    const processResult = await recognizerRunner.processImage( imageFrame );
+    const processResult = await recognizerRunner.processImage(imageFrame);
 
     // 5. If recognition was successful, obtain the result and display it
-    if ( processResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
-    {
+    if (processResult !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
         const blinkIdImageCaptureResults = await blinkIdImageCaptureRecognizer.getResult();
-        if ( blinkIdImageCaptureResults.state !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty )
-        {
-            console.log( "BlinkIDImageCapture results", blinkIdImageCaptureResults );
-
-            if ( !blinkIdImageCaptureResults.frontSideCameraFrame )
-            {
-                alert( "Could not extract front image of a document. Please try again." );
+        if (blinkIdImageCaptureResults.state !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
+            console.log("BlinkIDImageCapture results", blinkIdImageCaptureResults);
+            if (!blinkIdImageCaptureResults.frontSideCameraFrame) {
+                alert("Could not extract front image of a document. Please try again.");
             }
-            else
-            {
+            else {
                 processingOnWebApi = true;
-                console.log( "Sending request to web API..." );
-                getWebApiResults( blinkIdImageCaptureResults.frontSideCameraFrame );
+                console.log("Sending request to web API...");
+                getWebApiResults(blinkIdImageCaptureResults.frontSideCameraFrame);
             }
         }
     }
-    else
-    {
-        alert( "Could not extract information!" );
+    else {
+        alert("Could not extract information!");
     }
 
     // 7. Release all resources allocated on the WebAssembly heap and associated with camera stream
@@ -164,11 +149,9 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
 
     // Hide scanning screen and show scan button again
     inputImageFile.value = "";
-
-    if ( !processingOnWebApi )
-    {
-        document.getElementById( "screen-start" )?.classList.remove( "hidden" );
-        document.getElementById( "screen-scanning" )?.classList.add( "hidden" );
+    if (!processingOnWebApi) {
+        document.getElementById("screen-start")?.classList.remove("hidden");
+        document.getElementById("screen-scanning")?.classList.add("hidden");
     }
 }
 
@@ -177,48 +160,38 @@ async function startScan( sdk: BlinkIDImageCaptureSDK.WasmSDK, fileList: FileLis
  *
  * This function is using client library which is provided with the SDK.
  */
-function getWebApiResults( frontSide: ImageData )
-{
+function getWebApiResults(frontSide: ImageData) {
+
     // Create instance of client library - for more information see `client-library/README.md` file
-    const client = new Client( ApiType.SelfHosted, { apiLocation: "https://demoapi.microblink.com" } );
+    const client = new Client(ApiType.SelfHosted, { apiLocation: "https://demoapi.microblink.com" });
 
     // Send image to web API for processing
-    const payload =
-    {
+    const payload = {
+
         // Image from WASM library should be converted to Base64 from ImageData format.
-        "imageSource": client.imageDataToBase64( frontSide )
+        "imageSource": client.imageDataToBase64(frontSide)
     };
-
-    client.recognize( "/v1/recognizers/blinkid", payload )
-        .then( ( results ) =>
-        {
-            const recognitionResults = results.response.data.result;
-            console.log( "API recognition results", recognitionResults );
-
-            if ( recognitionResults.recognitionStatus === "EMPTY" )
-            {
-                console.warn( "API processing returned empty results." );
-                alert( "API processing returned empty results." );
-                return;
-            }
-
-            alert
-            (
-                `Hello, ${ recognitionResults.firstName } ${ recognitionResults.lastName }!\n` +
-                `You were born on ${ recognitionResults.dateOfBirth.year }-${ recognitionResults.dateOfBirth.month }-${ recognitionResults.dateOfBirth.day }.`
-            );
-        } )
-        .catch( ( error ) =>
-        {
-            console.error( "API recognition error", error );
-            alert( "Could not process image on backend." );
-        } )
-        .finally( () =>
-        {
-            processingOnWebApi = false;
-            document.getElementById( "screen-start" )?.classList.remove( "hidden" );
-            document.getElementById( "screen-scanning" )?.classList.add( "hidden" );
-        } );
+    client.recognize("/v1/recognizers/blinkid", payload)
+        .then((results) => {
+        const recognitionResults = results.response.data.result;
+        console.log("API recognition results", recognitionResults);
+        if (recognitionResults.recognitionStatus === "EMPTY") {
+            console.warn("API processing returned empty results.");
+            alert("API processing returned empty results.");
+            return;
+        }
+        alert(`Hello, ${recognitionResults.firstName} ${recognitionResults.lastName}!\n` +
+            `You were born on ${recognitionResults.dateOfBirth.year}-${recognitionResults.dateOfBirth.month}-${recognitionResults.dateOfBirth.day}.`);
+    })
+        .catch((error) => {
+        console.error("API recognition error", error);
+        alert("Could not process image on backend.");
+    })
+        .finally(() => {
+        processingOnWebApi = false;
+        document.getElementById("screen-start")?.classList.remove("hidden");
+        document.getElementById("screen-scanning")?.classList.add("hidden");
+    });
 }
 
 // Run

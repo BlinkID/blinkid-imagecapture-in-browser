@@ -1,6 +1,6 @@
 {
     "name": "@microblink/blinkid-imagecapture-in-browser-sdk",
-    "version": "5.14.0",
+    "version": "5.14.1",
     "description": "A smart image capturing library for WebAssembly-enabled browsers.",
     "homepage": "https://github.com/BlinkID/blinkid-imagecapture-in-browser",
     "repository": "github:BlinkID/blinkid-imagecapture-in-browser",
@@ -32,11 +32,15 @@
         "types"
     ],
     "scripts": {
-        "build": "rollup -c",
-        "build:ui": "cd ui && npm install && npm run build",
+        "build": "npm run build:api && npm run build:ui && npm run build:client",
+        "build:api": "rollup -c",
         "build:client": "cd client-library && npm install && npm run build",
+        "build:ui": "cd ui && npm install && npm run build",
         "check-types": "tsc --noEmit",
-        "clean": "rimraf dist es lib types",
+        "clean": "npm run clean:api && npm run clean:ui && npm run clean:client",
+        "clean:api": "rimraf dist es lib types",
+        "clean:client": "cd client-library && npm run clean",
+        "clean:ui": "cd ui && npm run clean",
         "lint": "eslint --ext ts -c .eslintrc.json src",
         "pretest": "npm run build",
         "prepublishOnly": "npm run clean && npm run check-types && npm run lint && npm test",

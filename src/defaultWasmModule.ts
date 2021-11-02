@@ -3,3 +3,4 @@
  */
 
 export const defaultWasmModuleName = "BlinkIDImageCaptureWasmSDK";
+export const nativeJsonizationEnabled = false;

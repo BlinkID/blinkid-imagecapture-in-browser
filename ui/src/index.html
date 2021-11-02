@@ -48,42 +48,39 @@
     </style>
   </head>
   <body>
-    <blinkid-imagecapture-in-browser
-      engine-location="http://localhost:3333/resources"
-      license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKcUTzWfFms+1HtOJBLOa0Z9jQdHUQo1EWP1afmump3DAd/zRkoNODh6Y9FtA1eYVaya36wQmmWpLEliFyV9va44nCIrCRqyoUzeQolAjPINbKGqHklMsfYekNYLDA2i+7zfxUF8Ac3eQ3FiDhrN3d1l+36UjfUfU9e6omHNFxdqysdOxvgVw9bNH8fjbKRmI1CJHbJmb1AWmi2YGwk0="
-      recognizers="BlinkIdImageCaptureRecognizer"
-    ></blinkid-imagecapture-in-browser>
+    <blinkid-imagecapture-in-browser engine-location="http://localhost:3333/resources" license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKa04ZlIbreAlfvnlVctfE+J9SonygXAbRF54D1L1sgq2wp0QjtN1hgNiu0WtuheNGbAxAwaoci62MXfrEFpjSXMOVkzsrNbvBQGjuBqAq1k5jm5ThcLL/4F6AjdvtdjwvP+8dRx9kUqOKxc3DXTtR+Wtdur/D+VtDtcP8vvboGakck7xeG18rxOYpTv3XQEmn8U6E6LnuRXmLQ==" recognizers="BlinkIdImageCaptureRecognizer"></blinkid-imagecapture-in-browser>
 
     <script type="text/javascript">
-      const el = document.querySelector('blinkid-imagecapture-in-browser');
 
-      el.addEventListener('fatalError', ev => {
-        console.log('fatalError', ev.detail);
-      });
+const el = document.querySelector('blinkid-imagecapture-in-browser');
 
-      el.addEventListener('ready', ev => {
-        console.log('ready', ev.detail);
-      });
+el.addEventListener('fatalError', (ev) => {
+  console.log('fatalError', ev.detail);
+});
 
-      el.addEventListener('scanError', ev => {
-        console.log('scanError', ev.detail);
-      });
+el.addEventListener('ready', (ev) => {
+  console.log('ready', ev.detail);
+});
 
-      el.addEventListener('scanSuccess', ev => {
-        console.log('scanSuccess', ev.detail);
+el.addEventListener('scanError', (ev) => {
+  console.log('scanError', ev.detail);
+});
 
-        /**
-         * Since this SDK is intended to be used in combination with backend services
-         * for data extraction, it's required to manually set the success state.
-         *
-         * See 'ui/examples' folder to see how to communicate with Microblink backend.
-         */
-        el.setUiState('SUCCESS');
-      });
+el.addEventListener('scanSuccess', (ev) => {
+  console.log('scanSuccess', ev.detail);
 
-      el.addEventListener('feedback', ev => {
-        console.log('feedback', ev.detail);
-      });
-    </script>
+  /**
+   * Since this SDK is intended to be used in combination with backend services
+   * for data extraction, it's required to manually set the success state.
+   *
+   * See 'ui/examples' folder to see how to communicate with Microblink backend.
+   */
+  el.setUiState('SUCCESS');
+});
+
+el.addEventListener('feedback', (ev) => {
+  console.log('feedback', ev.detail);
+});
+</script>
   </body>
 </html>
