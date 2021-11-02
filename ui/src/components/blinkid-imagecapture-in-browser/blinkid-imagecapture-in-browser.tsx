@@ -32,6 +32,7 @@ import * as GenericHelpers from '../../utils/generic.helpers';
   shadow: true,
 })
 export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
+  private blocked: boolean = false;
 
   /**
    * Write a hello message to the browser console when license check is successfully performed.
@@ -389,7 +390,24 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
 
   @Element() hostEl: HTMLElement;
 
-  async componentWillRender() {
+  componentWillLoad() {
+    this.init();
+  }
+
+  componentWillUpdate() {
+    if (this.blocked) {
+      return;
+    }
+
+    this.sdkService?.delete();
+    this.init();
+  }
+
+  disconnectedCallback() {
+    this.sdkService?.delete();
+  }
+
+  private init() {
     const rawRecognizers = GenericHelpers.stringToArray(this.rawRecognizers);
     this.finalRecognizers = this.recognizers ? this.recognizers : rawRecognizers;
 
@@ -397,7 +415,6 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
     this.finalTranslations = this.translations ? this.translations : rawTranslations;
     this.translationService = new TranslationService(this.finalTranslations || {});
 
-    this.sdkService?.delete();
     this.sdkService = new SdkService();
   }
 
@@ -434,6 +451,7 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
                         sdkService={ this.sdkService }
                         translationService={ this.translationService }
                         cameraId={ this.cameraId }
+                        onBlock={ (ev: CustomEvent<boolean>) => { this.blocked = ev.detail } }
                         onFeedback={ (ev: CustomEvent<FeedbackMessage>) => this.feedbackEl.show(ev.detail) }></mb-component>
           <mb-feedback dir={ this.hostEl.getAttribute('dir') }
                        visible={ !this.hideFeedback }

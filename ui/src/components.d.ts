@@ -979,6 +979,10 @@ declare namespace LocalJSX {
          */
         "licenseKey"?: string;
         /**
+          * Event containing boolean which used to check whether component is blocked.
+         */
+        "onBlock"?: (event: CustomEvent<boolean>) => void;
+        /**
           * See event 'cameraScanStarted' in public component.
          */
         "onCameraScanStarted"?: (event: CustomEvent<null>) => void;

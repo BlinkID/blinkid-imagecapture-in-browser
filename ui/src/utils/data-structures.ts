@@ -165,7 +165,7 @@ export interface VideoRecognitionConfiguration {
   recognitionTimeout?: number,
   successFrame: boolean,
   cameraFeed: HTMLVideoElement,
-  cameraId: string | null;
+  cameraId: string | null
 }
 
 export interface ImageRecognitionConfiguration {
@@ -244,7 +244,8 @@ export interface RecognitionResults {
   recognizer:     BlinkIDImageCaptureSDK.RecognizerResult,
   recognizerName: string,
   successFrame?:  BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult,
-  imageCapture?:  boolean
+  imageCapture?:  boolean,
+  resultJSON?:    any
 }
 
 export enum CameraExperience {
