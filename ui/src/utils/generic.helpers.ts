@@ -67,3 +67,26 @@ export function classNames(classes: Record<string, boolean>) {
 
   return result.join(' ');
 }
+
+export function getWebComponentParts(root: ShadowRoot): Array<Element> {
+  const partsChildren = root.querySelectorAll('[part]');
+  const parts = [];
+
+  partsChildren.forEach((el: Element) => {
+    const elementParts = el.getAttribute('part').split(' ');
+
+    while (elementParts && elementParts.length) {
+      parts.push(elementParts.pop());
+    }
+  });
+
+  return parts;
+}
+
+export function setWebComponentParts(hostEl: Element): void {
+  const partParts = [
+    hostEl.tagName.toLowerCase(),
+    hostEl.getAttribute('id')
+  ];
+  hostEl.setAttribute('part', partParts.join(' ').trim() );
+}
