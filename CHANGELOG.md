@@ -1,5 +1,27 @@
 # Release notes
 
+## 5.15.0
+
+### Changes to BlinkID(Combined) Recognizer
+
+* No API changes
+* We've improved document detection and cropping of the document image
+
+### Platform-related SDK changes
+
+* We've added methods for programmatically starting camera and image scan when using the UI component.
+    * It's possible to call `startCameraScan()` and `startImageScan(File)` methods on the custom web element.
+* We've standardized error structures returned from the WebAssembly library and the UI component.
+    * See [SDKError.ts](src/MicroblinkSDK/SDKError.ts) and [ErrorTypes.ts](src/MicroblinkSDK/ErrorTypes.ts) for a complete list of possible error codes.
+* We've completed support for `part::` selector and added [an example](ui/README.md#customization-ui-css-part).
+* We've simplified integration of the UI component with Angular and React frameworks.
+    * [Integration guide for Angular](ui/README.md#installation-angular)
+    * [Integration guide for React](ui/README.md#installation-react)
+
+### Bug fixes
+
+* We've ensured that all SDK errors can be visible from `fatalError` and `scanError` events in the UI component.
+
 ## 5.14.1
 
 * We've added support for `part::` selector to provide more flexibility when customizing built-in UI. [#35](https://github.com/BlinkID/blinkid-in-browser/issues/35)

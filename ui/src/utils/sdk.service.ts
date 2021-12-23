@@ -2,14 +2,12 @@
  * Copyright (c) Microblink Ltd. All rights reserved.
  */
 
-import * as BlinkIDImageCaptureSDK from "../../../es/blinkid-imagecapture-sdk";
+import * as BlinkIDImageCaptureSDK from '@microblink/blinkid-imagecapture-in-browser-sdk';
 
 import {
   AvailableRecognizers,
   CameraEntry,
   CameraExperience,
-  Code,
-  EventFatalError,
   EventReady,
   VideoRecognitionConfiguration,
   ImageRecognitionConfiguration,
@@ -19,8 +17,10 @@ import {
   RecognitionEvent,
   RecognitionStatus,
   RecognitionResults,
-  SdkSettings
+  SdkSettings,
+  SDKError
 } from './data-structures';
+import * as ErrorTypes from './error-structures';
 
 const _IS_IMAGE_CAPTURE = true;
 
@@ -63,7 +63,7 @@ export class SdkService {
     this.sdk?.delete();
   }
 
-  public initialize(licenseKey: string, sdkSettings: SdkSettings): Promise<EventReady|EventFatalError> {
+  public initialize(licenseKey: string, sdkSettings: SdkSettings): Promise<EventReady|SDKError> {
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings(licenseKey);
 
     loadSettings.allowHelloMessage = sdkSettings.allowHelloMessage;
@@ -81,7 +81,7 @@ export class SdkService {
           resolve(new EventReady(this.sdk));
         })
         .catch(error => {
-          resolve(new EventFatalError(Code.SdkLoadFailed, 'Failed to load SDK!', error));
+          resolve(new SDKError(ErrorTypes.componentErrors.sdkLoadFailed, error));
         });
     });
   }
@@ -237,8 +237,8 @@ export class SdkService {
           }
         }, configuration.recognitionTimeout);
     } catch (error) {
-      if (error && error.name === 'VideoRecognizerError') {
-        const reason = (error as BlinkIDImageCaptureSDK.VideoRecognizerError).reason;
+      if (error && error.details?.reason) {
+        const reason = error.details?.reason;
 
         switch (reason) {
           case BlinkIDImageCaptureSDK.NotSupportedReason.MediaDevicesNotSupported:
@@ -278,7 +278,7 @@ export class SdkService {
     if (!this.videoRecognizer) {
       return false;
     }
-    return this.videoRecognizer.cameraFlipped;
+    return this.videoRecognizer.isCameraFlipped();
   }
 
   public isScanFromImageAvailable(_recognizers: Array<string> = [], _recognizerOptions: any = {}): boolean {
