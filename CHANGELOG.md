@@ -1,5 +1,9 @@
 # Release notes
 
+## 5.15.1
+
+* We've updated Microblink logo and colors
+
 ## 5.15.0
 
 ### Changes to BlinkID(Combined) Recognizer
