@@ -36,7 +36,7 @@ function main() {
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLZU/ZvIhdnu9LUbYdtrWLaONlSDyZXGOH2A+uFt8dhc3JA6eJ8D9O33GC3bIcP2BSVb/pGWdAIiV7PCwh1MhVd67vvkoMT2LuvpDvPxDa5dwdZ9/EvHGNDch56ouyYyS+sA3RyWlmq4umH7VqlxXuD4n5A9P/2C2QK8WeVEDWUJBxJkv97XkIjkliax4T3+wIFx9FsNxo2Gu0w==";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKoUbwQltserSykjeSEsSCVfWKqfxFvkLjL2HWEI4HOXr5m421vGohboFhYUw++ojPvtmcQFWJJRrk9Q/Wc7snrjjc/u/EJ3VrOYN9yv4dunEAoOlkbG9hsNBadI+i+Y1jfQn1qToIW+7nT0DZ4dHF9tCPFn7BsMNg+1irDkPFJVT6OL39v/hDzuvcUQ8qj5FRE8gsaRB2yI=";
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings(licenseKey);

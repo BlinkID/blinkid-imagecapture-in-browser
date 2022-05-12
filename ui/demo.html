@@ -133,17 +133,17 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.15.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.15.1/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.16.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.16.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
     <script src="../client-library/dist/client-library.js"></script>
         <script type="text/javascript">
 
 window.getSafePathname = (p) => p[p.length - 1] === '/' ? p : p.split('/').slice(0, -1).join('/') + '/';
 
-window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWLZU/ZvIhdnu9LUbYdtrWLaONlSDyZXGOH2A+uFt8dhc3JA6eJ8D9O33GC3bIcP2BSVb/pGWdAIiV7PCwh1MhVd67vvkoMT2LuvpDvPxDa5dwdZ9/EvHGNDch56ouyYyS+sA3RyWlmq4umH7VqlxXuD4n5A9P/2C2QK8WeVEDWUJBxJkv97XkIjkliax4T3+wIFx9FsNxo2Gu0w==";
+window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKoUbwQltserSykjeSEsSCVfWKqfxFvkLjL2HWEI4HOXr5m421vGohboFhYUw++ojPvtmcQFWJJRrk9Q/Wc7snrjjc/u/EJ3VrOYN9yv4dunEAoOlkbG9hsNBadI+i+Y1jfQn1qToIW+7nT0DZ4dHF9tCPFn7BsMNg+1irDkPFJVT6OL39v/hDzuvcUQ8qj5FRE8gsaRB2yI=";
 
 if (window.location.hostname === 'blinkid.github.io') {
-  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvmaCmIfg3tky6GweFiTieV7VNe7GBpVhDPHleBZ+sfoOswwO2vJXilvYv9KWJrJXDZM2lZeyOkB5+wzCWZq5+Um5HtIoJcDBTjlg1XYkuQLTVOpAzmSXBFYl02ohVhfCv/THglhjTj3zbY5QtU0wYI/8TTbyH082GGKejyeecqtQz6+3k26+6L16YcuSgKQQ1e69aRK56Sjb8wIr";
+  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaFiKNHg4G2awtEGd+imfxvW62DEqVTolHQnorEXKJzgyBWktsepe0hf/PatSjz1NPIGl5NpcBB3/+c6AY9qDvqBXueL4H8keVx9zfYCTMMBSYAXnlrkyHCAfenDxl2mrg7AGH85Yf7QCDiknrUdnI5DigEBgf2kw35LTeqD9Otf+UDso02jhavbG/gJnkDyddU43r1MJpAiQ==";
 }
 window.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecapture-in-browser/resources";
 </script>
@@ -187,7 +187,7 @@ window.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecap
   client.getHealthcheck().
   then(() => {/* Do nothing */}).
   catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+    el.setUiMessage('FEEDBACK_ERROR', 'Cannot access API!');
   });
 
 
@@ -231,7 +231,8 @@ window.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecap
     }).
     catch((error) => {
       console.error('API recognition error', error);
-      el.setUiState('ERROR', error.error.message);
+      el.setUiState('ERROR');
+      el.setUiMessage('FEEDBACK_ERROR', error.error.message);
     });
   });
 })();
@@ -275,7 +276,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   client.getHealthcheck().
   then(() => {/* Do nothing */}).
   catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+    el.setUiMessage('FEEDBACK_ERROR', 'Cannot access API!');
   });
 
   el.addEventListener('scanError', (ev) => {
@@ -334,7 +335,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
       }).
       catch((error) => {
         console.error('API recognition error', error);
-        el.setUiState('ERROR', error.error.message);
+        el.setUiState('ERROR');
+        el.setUiMessage('FEEDBACK_ERROR', error.error.message);
       });
     }
   });
@@ -390,7 +392,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   client.getHealthcheck().
   then(() => {/* Do nothing */}).
   catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+    el.setUiMessage('FEEDBACK_ERROR', 'Cannot access API!');
   });
 
 
@@ -435,7 +437,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     }).
     catch((error) => {
       console.error('API recognition error', error);
-      el.setUiState('ERROR', error.error.message);
+      el.setUiState('ERROR');
+      el.setUiMessage('FEEDBACK_ERROR', error.error.message);
     });
   });
 })();
@@ -487,7 +490,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   client.getHealthcheck().
   then(() => {/* Do nothing */}).
   catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+    el.setUiMessage('FEEDBACK_ERROR', 'Cannot access API!');
   });
 
 
@@ -531,7 +534,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     }).
     catch((error) => {
       console.error('API recognition error', error);
-      el.setUiState('ERROR', error.error.message);
+      el.setUiState('ERROR');
+      el.setUiMessage('FEEDBACK_ERROR', error.error.message);
     });
   });
 })();
@@ -624,7 +628,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   client.getHealthcheck().
   then(() => {/* Do nothing */}).
   catch((response) => {
-    el.setUiMessage('ERROR_FEEDBACK', 'Cannot access API!');
+    el.setUiMessage('FEEDBACK_ERROR', 'Cannot access API!');
   });
 
 
@@ -668,7 +672,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     }).
     catch((error) => {
       console.error('API recognition error', error);
-      el.setUiState('ERROR', error.error.message);
+      el.setUiState('ERROR');
+      el.setUiMessage('FEEDBACK_ERROR', error.error.message);
     });
   });
 })();

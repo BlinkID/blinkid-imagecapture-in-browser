@@ -1,5 +1,59 @@
 # Release notes
 
+## 5.16.0
+
+We've added new documents to our list of supported documents:
+
+#### Europe
+
+* Austria - ID Card (front only)
+* Germany - ID Card
+
+#### Latin America and the Caribbean
+
+* Brazil - ID Card (beta)
+* Colombia - ID Card (front only)
+* Ecuador - ID Card
+
+#### Mexico
+
+* Baja California Sur - Driving Licence (beta)
+* Ciudad De Mexico - Driving Licence (front only)
+* Colima - Driving Licence (front only, beta)
+* Michoacan - Driving Licence (beta)
+* Nayarit - Driving Licence (beta)
+* Quintana Roo Solidaridad - Driving Licence (front only)
+* Tlaxcala - Driving Licence
+* Veracruz - Driving Licence (beta)
+
+#### Oceania
+
+* Australia - Northern Territory (beta)
+
+#### Asia
+
+* Japan - My Number Card (front only)
+* Singapore - Resident ID
+
+#### Northern America
+
+* USA - Missouri - ID Card
+* USA - Nevada - Driving Licence
+* USA - New York City - ID Card
+* USA - Oklahoma - ID Card
+
+#### Back side support added:
+
+* Mexico - Chiapas - Driving License 
+
+#### No longer BETA:
+
+* Mexico - Baja California - Driving Licence
+* Mexico - Chihuahua - Driving Licence
+* Mexico - Coahuila - Driving Licence
+* Mexico - Guanajuato - Driving Licence
+* Mexico - Mexico - Driving Licence
+
 ## 5.15.1
 
 * We've updated Microblink logo and colors

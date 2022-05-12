@@ -584,6 +584,10 @@ export class SdkService {
     });
   }
 
+  public getProductIntegrationInfo(): Promise<BlinkIDImageCaptureSDK.ProductIntegrationInfo> {
+    return this.sdk.getProductIntegrationInfo();
+  }
+
   //////////////////////////////////////////////////////////////////////////////
   //
   // PRIVATE METHODS
