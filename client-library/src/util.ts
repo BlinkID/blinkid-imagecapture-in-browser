@@ -104,35 +104,6 @@ export function httpClient(
     } );
 }
 
-export function deepCompare( a: any, b: any ): boolean
-{
-    const isObject = ( a: any ): boolean => a !== null && typeof a === "object";
-
-    const keys1 = Object.keys( a );
-    const keys2 = Object.keys( b );
-
-    if ( keys1.length !== keys2.length )
-    {
-        return false;
-    }
-
-    for ( const key of keys1 )
-    {
-        const val1 = a[ key ];
-        const val2 = b[ key ];
-        const areObjects = isObject( val1 ) && isObject( val2 );
-
-        if (
-            areObjects && !deepCompare( val1, val2 ) ||
-            !areObjects && val1 !== val2
-        ) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 export function imageDataToBase64( imageData: ImageData ): string
 {
     const canvas = document.createElement( "canvas" );

@@ -6,7 +6,10 @@ import { EventEmitter } from '@stencil/core';
 
 import * as BlinkIDImageCaptureSDK from '@microblink/blinkid-imagecapture-in-browser-sdk';
 
-export { SDKError } from '@microblink/blinkid-imagecapture-in-browser-sdk';
+export {
+  ProductIntegrationInfo,
+  SDKError
+} from '@microblink/blinkid-imagecapture-in-browser-sdk';
 
 export interface MicroblinkUI {
   // SDK settings
@@ -59,8 +62,9 @@ export interface MicroblinkUI {
   imageScanStarted:   EventEmitter<null>;
 
   // Methods
-  setUiState:         (state: 'ERROR' | 'LOADING' | 'NONE' | 'SUCCESS') => Promise<any>;
-  setUiMessage:       (state: 'FEEDBACK_ERROR' | 'FEEDBACK_INFO' | 'FEEDBACK_OK', message: string) => Promise<any>;
+  setUiState:                (state: 'ERROR' | 'LOADING' | 'NONE' | 'SUCCESS') => Promise<any>;
+  setUiMessage:              (state: 'FEEDBACK_ERROR' | 'FEEDBACK_INFO' | 'FEEDBACK_OK', message: string) => Promise<any>;
+  getProductIntegrationInfo: () => Promise<BlinkIDImageCaptureSDK.ProductIntegrationInfo>;
 }
 
 export interface SdkSettings {
@@ -227,11 +231,11 @@ export interface RecognitionEvent {
 }
 
 export interface RecognitionResults {
-  recognizer:     BlinkIDImageCaptureSDK.RecognizerResult,
-  recognizerName: string,
-  successFrame?:  BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult,
-  imageCapture?:  boolean,
-  resultJSON?:    any
+  recognizer:        BlinkIDImageCaptureSDK.RecognizerResult,
+  recognizerName:    string,
+  successFrame?:     BlinkIDImageCaptureSDK.SuccessFrameGrabberRecognizerResult,
+  imageCapture?:     boolean,
+  resultSignedJSON?: BlinkIDImageCaptureSDK.SignedPayload
 }
 
 export enum CameraExperience {
