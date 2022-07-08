@@ -145,14 +145,15 @@ window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi04YqlzvLD9rIz4izOx4fn
 if (window.location.hostname === 'blinkid.github.io') {
   window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIDkJA/XQU6HolX+MNqSLG1m/fFMC1qqUZmBFli7qQfYreJbTgbHVh6giiJyVG43gHYPLatYM8ObP/ebmC3OYDUMf8bT/jFWQ6bNQ5bmJN3CdrdoZd/pJebqI+ZJDMDSL4Hs9KKOSseAkLQmpuxG6yQUhYaxLJvE02xXx0gr/tNFnH0bp2iaEHNlYhHlwFP7XVfZSKY3TFzu";
 }
-window.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecapture-in-browser/resources";
+window.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
+window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources/BlinkIDImageCaptureWasmSDK.worker.min.js";
 </script>
   </head>
   <body>
     <header>
       <h1>BlinkID ImageCapture UI: examples</h1>
       <p>The goal of this page is to display minimal example and features of BlinkID ImageCapture UI component.</p>
-      <p><em><strong>Important:</strong> to use BlinkID ImageCapture UI component it&apos;s required to have a valid license key. It&apos;s possible to obtain a free trial license key by registering to <a href="https://microblink.com/login" target="_blank">Microblink dashboard.</a></em></p>
+      <p><em><strong>Important:</strong> to use BlinkID ImageCapture UI component it&apos;s required to have a valid license key. It&apos;s possible to request a free trial license key, after you register, at <a href="https://account.microblink.com/signin" target="_blank">Microblink Developer Hub</a>.</em></p>
     </header>
 
     <section id="example-minimal">
@@ -174,6 +175,7 @@ window.engineLocation = "https://blinkid-imagecapture.github.io/blinkid-imagecap
   const el = document.querySelector('#example-minimal blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
+  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
@@ -258,6 +260,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
+  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
 
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
@@ -374,6 +377,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   const el = document.querySelector('#example-localization blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
+  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
   window.setTimeout(() => {
@@ -471,6 +475,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   const el = document.querySelector('#example-localization-rtl blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
+  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
@@ -615,6 +620,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   const el = document.querySelector('#example-customization blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
+  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
 
