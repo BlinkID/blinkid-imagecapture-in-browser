@@ -15,12 +15,14 @@ export interface MicroblinkUI {
   // SDK settings
   allowHelloMessage:     boolean;
   engineLocation:        string;
+  workerLocation:        string;
   licenseKey:            string;
   wasmType:              string;
   rawRecognizers:        string;
   recognizers:           Array<string>;
   recognizerOptions:     { [key: string]: any };
   recognitionTimeout?:   number;
+  recognitionPauseTimeout?: number;
   includeSuccessFrame?:  boolean;
   thoroughScanFromImage: boolean;
 
@@ -70,6 +72,7 @@ export interface MicroblinkUI {
 export interface SdkSettings {
   allowHelloMessage:  boolean;
   engineLocation:     string;
+  workerLocation:     string;
   wasmType?:          BlinkIDImageCaptureSDK.WasmType;
 }
 
@@ -257,6 +260,16 @@ export enum CameraExperienceState {
   MoveFarther     = 'MoveFarther'
 }
 
+export interface CameraExperienceTimeoutDurations {
+  adjustAngle: number,
+  default: number,
+  done: number,
+  doneAll: number,
+  flip: number,
+  moveCloser: number,
+  moveFarther: number
+}
+
 export const CameraExperienceStateDuration = new Map([
   [ CameraExperienceState.AdjustAngle, 2500 ],
   [ CameraExperienceState.Default, 500 ],
@@ -266,12 +279,6 @@ export const CameraExperienceStateDuration = new Map([
   [ CameraExperienceState.MoveCloser, 2500 ],
   [ CameraExperienceState.MoveFarther, 2500 ]
 ]);
-
-export enum CameraExperienceReticleAnimation {
-  Default,
-  Detection,
-  Classification
-}
 
 /**
  * User feedback structures
