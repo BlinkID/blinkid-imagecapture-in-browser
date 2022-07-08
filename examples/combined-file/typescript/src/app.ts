@@ -32,7 +32,7 @@ function main() {
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKoUbwQltserSykjeSEsSCVfWKqfxFvkLjL2HWEI4HOXr5m421vGohboFhYUw++ojPvtmcQFWJJRrk9Q/Wc7snrjjc/u/EJ3VrOYN9yv4dunEAoOlkbG9hsNBadI+i+Y1jfQn1qToIW+7nT0DZ4dHF9tCPFn7BsMNg+1irDkPFJVT6OL39v/hDzuvcUQ8qj5FRE8gsaRB2yI=";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi04YqlzvLD9rIz4izOx4fnPF6gY0fQhFRXnhp4JFAoaEQ/u8BKDnAQ9ugvgYNY3pptTBU65iTZyXpRuXW9Etjp2JqNMs0zFk5sBcw2za1l0Y6aJlt+W/YqkAZqFMvxHsAxP/3w1ZB20RyiCE1t6AxbbhKnQ5RYQwp6j4qs8Kz5/MpDNl3VqrhG8THth+Rl8xv2d3HmNUyQIRQ==";
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings(licenseKey);
@@ -47,6 +47,9 @@ function main() {
 
     // Set absolute location of the engine, i.e. WASM and support JS files
     loadSettings.engineLocation = window.location.origin;
+
+    // Set absolute location of the worker file
+    loadSettings.workerLocation = window.location.origin + "/BlinkIDImageCaptureWasmSDK.worker.min.js";
 
     // 3. Load SDK
     BlinkIDImageCaptureSDK.loadWasmModule(loadSettings).then((sdk: BlinkIDImageCaptureSDK.WasmSDK) => {

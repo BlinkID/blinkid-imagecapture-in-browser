@@ -31,11 +31,11 @@ function main()
   }
 
   // 1. It's possible to obtain a free trial license key on microblink.com
-  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKoUbwQltserSykjeSEsSCVfWKqfxFvkLjL2HWEI4HOXr5m421vGohboFhYUw++ojPvtmcQFWJJRrk9Q/Wc7snrjjc/u/EJ3VrOYN9yv4dunEAoOlkbG9hsNBadI+i+Y1jfQn1qToIW+7nT0DZ4dHF9tCPFn7BsMNg+1irDkPFJVT6OL39v/hDzuvcUQ8qj5FRE8gsaRB2yI=";
+  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi04YqlzvLD9rIz4izOx4fnPF6gY0fQhFRXnhp4JFAoaEQ/u8BKDnAQ9ugvgYNY3pptTBU65iTZyXpRuXW9Etjp2JqNMs0zFk5sBcw2za1l0Y6aJlt+W/YqkAZqFMvxHsAxP/3w1ZB20RyiCE1t6AxbbhKnQ5RYQwp6j4qs8Kz5/MpDNl3VqrhG8THth+Rl8xv2d3HmNUyQIRQ==";
 
   if (window.location.hostname === "blinkid.github.io")
   {
-    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaFiKNHg4G2awtEGd+imfxvW62DEqVTolHQnorEXKJzgyBWktsepe0hf/PatSjz1NPIGl5NpcBB3/+c6AY9qDvqBXueL4H8keVx9zfYCTMMBSYAXnlrkyHCAfenDxl2mrg7AGH85Yf7QCDiknrUdnI5DigEBgf2kw35LTeqD9Otf+UDso02jhavbG/gJnkDyddU43r1MJpAiQ==";
+    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIDkJA/XQU6HolX+MNqSLG1m/fFMC1qqUZmBFli7qQfYreJbTgbHVh6giiJyVG43gHYPLatYM8ObP/ebmC3OYDUMf8bT/jFWQ6bNQ5bmJN3CdrdoZd/pJebqI+ZJDMDSL4Hs9KKOSseAkLQmpuxG6yQUhYaxLJvE02xXx0gr/tNFnH0bp2iaEHNlYhHlwFP7XVfZSKY3TFzu";
   }
 
   // 2. Create instance of SDK load settings with your license key
@@ -51,6 +51,9 @@ function main()
 
   // Set absolute location of the engine, i.e. WASM and support JS files
   loadSettings.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
+
+  // Set absolute location of the worker file
+  loadSettings.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources/BlinkIDImageCaptureWasmSDK.worker.min.js";
 
   // 3. Load SDK
   BlinkIDImageCaptureSDK.loadWasmModule(loadSettings).then(

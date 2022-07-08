@@ -6,7 +6,7 @@
 import "@microblink/blinkid-imagecapture-in-browser-sdk/ui";
 
 // Import typings for custom events
-import { EventFatalError, EventScanError, EventScanSuccess } from "@microblink/blinkid-imagecapture-in-browser-sdk/ui/dist/types/utils/data-structures";
+import { SDKError, EventScanError, EventScanSuccess } from "@microblink/blinkid-imagecapture-in-browser-sdk/ui/dist/types/utils/data-structures";
 
 // Import client library for simple communication with backend services
 import { ApiType, Client } from "@microblink/blinkid-imagecapture-in-browser-sdk/client-library";
@@ -20,6 +20,7 @@ function initializeUiComponent() {
     }
     el.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGFWKcUTzWfFms+1HtOJBLOa0Z9jQdHUQo1EWP1afmump3DAd/zRkoNODh6Y9FtA1eYVaya36wQmmWpLEliFyV9va44nCIrCRqyoUzeQolAjPINbKGqHklMsfYekNYLDA2i+7zfxUF8Ac3eQ3FiDhrN3d1l+36UjfUfU9e6omHNFxdqysdOxvgVw9bNH8fjbKRmI1CJHbJmb1AWmi2YGwk0=";
     el.engineLocation = window.location.origin;
+    el.workerLocation = window.location.origin + "/BlinkIDImageCaptureWasmSDK.worker.min.js";
     el.recognizers = ["BlinkIdImageCaptureRecognizer"];
 
     // Create instance of client library - for more information see `client-library/README.md` file
@@ -74,7 +75,7 @@ function initializeUiComponent() {
             el.setUiState("ERROR");
         });
     });
-    el.addEventListener("fatalError", (ev: CustomEventInit<EventFatalError>) => {
+    el.addEventListener("fatalError", (ev: CustomEventInit<SDKError>) => {
         const fatalError = ev.detail;
         console.log("Could not load UI component", fatalError);
     });
