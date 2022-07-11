@@ -133,27 +133,27 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.1/ui/dist/blinkid-imagecapture-in-browser.js"></script>
     <script src="../client-library/dist/client-library.js"></script>
         <script type="text/javascript">
 
 window.getSafePathname = (p) => p[p.length - 1] === '/' ? p : p.split('/').slice(0, -1).join('/') + '/';
 
-window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi04YqlzvLD9rIz4izOx4fnPF6gY0fQhFRXnhp4JFAoaEQ/u8BKDnAQ9ugvgYNY3pptTBU65iTZyXpRuXW9Etjp2JqNMs0zFk5sBcw2za1l0Y6aJlt+W/YqkAZqFMvxHsAxP/3w1ZB20RyiCE1t6AxbbhKnQ5RYQwp6j4qs8Kz5/MpDNl3VqrhG8THth+Rl8xv2d3HmNUyQIRQ==";
+window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi09YpSctgN0Kj+479nTodOhrYNhwzeb4achalTw4KOEgkX4J+hvPyoTn+lQu7JJJq1fAo68dRhl70tU1ZTTR8oMsDDWQ84SYP+qh6eMfSl0X+Pi9Mj8FEA6WMTwvKp/4JOv8hhb91/6D+/9TGSLq9xCeW7tHMgzTsDv9uDQfn3lNRnQOaYPZ/AnYc5VYQiXE7WKwasRz/W+wQ==";
 
 if (window.location.hostname === 'blinkid.github.io') {
-  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIDkJA/XQU6HolX+MNqSLG1m/fFMC1qqUZmBFli7qQfYreJbTgbHVh6giiJyVG43gHYPLatYM8ObP/ebmC3OYDUMf8bT/jFWQ6bNQ5bmJN3CdrdoZd/pJebqI+ZJDMDSL4Hs9KKOSseAkLQmpuxG6yQUhYaxLJvE02xXx0gr/tNFnH0bp2iaEHNlYhHlwFP7XVfZSKY3TFzu";
+  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIXkPfWP88He4E7I5enyoUOZxwmPpjetVumF/CFXjKw8lEJA7TkA3Q2J0/TMjlQCA5NpOyHxwvtTZwgA5giHGeBHKVWV8ABhZORP1z5qf3rIZOOZbeBFntWDg4T5c1TsQ7MHz8qMvx2FlzDkGWVzd1NLTnFuxrpzctDteIXQRgWn559iuXa1MdC+UUP8yl8ynsmAs/C3z0dC";
 }
 window.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
-window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources/BlinkIDImageCaptureWasmSDK.worker.min.js";
+window.workerLocation = window.location.origin + '/../resources/BlinkIDImageCaptureWasmSDK.worker.min.js';
 </script>
   </head>
   <body>
     <header>
       <h1>BlinkID ImageCapture UI: examples</h1>
       <p>The goal of this page is to display minimal example and features of BlinkID ImageCapture UI component.</p>
-      <p><em><strong>Important:</strong> to use BlinkID ImageCapture UI component it&apos;s required to have a valid license key. It&apos;s possible to request a free trial license key, after you register, at <a href="https://account.microblink.com/signin" target="_blank">Microblink Developer Hub</a>.</em></p>
+      <p><em><strong>Important:</strong> to use BlinkID ImageCapture UI component it&apos;s required to have a valid license key. It&apos;s possible to obtain a free trial license key, after you register, at <a href="https://account.microblink.com/signin" target="_blank">Microblink Developer Hub</a>.</em></p>
     </header>
 
     <section id="example-minimal">
@@ -260,7 +260,6 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
-  el.workerLocation = window.workerLocation;
   el.licenseKey = window.licenseKey;
 
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
