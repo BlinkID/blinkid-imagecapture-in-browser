@@ -11,8 +11,8 @@
     "scripts": {
         "build": "stencil build --docs --config=stencil.config.ts",
         "check-types": "tsc --p ./tsconfig.json --noEmit",
-        "clean": "rimraf demo dist docs loader resources client-dist",
-        "prepare-assets": "cp -r ../resources/ resources && cp -r ../client-library/dist/ client-dist",
+        "clean": "rimraf demo dist docs loader resources resources-lightweight client-dist",
+        "prepare-assets": "cp -r ../resources/ resources && cp -r ../resources-lightweight/ resources-lightweight && cp -r ../client-library/dist/ client-dist",
         "generate": "stencil generate",
         "start": "stencil build --dev --watch --serve --config=stencil.config.ts",
         "test": "stencil test --spec --e2e",

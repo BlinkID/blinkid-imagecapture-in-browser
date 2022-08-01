@@ -31,11 +31,11 @@ function main()
   }
 
   // 1. It's possible to obtain a free trial license key on microblink.com
-  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi09YpSctgN0Kj+479nTodOhrYNhwzeb4achalTw4KOEgkX4J+hvPyoTn+lQu7JJJq1fAo68dRhl70tU1ZTTR8oMsDDWQ84SYP+qh6eMfSl0X+Pi9Mj8FEA6WMTwvKp/4JOv8hhb91/6D+/9TGSLq9xCeW7tHMgzTsDv9uDQfn3lNRnQOaYPZ/AnYc5VYQiXE7WKwasRz/W+wQ==";
+  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKO04YrlUtdxXDo5BzgFSgHpva9hMMITa9+yGaYRyTnXVMv/L2YIiYentpORrou0qA2XVOivSMvvle5XgL+gx/QSS7sFpU5B3afH6h/P233xpvy/5Y/1Mp7g9nXQEFJ3kM4+XQ9zo0CJmm0nmDkNp9otY8ewB5I2bjs2RlodXmh8+PRlRAC9nyoQaT4mv4ou/ZNH8braaLK+0eA==";
 
   if (window.location.hostname === "blinkid.github.io")
   {
-    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIXkPfWP88He4E7I5enyoUOZxwmPpjetVumF/CFXjKw8lEJA7TkA3Q2J0/TMjlQCA5NpOyHxwvtTZwgA5giHGeBHKVWV8ABhZORP1z5qf3rIZOOZbeBFntWDg4T5c1TsQ7MHz8qMvx2FlzDkGWVzd1NLTnFuxrpzctDteIXQRgWn559iuXa1MdC+UUP8yl8ynsmAs/C3z0dC";
+    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaH4IDkSNZnf9Zbe9CH0iD8a+s+YCv7YEen/zVmkqbAHvDqg0yoi+5VTGVicUO+1a0gYNBpk0549/mni5FlkIftVvhfBKuvW54+ilsuQmJdBWNJ5CjupfvTl437HWt0gKoxuXY9Y2fOznUSt2dgi9DZQGr0736FEv9JHBfPwQ9K7cSO7AWIOzVHblPnT/U7cZS5DT/AIVullDT2";
   }
 
   // 2. Create instance of SDK load settings with your license key
