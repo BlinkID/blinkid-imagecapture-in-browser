@@ -7,13 +7,13 @@
 
         <!-- Import UI component which includes WASM library -->
         <!-- Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production! -->
-        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.1/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+        <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.18.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
 
         <!-- Include client library for straightforward communication with backend services -->
-        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.1/client-library/dist/client-library.js"></script>
+        <script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.18.0/client-library/dist/client-library.js"></script>
 
         <!-- [OPTIONAL] Include WASM library if filtering by document type is required -->
-        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.17.1/dist/blinkid-imagecapture-sdk.js"></script>-->
+        <!--<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.18.0/dist/blinkid-imagecapture-sdk.js"></script>-->
 
         <style type="text/css">
             html,
@@ -58,7 +58,7 @@
     </head>
     <body>
         <!-- It's possible to obtain a free trial license key on microblink.com -->
-        <blinkid-imagecapture-in-browser license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmLi09YpSctgN0Kj+479nTodOhrYNhwzeb4achalTw4KOEgkX4J+hvPyoTn+lQu7JJJq1fAo68dRhl70tU1ZTTR8oMsDDWQ84SYP+qh6eMfSl0X+Pi9Mj8FEA6WMTwvKp/4JOv8hhb91/6D+/9TGSLq9xCeW7tHMgzTsDv9uDQfn3lNRnQOaYPZ/AnYc5VYQiXE7WKwasRz/W+wQ==" recognizers="BlinkIdImageCaptureRecognizer"></blinkid-imagecapture-in-browser>
+        <blinkid-imagecapture-in-browser license-key="sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKO04YrlUtdxXDo5BzgFSgHpva9hMMITa9+yGaYRyTnXVMv/L2YIiYentpORrou0qA2XVOivSMvvle5XgL+gx/QSS7sFpU5B3afH6h/P233xpvy/5Y/1Mp7g9nXQEFJ3kM4+XQ9zo0CJmm0nmDkNp9otY8ewB5I2bjs2RlodXmh8+PRlRAC9nyoQaT4mv4ou/ZNH8braaLK+0eA==" recognizers="BlinkIdImageCaptureRecognizer"></blinkid-imagecapture-in-browser>
 
         <script type="text/javascript">
 
@@ -69,7 +69,7 @@ function run()
 
   if (window.location.hostname === "blinkid.github.io")
   {
-    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaBIIXkPfWP88He4E7I5enyoUOZxwmPpjetVumF/CFXjKw8lEJA7TkA3Q2J0/TMjlQCA5NpOyHxwvtTZwgA5giHGeBHKVWV8ABhZORP1z5qf3rIZOOZbeBFntWDg4T5c1TsQ7MHz8qMvx2FlzDkGWVzd1NLTnFuxrpzctDteIXQRgWn559iuXa1MdC+UUP8yl8ynsmAs/C3z0dC";
+    el.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaH4IDkSNZnf9Zbe9CH0iD8a+s+YCv7YEen/zVmkqbAHvDqg0yoi+5VTGVicUO+1a0gYNBpk0549/mni5FlkIftVvhfBKuvW54+ilsuQmJdBWNJ5CjupfvTl437HWt0gKoxuXY9Y2fOznUSt2dgi9DZQGr0736FEv9JHBfPwQ9K7cSO7AWIOzVHblPnT/U7cZS5DT/AIVullDT2";
   }
 
   el.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
