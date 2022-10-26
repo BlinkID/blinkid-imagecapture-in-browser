@@ -133,8 +133,8 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.18.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.18.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.20.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.20.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
     <script src="../client-library/dist/client-library.js"></script>
         <script type="text/javascript">
 
@@ -143,10 +143,10 @@ var parcelRequire;
 
 window.getSafePathname = (p) => p[p.length - 1] === '/' ? p : p.split('/').slice(0, -1).join('/') + '/';
 
-window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKO04YrlUtdxXDo5BzgFSgHpva9hMMITa9+yGaYRyTnXVMv/L2YIiYentpORrou0qA2XVOivSMvvle5XgL+gx/QSS7sFpU5B3afH6h/P233xpvy/5Y/1Mp7g9nXQEFJ3kM4+XQ9zo0CJmm0nmDkNp9otY8ewB5I2bjs2RlodXmh8+PRlRAC9nyoQaT4mv4ou/ZNH8braaLK+0eA==";
+window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmK1U6YuQ8GhAykMmKJup313bWbJ1Hv6XCYLtATBjrUxNsA8PsucdXyI9MhYY9EDcizituz1Ga4QXJlVKRnIpYWhfUKaOomTq1B91dAJ6NNqGBAlNaKR9g/joPFYaUiGrCSOCAny89nH152JOBeI6HwI0wZVE87f6NUJ1cTlpOgc9Lg2h9TvXLsG5FArBnlLmieLyBgfYR3nqE+A==";
 
 if (window.location.hostname === 'blinkid.github.io') {
-  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaH4IDkSNZnf9Zbe9CH0iD8a+s+YCv7YEen/zVmkqbAHvDqg0yoi+5VTGVicUO+1a0gYNBpk0549/mni5FlkIftVvhfBKuvW54+ilsuQmJdBWNJ5CjupfvTl437HWt0gKoxuXY9Y2fOznUSt2dgi9DZQGr0736FEv9JHBfPwQ9K7cSO7AWIOzVHblPnT/U7cZS5DT/AIVullDT2";
+  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaEWILk5nOGdljjueRbHtcM5DaUW4gd3Lt19u/E7FP03Jaw98ez6rKI7Ubvv3GNJ4JUforOwRboBzdP+ssYdCkY71CnzNxQG7Bxt+R5Yf6KrNhOQTpaPHtge1eLKqkBfmbPtdnEWABxKQH9j9up+sUsQxzgQQoe9vqA1V4lR3EpWn8mnhPfQutA1CXU2Mhw8vR3xq08Z80D4Q1f";
 }
 window.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
 window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources/BlinkIDImageCaptureWasmSDK.worker.min.js";
@@ -184,8 +184,8 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc" };
-
+    healthcheckEndpoint: "/v1/hc"
+  };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
@@ -217,8 +217,8 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
-      'imageSource': image64 };
-
+      'imageSource': image64
+    };
 
     client.recognize('/v1/recognizers/blinkid', payload).
     then((results) => {
@@ -273,8 +273,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc" };
-
+    healthcheckEndpoint: "/v1/hc"
+  };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
@@ -321,8 +321,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
       const payload = {
         'imageFrontSide': imageFront64,
-        'imageBackSide': imageBack64 };
-
+        'imageBackSide': imageBack64
+      };
 
       client.recognize('/v1/recognizers/blinkid-combined', payload).
       then((results) => {
@@ -384,14 +384,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   el.recognizers = ['BlinkIdImageCaptureRecognizer'];
   window.setTimeout(() => {
     el.translations = {
-      'action-message': 'Alternative CTA' };
-
+      'action-message': 'Alternative CTA'
+    };
   }, 3000);
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc" };
-
+    healthcheckEndpoint: "/v1/hc"
+  };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
@@ -424,8 +424,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
-      'imageSource': image64 };
-
+      'imageSource': image64
+    };
 
     client.recognize('/v1/recognizers/blinkid', payload).
     then((results) => {
@@ -483,14 +483,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   window.setTimeout(() => {
     el.translations = {
-      'action-message': 'Alternative CTA' };
-
+      'action-message': 'Alternative CTA'
+    };
   }, 3000);
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc" };
-
+    healthcheckEndpoint: "/v1/hc"
+  };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
@@ -522,8 +522,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
-      'imageSource': image64 };
-
+      'imageSource': image64
+    };
 
     client.recognize('/v1/recognizers/blinkid', payload).
     then((results) => {
@@ -628,8 +628,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc" };
-
+    healthcheckEndpoint: "/v1/hc"
+  };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
 
@@ -661,8 +661,8 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
-      'imageSource': image64 };
-
+      'imageSource': image64
+    };
 
     client.recognize('/v1/recognizers/blinkid', payload).
     then((results) => {

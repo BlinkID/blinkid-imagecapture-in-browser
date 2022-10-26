@@ -1,6 +1,6 @@
 {
     "name": "@microblink/blinkid-imagecapture-in-browser-sdk",
-    "version": "5.18.0",
+    "version": "5.20.0",
     "description": "A smart image capturing library for WebAssembly-enabled browsers.",
     "homepage": "https://github.com/BlinkID/blinkid-imagecapture-in-browser",
     "repository": "github:BlinkID/blinkid-imagecapture-in-browser",
@@ -10,7 +10,7 @@
         "browser"
     ],
     "engines": {
-        "node": ">=12.0.0"
+        "node": ">=16.3.0"
     },
     "main": "lib/blinkid-imagecapture-sdk.js",
     "module": "es/blinkid-imagecapture-sdk.js",

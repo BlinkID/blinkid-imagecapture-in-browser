@@ -36,11 +36,11 @@ function main()
   }
 
   // 1. It's possible to obtain a free trial license key on microblink.com
-  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmKO04YrlUtdxXDo5BzgFSgHpva9hMMITa9+yGaYRyTnXVMv/L2YIiYentpORrou0qA2XVOivSMvvle5XgL+gx/QSS7sFpU5B3afH6h/P233xpvy/5Y/1Mp7g9nXQEFJ3kM4+XQ9zo0CJmm0nmDkNp9otY8ewB5I2bjs2RlodXmh8+PRlRAC9nyoQaT4mv4ou/ZNH8braaLK+0eA==";
+  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmK1U6YuQ8GhAykMmKJup313bWbJ1Hv6XCYLtATBjrUxNsA8PsucdXyI9MhYY9EDcizituz1Ga4QXJlVKRnIpYWhfUKaOomTq1B91dAJ6NNqGBAlNaKR9g/joPFYaUiGrCSOCAny89nH152JOBeI6HwI0wZVE87f6NUJ1cTlpOgc9Lg2h9TvXLsG5FArBnlLmieLyBgfYR3nqE+A==";
 
   if (window.location.hostname === "blinkid.github.io")
   {
-    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaH4IDkSNZnf9Zbe9CH0iD8a+s+YCv7YEen/zVmkqbAHvDqg0yoi+5VTGVicUO+1a0gYNBpk0549/mni5FlkIftVvhfBKuvW54+ilsuQmJdBWNJ5CjupfvTl437HWt0gKoxuXY9Y2fOznUSt2dgi9DZQGr0736FEv9JHBfPwQ9K7cSO7AWIOzVHblPnT/U7cZS5DT/AIVullDT2";
+    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaEWILk5nOGdljjueRbHtcM5DaUW4gd3Lt19u/E7FP03Jaw98ez6rKI7Ubvv3GNJ4JUforOwRboBzdP+ssYdCkY71CnzNxQG7Bxt+R5Yf6KrNhOQTpaPHtge1eLKqkBfmbPtdnEWABxKQH9j9up+sUsQxzgQQoe9vqA1V4lR3EpWn8mnhPfQutA1CXU2Mhw8vR3xq08Z80D4Q1f";
   }
 
   // 2. Create instance of SDK load settings with your license key
@@ -109,8 +109,8 @@ async function startScan(sdk)
     onDetectionFailed: () => updateScanFeedback("Detection failed", true),
 
     // This callback is required for combined experience.
-    onFirstSideResult: () => alert("Flip the document") };
-
+    onFirstSideResult: () => alert("Flip the document")
+  };
 
   // 2. Create a RecognizerRunner object which orchestrates the recognition with one or more
   //    recognizer objects.
@@ -224,8 +224,8 @@ function getWebApiResults(frontSide, backSide)
   {
     // Images from WASM library should be converted to Base64 from ImageData format.
     "imageFrontSide": client.imageDataToBase64(frontSide),
-    "imageBackSide": client.imageDataToBase64(backSide) };
-
+    "imageBackSide": client.imageDataToBase64(backSide)
+  };
 
   client.recognize("/v1/recognizers/blinkid-combined", payload).
   then((results) =>

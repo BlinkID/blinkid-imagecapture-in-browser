@@ -12,7 +12,7 @@ import { SDKError, EventScanError, EventScanSuccess } from "@microblink/blinkid-
 import { ApiType, Client } from "@microblink/blinkid-imagecapture-in-browser-sdk/client-library";
 
 // [OPTIONAL] Include WASM library if filtering by document type is required
-import { Country } from "@microblink/blinkid-imagecapture-in-browser-sdk";
+import { BlinkIdImageCaptureRecognizerResult, Country } from "@microblink/blinkid-imagecapture-in-browser-sdk";
 function initializeUiComponent() {
     const el = document.querySelector("blinkid-imagecapture-in-browser") as HTMLBlinkidImagecaptureInBrowserElement;
     if (!el) {
@@ -32,18 +32,23 @@ function initializeUiComponent() {
      */
     el.addEventListener("scanSuccess", (ev: CustomEventInit<EventScanSuccess>) => {
         console.log("scanSuccess: extracted image from WASM library", ev.detail);
+        if (!ev.detail) {
+            el.setUiState("ERROR");
+            return;
+        }
+        const results = ev.detail.recognizer as BlinkIdImageCaptureRecognizerResult;
         /**
          * [OPTIONAL] Filter document based on provided class info.
          *
          * Keep in mind that enums with codes for country, region and document types are
          * included in the WASM library.
          */
-        if (ev.detail!.recognizer.classInfo.country === Country.CROATIA) {
+        if (results.classInfo.country === Country.CROATIA) {
             console.log("What should I do with Croatian document?");
         }
 
         // Show error or loading screen in UI component based on extracted image
-        if (!ev.detail!.recognizer.frontSideCameraFrame) {
+        if (results.frontSideCameraFrame) {
             el.setUiState("ERROR");
             return;
         }
@@ -55,7 +60,7 @@ function initializeUiComponent() {
         const payload = {
 
             // Image from WASM library should be converted to Base64 from ImageData format.
-            "imageSource": client.imageDataToBase64(ev.detail!.recognizer.frontSideCameraFrame)
+            "imageSource": client.imageDataToBase64(results.frontSideCameraFrame)
         };
         client.recognize("/v1/recognizers/blinkid", payload)
             .then((results) => {

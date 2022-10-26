@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/BlinkID/blinkid-imagecapture-in-browser.svg?branch=master)](https://travis-ci.org/BlinkID/blinkid-imagecapture-in-browser) [![npm version](https://badge.fury.io/js/%40microblink%2Fblinkid-imagecapture-in-browser-sdk.svg)](https://badge.fury.io/js/%40microblink%2Fblinkid-imagecapture-in-browser-sdk)
 
-With BlinkID ImageCapture In-browser SDK, your users can scan their identity documents straight from their web browser. The SDK acts as a frontend component for Microblink's [BlinkID Cloud API](https://microblink.com/products/blinkid/cloud-api) and [BlinkID Self-hosted API](https://microblink.com/products/blinkid/self-hosted-api). It captures a high-quality image of an identity document inside a web browser and guarantees a successful scan when the image is sent to one of our backend services for processing.
+With BlinkID ImageCapture In-browser SDK, your users can scan their identity documents straight from their web browser. The SDK acts as a frontend component for Microblink's [BlinkID Cloud API](https://docs.microblink.com/documentation/cloudapi/overview.html#introduction) and [BlinkID Self-hosted API](https://docs.microblink.com/documentation/self-hosted/current/overview.html#introduction). It captures a high-quality image of an identity document inside a web browser and guarantees a successful scan when the image is sent to one of our backend services for processing.
 
 The SDK offers a number of benefits that will help you build a more seamless onboarding experience for your users:
 
@@ -730,13 +730,13 @@ Requirements:
 
 Minimal browser versions with support for all features required by BlinkID ImageCapture.
 
-|Chrome|Safari|Edge|Firefox|Opera|iOS Safari|Android Browser|Opera Mobile|Chrome for Android|Firefox for Android|
-|------|------|----|-------|-----|----------|---------------|------------|------------------|-------------------|
-|    57|    11|  79|     52|   44|        14|             81|          59|                86|                 82|
+|Chrome|Safari|Edge|Firefox|Opera|iOS Safari|Android Browser|Chrome for Android|Firefox for Android|
+|------|------|----|-------|-----|----------|---------------|------------------|-------------------|
+|    96|    15|  93|     79|   82|        15|             81|                96|                 79|
 
 Internet Explorer is **not supported**.
 
-*Source: [caniuse](https://caniuse.com/wasm)*
+*Sources: [caniuse](https://caniuse.com/wasm) and [WebAssembly Roadmap](https://webassembly.org/roadmap/)*
 
 ## <a name="camera-devices"></a> Camera devices
 

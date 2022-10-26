@@ -1,5 +1,3 @@
-import { readFileSync, writeFileSync } from 'fs'
-
 import babel from '@rollup/plugin-babel'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import typescript from 'rollup-plugin-typescript2'
@@ -27,7 +25,7 @@ const config = {
     worker: {
         input: 'src/worker.ts',
         output: {
-            file: 'resources/BlinkIDImageCaptureSDK.worker.min.js',
+            file: 'resources/BlinkIDImageCaptureWasmSDK.worker.min.js',
             format: 'iife'
         },
         plugins: [
