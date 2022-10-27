@@ -236,7 +236,10 @@ export class SdkService {
               }
             });
           }
-        }, configuration.recognitionTimeout);
+        }, configuration.recognitionTimeout)
+        .then(() => { /* Scanning... */ })
+        .catch((error) => { throw error; });
+;
     } catch (error) {
       if (error && error.details?.reason) {
         const reason = error.details?.reason;
