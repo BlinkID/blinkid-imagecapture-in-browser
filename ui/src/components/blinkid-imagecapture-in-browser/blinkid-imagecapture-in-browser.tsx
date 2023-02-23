@@ -436,14 +436,14 @@ export class BlinkidImageCaptureInBrowser implements MicroblinkUI {
   }
 
   /**
-   * Starts combined image scan, emits results from provided files.
+   * Starts multi-side image scan, emits results from provided files.
    *
    * @param firstFile File to scan as first image
    * @param secondFile File to scan as second image
    */
   @Method()
-  async startCombinedImageScan(firstFile: File, secondFile: File) {
-    this.mbComponentEl.startCombinedImageScan(firstFile, secondFile);
+  async startMultiSideImageScan(firstFile: File, secondFile: File) {
+    this.mbComponentEl.startMultiSideImageScan(firstFile, secondFile);
   }
 
   /**

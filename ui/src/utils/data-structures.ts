@@ -168,7 +168,7 @@ export interface ImageRecognitionConfiguration {
   file: File
 }
 
-export interface CombinedImageRecognitionConfiguration {
+export interface MultiSideImageRecognitionConfiguration {
   recognizers: Array<string>,
   recognizerOptions?: any,
   thoroughScan?: boolean,
@@ -177,11 +177,11 @@ export interface CombinedImageRecognitionConfiguration {
 }
 
 export enum ImageRecognitionType {
-  Single   = 'Single',
-  Combined = 'Combined'
+  SingleSide = 'SingleSide',
+  MultiSide  = 'MultiSide'
 }
 
-export enum CombinedImageType {
+export enum MultiSideImageType {
   First  = 'First',
   Second = 'Second'
 }
@@ -243,7 +243,7 @@ export interface RecognitionResults {
 
 export enum CameraExperience {
   Barcode         = 'BARCODE',
-  CardCombined    = 'CARD_COMBINED',
+  CardMultiSide   = 'CARD_MULTI_SIDE',
   CardSingleSide  = 'CARD_SINGLE_SIDE',
   PaymentCard     = 'PAYMENT_CARD'
 }

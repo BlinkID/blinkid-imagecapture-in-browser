@@ -23,15 +23,15 @@ Check out live examples of BlinkID ImageCapture SDK in action:
 
 1. [BlinkID ImageCapture SDK with built-in UI](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/examples/javascript/index.html)
     * See what the bare UI looks like at [Codepen](https://codepen.io/microblink/pen/ZEOVRVQ)
-2. [BlinkID ImageCapture SDK UI - scan both document sides](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/examples/javascript-combined/index.html)
+2. [BlinkID ImageCapture SDK UI - scan both document sides](https://blinkid.github.io/blinkid-imagecapture-in-browser/ui/examples/javascript-multi-side/index.html)
     * See example for scanning of both document sides at [Codepen](https://codepen.io/microblink/pen/pobGzEY)
 3. [Scan the front side of an identity document with a web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-camera/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/XWKoYPK)
 4. [Scan the front side of an identity document by uploading its image](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/blinkid-file/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/bGeOKxZ)
-5. [Scan both sides of an identity document with a web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/combined/javascript/index.html)
+5. [Scan both sides of an identity document with a web camera](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/multi-side/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/dyXwKgZ)
-6. [Scan both sides of an identity document by uploading its image](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/combined-file/javascript/index.html)
+6. [Scan both sides of an identity document by uploading its image](https://blinkid.github.io/blinkid-imagecapture-in-browser/examples/multi-side-file/javascript/index.html)
     * See example at [Codepen](https://codepen.io/microblink/pen/yLVXdEp)
 
 To see the source code of the above examples, check out the [examples directory](examples). If you'd like to run examples of the UI component, either through the browser or locally, see the [ui/examples](ui/examples) directory.
@@ -144,20 +144,20 @@ Alternatively, it's possible to use UMD builds which can be loaded from public C
 
 However, **we strongly advise** that you host the JavaScript bundles on your infrastructure since there is no guarantee that the public CDN service has satisfactory uptime and availability throughout the world.
 
-For example, it's possible to use UMD builds from [the `dist` folder on Unpkg CDN](https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/dist/). The UMD builds make `BlinkIDImageCaptureSDK` available as a `window.BlinkIDImageCaptureSDK` global variable:
+For example, it's possible to use UMD builds from [the `dist` folder on the jsDelivr CDN](https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk/dist/). The UMD builds make `BlinkIDImageCaptureSDK` available as a `window.BlinkIDImageCaptureSDK` global variable:
 
 ```html
 <!-- IMPORTANT: change "X.Y.Z" to the version number you wish to use! -->
-<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/dist/blinkid-imagecapture-sdk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/dist/blinkid-imagecapture-sdk.min.js"></script>
 ```
 
-Finally, it's possible to use ES builds, which can be downloaded from [the `es` folder on unpkg](https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk/es/). ES modules are used in a similar manner as NPM package:
+Finally, it's possible to use ES builds, which can be downloaded from [the `es` folder on jsDelivr](https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk/es/). ES modules are used in a similar manner as NPM package:
 
 ```javascript
 import * as BlinkIDImageCaptureSDK from "./es/blinkid-imagecapture-sdk.js";
 ```
 
-**Important:** Unpkg CDN is used here due to simplicity of usage. It's not intended to be used in production!
+**Important:** the jsDelivr CDN is used here due to simplicity of usage. It's not intended to be used in production!
 
 #### WASM Resources
 

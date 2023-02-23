@@ -1,5 +1,65 @@
 # Release notes
 
+## 6.0.0
+
+### Added support for 50 new versions of already supported documents:
+
+* Mexico - Aguascalientes - Driving license
+* Mexico - Baja California - Driving license 
+* Mexico - Hidalgo - Driving license
+* USA - Delaware - Driving license
+* USA - Florida - ID card
+* USA - Hawaii - Driving license
+* USA - Kentucky - ID card
+* USA - Maryland - ID card
+* USA - Michigan - ID card
+* USA - Mississippi - Driving license
+* USA - Mississippi - ID card
+* USA - Missouri - ID card
+* USA - Ohio - ID card
+* USA - Oklahoma - ID card
+* USA - Rhode Island - Driving license 
+
+### These documents are no longer BETA:
+
+* Australia - New South Wales - ID card
+* Australia - South Australia - Proof of Age Card 
+* Belgium - Minors ID card
+* Belgium - Passport
+* Canada - Tribal ID card
+* Canada - Weapon Permit
+* Canada - British Columbia - Minors Public Services Card
+* Ireland - Public Services Card
+* Israel - ID card
+* Ivory Coast - Driving License
+* Lebanon - ID card
+* Libya - Polycarbonate Passport 
+* Mexico - Colima - Driving license
+* Mexico - Michoacan - Driving license
+* Mexico - Tamaulipas - Driving license 
+* Mexico - Zacatecas - Driving license
+* Myanmar - Driving license
+* Panama - Temporary Residence Permit
+* Slovenia - Residence Permit
+* Trinidad and Tobago - Driving license
+* USA - Passport
+* USA - Maine - ID card
+
+### Added support for 2 new ID types in BETA:
+
+#### Latin America and the Caribbean
+
+* Cuba - ID card
+* Cayman Islands - Drivers License
+
+### Platform-related SDK changes
+
+* The SDK can now be used with the `wasm-unsafe-eval` content security policy.
+
+### Bugfixes
+
+* We've fixed a problem with camera focus on iPhone devices that use iOS 16 or newer, most notably iPhone 14.
+
 ## 5.20.0
 
 ### New feature:

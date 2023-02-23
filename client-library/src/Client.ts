@@ -32,7 +32,7 @@ import
 
 const _DEFAULT_CLOUD_LOCATION       = "http://localhost";
 const _DEFAULT_SELF_HOSTED_LOCATION = "http://localhost";
-const _DEFAULT_HEALTHCHECK_ENDPOINT = "/v1/hc";
+const _DEFAULT_HEALTHCHECK_ENDPOINT = "/v2/hc";
 
 export class Client
 {
@@ -135,7 +135,7 @@ export class Client
      * documentation for Cloud API or Self-hosted API.
      *
      * @example
-     * client.recognize( "/v1/recognizers/blinkid", { "imageSource": imageBase64 } )
+     * client.recognize( "/v2/recognizers/blinkid-single-side", { "imageSource": imageBase64 } )
      *        .then( ( result: ResponseRecognition ) => console.log( result.response.data.result ) )
      *        .catch( ( error: ResponseRecognition ) => console.log( error.error.message ) );
      */

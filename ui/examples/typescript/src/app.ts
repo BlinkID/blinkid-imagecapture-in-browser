@@ -48,7 +48,7 @@ function initializeUiComponent() {
         }
 
         // Show error or loading screen in UI component based on extracted image
-        if (results.frontSideCameraFrame) {
+        if (results.frontCameraFrame.frame) {
             el.setUiState("ERROR");
             return;
         }
@@ -60,9 +60,9 @@ function initializeUiComponent() {
         const payload = {
 
             // Image from WASM library should be converted to Base64 from ImageData format.
-            "imageSource": client.imageDataToBase64(results.frontSideCameraFrame)
+            "imageSource": client.imageDataToBase64(results.frontCameraFrame.frame)
         };
-        client.recognize("/v1/recognizers/blinkid", payload)
+        client.recognize("/v2/recognizers/blinkid-single-side", payload)
             .then((results) => {
             const recognitionResults = results.response.data.result;
             console.log("API recognition results", recognitionResults);

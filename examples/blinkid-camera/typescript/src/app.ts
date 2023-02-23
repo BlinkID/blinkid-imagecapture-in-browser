@@ -36,7 +36,7 @@ function main() {
     }
 
     // 1. It's possible to obtain a free trial license key on microblink.com
-    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmK1U6YuQ8GhAykMmKJup313bWbJ1Hv6XCYLtATBjrUxNsA8PsucdXyI9MhYY9EDcizituz1Ga4QXJlVKRnIpYWhfUKaOomTq1B91dAJ6NNqGBAlNaKR9g/joPFYaUiGrCSOCAny89nH152JOBeI6HwI0wZVE87f6NUJ1cTlpOgc9Lg2h9TvXLsG5FArBnlLmieLyBgfYR3nqE+A==";
+    const licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGHWKsMXyV8pLjKmj0+9eFjvfX0TgjpvuedjxBx/LIsuo5sKOHD+5Uwjw1z4y10qbq/lEwUJiXzdSnihwZqLno0gfabRPsF/o2SyH7C5al21APZBfvwXx6PMvxe6Ze7SIGu0wach/76eKVlLKbVp2vxI7tVa42cnIQcM0YyD1UqcCI/9fomjgILTvNJHoMjAvy+ptZRw";
 
     // 2. Create instance of SDK load settings with your license key
     const loadSettings = new BlinkIDImageCaptureSDK.WasmSDKLoadSettings(licenseKey);
@@ -117,13 +117,13 @@ async function startScan(sdk: BlinkIDImageCaptureSDK.WasmSDK) {
         const blinkIdImageCaptureResults = await blinkIdImageCaptureRecognizer.getResult();
         if (blinkIdImageCaptureResults.state !== BlinkIDImageCaptureSDK.RecognizerResultState.Empty) {
             console.log("BlinkIDImageCapture results", blinkIdImageCaptureResults);
-            if (!blinkIdImageCaptureResults.frontSideCameraFrame) {
+            if (!blinkIdImageCaptureResults.frontCameraFrame.frame) {
                 alert("Could not extract front image of a document. Please try again.");
             }
             else {
                 processingOnWebApi = true;
                 updateScanFeedback("Sending request to web API...", true);
-                getWebApiResults(blinkIdImageCaptureResults.frontSideCameraFrame);
+                getWebApiResults(blinkIdImageCaptureResults.frontCameraFrame.frame);
             }
         }
     }
@@ -168,7 +168,7 @@ function getWebApiResults(frontSide: ImageData) {
         // Image from WASM library should be converted to Base64 from ImageData format.
         "imageSource": client.imageDataToBase64(frontSide)
     };
-    client.recognize("/v1/recognizers/blinkid", payload)
+    client.recognize("/v2/recognizers/blinkid-single-side", payload)
         .then((results) => {
         const recognitionResults = results.response.data.result;
         console.log("API recognition results", recognitionResults);

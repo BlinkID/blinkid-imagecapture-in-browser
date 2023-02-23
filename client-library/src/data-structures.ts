@@ -26,7 +26,7 @@ export interface Configuration
      *
      * This endpoint should return HTTP status 200 if everything is OK.
      *
-     * Default value is "/v1/hc".
+     * Default value is "/v2/hc".
      */
     healthcheckEndpoint?: string;
 

@@ -46,10 +46,10 @@ However, **we strongly advise** that you host the JavaScript bundle on your infr
 ```html
 <!-- After successful load, global variable `Client` is available. -->
 <!-- IMPORTANT: change "X.Y.Z" to the version number you wish to use! -->
-<script src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/dist/client-library.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/dist/client-library.min.js"></script>
 ```
 
-*Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
+*Keep in mind that the jsDelivr CDN is used for demonstration, it's not intended to be used in production!*
 
 ### <a name="installation-es-module"></a> ES module
 
@@ -59,10 +59,10 @@ However, **we strongly advise** that you host the JavaScript bundle on your infr
 
 ```js
 /* IMPORTANT: change "X.Y.Z" to the version number you wish to use! */
-import { Client } from "https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/es/client-library.mjs";
+import { Client } from "https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk@X.Y.Z/client-library/es/client-library.mjs";
 ```
 
-*Keep in mind that Unpkg CDN is used for demonstration, it's not intended to be used in production!*
+*Keep in mind that the jsDelivr CDN is used for demonstration, it's not intended to be used in production!*
 
 ## <a name="usage"></a> Usage
 
@@ -98,7 +98,7 @@ client.getHealthcheck()
 const image = "..."; // Base64 representation of image
 
 /* See API documentation for full list of endpoints and body parameters */
-client.recognize( "/v1/recognizers/blinkid", { "imageSource": image } )
+client.recognize( "/v2/recognizers/blinkid-single-side", { "imageSource": image } )
     .then( ( results: ResponseRecognition ) =>
     {
         const recognitionResults = results.response.data.result;
