@@ -31,11 +31,11 @@ function main()
   }
 
   // 1. It's possible to obtain a free trial license key on microblink.com
-  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmK1U6YuQ8GhAykMmKJup313bWbJ1Hv6XCYLtATBjrUxNsA8PsucdXyI9MhYY9EDcizituz1Ga4QXJlVKRnIpYWhfUKaOomTq1B91dAJ6NNqGBAlNaKR9g/joPFYaUiGrCSOCAny89nH152JOBeI6HwI0wZVE87f6NUJ1cTlpOgc9Lg2h9TvXLsG5FArBnlLmieLyBgfYR3nqE+A==";
+  let licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGHWKsMXyV8pLjKmj0+9eFjvfX0TgjpvuedjxBx/LIsuo5sKOHD+5Uwjw1z4y10qbq/lEwUJiXzdSnihwZqLno0gfabRPsF/o2SyH7C5al21APZBfvwXx6PMvxe6Ze7SIGu0wach/76eKVlLKbVp2vxI7tVa42cnIQcM0YyD1UqcCI/9fomjgILTvNJHoMjAvy+ptZRw";
 
   if (window.location.hostname === "blinkid.github.io")
   {
-    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaEWILk5nOGdljjueRbHtcM5DaUW4gd3Lt19u/E7FP03Jaw98ez6rKI7Ubvv3GNJ4JUforOwRboBzdP+ssYdCkY71CnzNxQG7Bxt+R5Yf6KrNhOQTpaPHtge1eLKqkBfmbPtdnEWABxKQH9j9up+sUsQxzgQQoe9vqA1V4lR3EpWn8mnhPfQutA1CXU2Mhw8vR3xq08Z80D4Q1f";
+    licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvuaFzq9PiS0vf1fYGV2YWYAaY6T5nF3SCiK3YFXRSTUguSJHTO+XKjmupSk49GH7QJN+8lo1XwCtV6TBri+4hGPCHUb3Ac4SoEQqCtcEnZGadseNI4PqoJe+a5A5CcSWbo1IwrS6qX8jfLX44wlfLzc3l6rMFGlLvA8AZkkGbXag0K+DGxAJVXIg+NQ7Y2Ck2OUHv2g=";
   }
 
   // 2. Create instance of SDK load settings with your license key
@@ -143,7 +143,7 @@ async function startScan(sdk, fileList)
     {
       console.log("BlinkIDImageCapture results", blinkIdImageCaptureResults);
 
-      if (!blinkIdImageCaptureResults.frontSideCameraFrame)
+      if (!blinkIdImageCaptureResults.frontCameraFrame.frame)
       {
         alert("Could not extract front image of a document. Please try again.");
       } else
@@ -151,7 +151,7 @@ async function startScan(sdk, fileList)
       {
         processingOnWebApi = true;
         console.log("Sending request to web API...");
-        getWebApiResults(blinkIdImageCaptureResults.frontSideCameraFrame);
+        getWebApiResults(blinkIdImageCaptureResults.frontCameraFrame.frame);
       }
     }
   } else
@@ -195,7 +195,7 @@ function getWebApiResults(frontSide)
     "imageSource": client.imageDataToBase64(frontSide)
   };
 
-  client.recognize("/v1/recognizers/blinkid", payload).
+  client.recognize("/v2/recognizers/blinkid-single-side", payload).
   then((results) =>
   {
     const recognitionResults = results.response.data.result;

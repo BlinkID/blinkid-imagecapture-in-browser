@@ -11,7 +11,7 @@ import {
   EventReady,
   VideoRecognitionConfiguration,
   ImageRecognitionConfiguration,
-  CombinedImageRecognitionConfiguration,
+  MultiSideImageRecognitionConfiguration,
   ImageRecognitionType,
   RecognizerInstance,
   RecognitionEvent,
@@ -113,7 +113,7 @@ export class SdkService {
   public getDesiredCameraExperience(_recognizers: Array<string> = [], _recognizerOptions: any = {}): CameraExperience {
     if (_recognizers.indexOf('BlinkIdImageCaptureRecognizer') > -1) {
       if (_recognizerOptions && Object.keys(_recognizerOptions).length > 0 && _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides) {
-        return CameraExperience.CardCombined;
+        return CameraExperience.CardMultiSide;
       }
 
       return CameraExperience.CardSingleSide;
@@ -295,10 +295,10 @@ export class SdkService {
       Object.keys(_recognizerOptions).length > 0 &&
       _recognizerOptions['BlinkIdImageCaptureRecognizer']?.captureBothDocumentSides
     ) {
-      return ImageRecognitionType.Combined;
+      return ImageRecognitionType.MultiSide;
     }
 
-    return ImageRecognitionType.Single;
+    return ImageRecognitionType.SingleSide;
   }
 
   public async scanFromImage(
@@ -426,8 +426,8 @@ export class SdkService {
     window.setTimeout(() => void this.cancelRecognition(), 500);
   }
 
-  public async scanFromImageCombined(
-    configuration: CombinedImageRecognitionConfiguration,
+  public async scanFromImageMultiSide(
+    configuration: MultiSideImageRecognitionConfiguration,
     eventCallback: (ev: RecognitionEvent) => void
   ): Promise<void> {
     eventCallback({ status: RecognitionStatus.Preparing });
@@ -553,7 +553,7 @@ export class SdkService {
         const eventHandler = (recognitionEvent: RecognitionEvent) => eventCallback(recognitionEvent);
         const handleTerminateDone = () => {
           this.eventEmitter$.removeEventListener('terminate:done', handleTerminateDone);
-          this.scanFromImageCombined(configuration, eventHandler);
+          this.scanFromImageMultiSide(configuration, eventHandler);
         }
         this.eventEmitter$.addEventListener('terminate:done', handleTerminateDone);
         window.setTimeout(() => void this.cancelRecognition(), 500);

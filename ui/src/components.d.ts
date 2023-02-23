@@ -139,16 +139,16 @@ export namespace Components {
          */
         "startCameraScan": () => Promise<void>;
         /**
-          * Starts combined image scan, emits results from provided files.
-          * @param firstFile File to scan as first image
-          * @param secondFile File to scan as second image
-         */
-        "startCombinedImageScan": (firstFile: File, secondFile: File) => Promise<void>;
-        /**
           * Starts image scan, emits results from provided file.
           * @param file File to scan
          */
         "startImageScan": (file: File) => Promise<void>;
+        /**
+          * Starts multi-side image scan, emits results from provided files.
+          * @param firstFile File to scan as first image
+          * @param secondFile File to scan as second image
+         */
+        "startMultiSideImageScan": (firstFile: File, secondFile: File) => Promise<void>;
         /**
           * Set to 'true' if scan from image should execute twice in case that first result is empty.  If enabled, this option will add/remove 'scanCroppedDocumentImage' recognizer option for the second scan action.
          */
@@ -466,16 +466,16 @@ export namespace Components {
          */
         "startCameraScan": () => Promise<void>;
         /**
-          * Starts combined image scan, emits results from provided files.
-          * @param firstFile File to scan as first image
-          * @param secondFile File to scan as second image
-         */
-        "startCombinedImageScan": (firstFile: File, secondFile: File) => Promise<void>;
-        /**
           * Starts image scan, emits results from provided file.
           * @param file File to scan
          */
         "startImageScan": (file: File) => Promise<void>;
+        /**
+          * Starts multi-side image scan, emits results from provided files.
+          * @param firstFile File to scan as first image
+          * @param secondFile File to scan as second image
+         */
+        "startMultiSideImageScan": (firstFile: File, secondFile: File) => Promise<void>;
         /**
           * See description in public component.
          */

@@ -133,8 +133,8 @@
         margin-bottom: 1.5rem;
       }
     </style>
-    <script type="module" src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.20.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
-    <script nomodule src="https://unpkg.com/@microblink/blinkid-imagecapture-in-browser-sdk@5.20.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk@6.0.0/ui/dist/blinkid-imagecapture-in-browser/blinkid-imagecapture-in-browser.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@microblink/blinkid-imagecapture-in-browser-sdk@6.0.0/ui/dist/blinkid-imagecapture-in-browser.js"></script>
     <script src="../client-library/dist/client-library.js"></script>
         <script type="text/javascript">
 
@@ -143,10 +143,10 @@ var parcelRequire;
 
 window.getSafePathname = (p) => p[p.length - 1] === '/' ? p : p.split('/').slice(0, -1).join('/') + '/';
 
-window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGGmK1U6YuQ8GhAykMmKJup313bWbJ1Hv6XCYLtATBjrUxNsA8PsucdXyI9MhYY9EDcizituz1Ga4QXJlVKRnIpYWhfUKaOomTq1B91dAJ6NNqGBAlNaKR9g/joPFYaUiGrCSOCAny89nH152JOBeI6HwI0wZVE87f6NUJ1cTlpOgc9Lg2h9TvXLsG5FArBnlLmieLyBgfYR3nqE+A==";
+window.licenseKey = "sRwAAAYJbG9jYWxob3N0r/lOPgo/w35CpGHWKsMXyV8pLjKmj0+9eFjvfX0TgjpvuedjxBx/LIsuo5sKOHD+5Uwjw1z4y10qbq/lEwUJiXzdSnihwZqLno0gfabRPsF/o2SyH7C5al21APZBfvwXx6PMvxe6Ze7SIGu0wach/76eKVlLKbVp2vxI7tVa42cnIQcM0YyD1UqcCI/9fomjgILTvNJHoMjAvy+ptZRw";
 
 if (window.location.hostname === 'blinkid.github.io') {
-  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvpaEWILk5nOGdljjueRbHtcM5DaUW4gd3Lt19u/E7FP03Jaw98ez6rKI7Ubvv3GNJ4JUforOwRboBzdP+ssYdCkY71CnzNxQG7Bxt+R5Yf6KrNhOQTpaPHtge1eLKqkBfmbPtdnEWABxKQH9j9up+sUsQxzgQQoe9vqA1V4lR3EpWn8mnhPfQutA1CXU2Mhw8vR3xq08Z80D4Q1f";
+  window.licenseKey = "sRwAAAYRYmxpbmtpZC5naXRodWIuaW+qBF9heYYlTvZbvuaFzq9PiS0vf1fYGV2YWYAaY6T5nF3SCiK3YFXRSTUguSJHTO+XKjmupSk49GH7QJN+8lo1XwCtV6TBri+4hGPCHUb3Ac4SoEQqCtcEnZGadseNI4PqoJe+a5A5CcSWbo1IwrS6qX8jfLX44wlfLzc3l6rMFGlLvA8AZkkGbXag0K+DGxAJVXIg+NQ7Y2Ck2OUHv2g=";
 }
 window.engineLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources";
 window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-browser/resources/BlinkIDImageCaptureWasmSDK.worker.min.js";
@@ -184,7 +184,7 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
+    healthcheckEndpoint: "/v2/hc"
   };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
@@ -204,7 +204,7 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
 
   el.addEventListener('scanSuccess', (ev) => {
     console.log('scanSuccess', ev.detail);
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
+    if (!ev.detail.recognizer.frontCameraFrame?.frame) {
       console.log("Could not extract front image of a document.");
       el.setUiState('ERROR');
       return;
@@ -213,14 +213,14 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
     // Show loading screen in UI component
     el.setUiState('LOADING');
 
-    const imageData = ev.detail.recognizer.frontSideCameraFrame;
+    const imageData = ev.detail.recognizer.frontCameraFrame.frame;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
       'imageSource': image64
     };
 
-    client.recognize('/v1/recognizers/blinkid', payload).
+    client.recognize('/v2/recognizers/blinkid-single-side', payload).
     then((results) => {
       const recognitionResults = results.response.data.result;
       console.log('API recognition results', recognitionResults);
@@ -244,7 +244,7 @@ window.workerLocation = "https://blinkid.github.io/blinkid-imagecapture-in-brows
 </script>
 
 
-      <section id="example-combined">
+      <section id="example-multi-side">
     <h2>Scan both sides</h2>
     <p>UI component with default behaviour where it&apos;s required to set valid license key and recognizer.</p>
     <p>Keep in mind that this example uses additional code which sends an image to web API for processing. Complete code can be seen in <em>examples/ui</em> directory of this repository.</p>
@@ -260,7 +260,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   <script type="text/javascript">
 
 (function () {
-  const el = document.querySelector('#example-combined blinkid-imagecapture-in-browser');
+  const el = document.querySelector('#example-multi-side blinkid-imagecapture-in-browser');
 
   el.engineLocation = window.engineLocation;
   el.licenseKey = window.licenseKey;
@@ -273,7 +273,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
+    healthcheckEndpoint: "/v2/hc"
   };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
@@ -293,18 +293,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
   el.addEventListener('scanSuccess', (ev) => {
     console.log('scanSuccess', ev.detail);
 
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
-      console.log("Could not extract front image of a document.");
-      el.setUiState('ERROR');
-    }
 
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
+    if (!ev.detail.recognizer.frontCameraFrame?.frame) {
       console.log("Could not extract front image of a document.");
       el.setUiState('ERROR');
       return;
     }
 
-    if (!ev.detail.recognizer.backSideCameraFrame) {
+    if (!ev.detail.recognizer.backCameraFrame?.frame) {
       console.log("Could not extract back image of a document.");
       el.setUiState('ERROR');
       return;
@@ -314,9 +310,9 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
       // Show loading screen in UI component
       el.setUiState('LOADING');
 
-      const imageFrontData = ev.detail.recognizer.frontSideCameraFrame;
+      const imageFrontData = ev.detail.recognizer.frontCameraFrame.frame;
       const imageFront64 = client.imageDataToBase64(imageFrontData);
-      const imageBackData = ev.detail.recognizer.backSideCameraFrame;
+      const imageBackData = ev.detail.recognizer.backCameraFrame.frame;
       const imageBack64 = client.imageDataToBase64(imageBackData);
 
       const payload = {
@@ -324,7 +320,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
         'imageBackSide': imageBack64
       };
 
-      client.recognize('/v1/recognizers/blinkid-combined', payload).
+      client.recognize('/v2/recognizers/blinkid-multi-side', payload).
       then((results) => {
         const recognitionResults = results.response.data.result;
         console.log('API recognition results', recognitionResults);
@@ -390,7 +386,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
+    healthcheckEndpoint: "/v2/hc"
   };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
@@ -411,7 +407,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   el.addEventListener('scanSuccess', (ev) => {
     console.log('scanSuccess', ev.detail);
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
+    if (!ev.detail.recognizer.frontCameraFrame?.frame) {
       console.log("Could not extract front image of a document.");
       el.setUiState('ERROR');
       return;
@@ -420,14 +416,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     // Show loading screen in UI component
     el.setUiState('LOADING');
 
-    const imageData = ev.detail.recognizer.frontSideCameraFrame;
+    const imageData = ev.detail.recognizer.frontCameraFrame.frame;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
       'imageSource': image64
     };
 
-    client.recognize('/v1/recognizers/blinkid', payload).
+    client.recognize('/v2/recognizers/blinkid-single-side', payload).
     then((results) => {
       const recognitionResults = results.response.data.result;
       console.log('API recognition results', recognitionResults);
@@ -489,7 +485,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
+    healthcheckEndpoint: "/v2/hc"
   };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
@@ -509,7 +505,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   el.addEventListener('scanSuccess', (ev) => {
     console.log('scanSuccess', ev.detail);
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
+    if (!ev.detail.recognizer.frontCameraFrame?.frame) {
       console.log("Could not extract front image of a document.");
       el.setUiState('ERROR');
       return;
@@ -518,14 +514,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     // Show loading screen in UI component
     el.setUiState('LOADING');
 
-    const imageData = ev.detail.recognizer.frontSideCameraFrame;
+    const imageData = ev.detail.recognizer.frontCameraFrame.frame;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
       'imageSource': image64
     };
 
-    client.recognize('/v1/recognizers/blinkid', payload).
+    client.recognize('/v2/recognizers/blinkid-single-side', payload).
     then((results) => {
       const recognitionResults = results.response.data.result;
       console.log('API recognition results', recognitionResults);
@@ -628,7 +624,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   const configuration = {
     apiLocation: "https://demoapi.microblink.com",
-    healthcheckEndpoint: "/v1/hc"
+    healthcheckEndpoint: "/v2/hc"
   };
 
   const client = new Client.Client(Client.ApiType.SelfHosted, configuration);
@@ -648,7 +644,7 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
 
   el.addEventListener('scanSuccess', (ev) => {
     console.log('scanSuccess', ev.detail);
-    if (!ev.detail.recognizer.frontSideCameraFrame) {
+    if (!ev.detail.recognizer.frontCameraFrame?.frame) {
       console.log("Could not extract front image of a document.");
       el.setUiState('ERROR');
       return;
@@ -657,14 +653,14 @@ recognizer-options=&quot;captureBothDocumentSides&quot;
     // Show loading screen in UI component
     el.setUiState('LOADING');
 
-    const imageData = ev.detail.recognizer.frontSideCameraFrame;
+    const imageData = ev.detail.recognizer.frontCameraFrame.frame;
     const image64 = client.imageDataToBase64(imageData);
 
     const payload = {
       'imageSource': image64
     };
 
-    client.recognize('/v1/recognizers/blinkid', payload).
+    client.recognize('/v2/recognizers/blinkid-single-side', payload).
     then((results) => {
       const recognitionResults = results.response.data.result;
       console.log('API recognition results', recognitionResults);

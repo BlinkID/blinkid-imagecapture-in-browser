@@ -6,10 +6,10 @@ import { ClassInfo } from "../Generic/ClassInfo";
 import { ImageAnalysisResult } from "../Generic/ImageAnalysisResult";
 import { ProcessingStatus } from "../Generic/ProcessingStatus";
 import { RecognitionModeFilter } from "../Generic/RecognitionModeFilter";
+import { CameraFrameResult } from "../ImageOptions";
 
 import
 {
-    ImageOrientation,
     Recognizer,
     RecognizerResult,
     RecognizerSettings,
@@ -84,24 +84,13 @@ export interface BlinkIdImageCaptureRecognizerResult extends RecognizerResult
     /**
      * Captured camera frame containing the front side of the document.
      */
-    readonly frontSideCameraFrame: ImageData;
-
-    /**
-     * Orientation of the camera frame containing the front side of the document.
-     */
-    readonly frontSideCameraFrameOrientation: ImageOrientation;
+    readonly frontCameraFrame: CameraFrameResult;
 
     /**
      * Captured camera frame containing the back side of the document.
      * Available only if both sides of document capturing is enabled.
      */
-    readonly backSideCameraFrame: ImageData | null;
-
-    /**
-     * Orientation of the camera frame containing the front side of the document.
-     * Available only if both sides of document capturing is enabled.
-     */
-    readonly backSideCameraFrameOrientation: ImageOrientation;
+    readonly backCameraFrame: CameraFrameResult;
 }
 
 /**

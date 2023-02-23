@@ -31,7 +31,7 @@
         const configuration =
         {
             apiLocation: "http://localhost",
-            healthcheckEndpoint: "/v1/hc",
+            healthcheckEndpoint: "/v2/hc",
             headers:
             {}
         };
@@ -78,7 +78,7 @@
             scanStatus.innerText = "waiting for API response";
             scanResults.value = "-";
 
-            client.recognize( "/v1/recognizers/blinkid", payload )
+            client.recognize( "/v2/recognizers/blinkid-single-side", payload )
                 .then( ( results ) =>
                 {
                     const recognitionResults = results.response.data.result;
